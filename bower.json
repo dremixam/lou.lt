@@ -1,0 +1,21 @@
+{
+  "name": "lou.lt",
+  "version": "0.0.1",
+  "homepage": "https://github.com/dremixam/lou.lt",
+  "authors": [
+    "Maxime Mélinon <maxime@melinon.fr>"
+  ],
+  "license": "Proprietary",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "static/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.16"
+  }
+}
