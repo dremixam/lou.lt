@@ -24,11 +24,5 @@ build/Release
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 node_modules
 
-# bower
-.bowerrc
-
 # Les libs statiques a installer avec bower
 static/lib
-
-# Les fichiers audio
-static/res/audio/*
