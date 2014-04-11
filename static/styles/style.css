@@ -1,0 +1,98 @@
+html, body {
+  height: 100%; width: 100%; overflow: hidden; margin: 0; padding: 0;
+  text-rendering:optimizespeed;font:16px/160% "Nexa Light","Helvetica Neue",Helvetica,sans-serif,Helvetica,sans-serif;
+  background: whitesmoke;
+}
+#zone_chat {
+  position: absolute;
+  top: 68px;
+  left: 0;
+  right: 150px;
+  bottom: 50px;
+  margin:0;padding:0;
+  padding-bottom: 3px;
+  padding-right: 150px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+#zone_chat .ligne {
+
+}
+
+#zone_chat .ligne.info {
+  color: #2ECC40;
+}
+
+#zone_chat .ligne.error {
+  color: #FF4136;
+}
+#zone_chat .ligne .premier {
+  display: inline-block;
+  width: 120px;
+  border-right: 1px black dotted;
+  text-align: right;
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
+#zone_chat .ligne .second {
+  display: inline-block;
+
+}
+
+#formulaire_chat {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 150px;
+  background: white;
+  margin:0;padding:0;
+}
+#message {
+  display: block;
+  box-sizing: border-box;
+  height: 50px;
+  width: 100%;
+  margin: 0;
+  padding: 4px;
+
+  font-size: 30px;
+}
+#userlist {
+  width: 150px;
+  position: absolute;
+  top:68px; right:0; bottom:0;
+  background: white;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+#userlist ul{
+  list-style-type: none;
+  padding-left: 15px;
+}
+header {
+  height: 68px;
+  overflow: hidden;
+  background: #FFFFF9;
+  box-sizing: border-box;
+  box-shadow: 0 0 5px black;
+}
+header h1 {
+  margin: 0 7px;
+  line-height: 68px;
+  display: inline-block;
+}
+header h1 a {
+  text-decoration: none;
+  color: black;
+}
+header h1 small {
+  font-size: 0.5em;
+  color: #c0c0c0;
+}
+header div {
+  float: right;
+  height: 62px;
+  padding: 3px;
+}
