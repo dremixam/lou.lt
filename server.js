@@ -10,14 +10,14 @@ var connect  = require("connect");
 var session  = require('express-session');
 
 // configuration ===============================================================
-mongoose.connect(config.dburl, function() {																		 // connect to mongoDB database
+mongoose.connect('mongodb://'+config.db.host+'/'+config.db.name+'', function() {																		 // connect to mongoDB database
 
 
 	var MongoStore = require('connect-mongo')(express);
 	var sessionStore = new MongoStore({
-		host : 'localhost',
-		db : 'lou_lt',
-		collection : 'session',
+		host : config.db.host,
+		db : config.db.name,
+		collection : config.db.sessionColl,
 		stringify : false
 	});
 
