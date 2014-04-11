@@ -26,3 +26,7 @@ node_modules
 
 # Les libs statiques a installer avec bower
 static/lib
+
+config.js
+
+static/.sass-cache

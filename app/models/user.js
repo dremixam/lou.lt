@@ -7,6 +7,8 @@ module.exports.add = function (socket, fn) {
 
   var hs = socket.handshake;
 
+  console.log("données de session chargées : "+hs.session);
+
   if ( hs.session.userData !== undefined ) {
     userData = hs.session.userData;
     userData.last=Date.now();
