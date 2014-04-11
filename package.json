@@ -26,5 +26,6 @@
   "bugs": {
     "url": "https://github.com/dremixam/lou.lt/issues"
   },
-  "homepage": "https://github.com/dremixam/lou.lt"
+  "homepage": "https://github.com/dremixam/lou.lt",
+  "private": true
 }
