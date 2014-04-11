@@ -7,7 +7,7 @@ module.exports = {
   secret: 't32ç!567pyqs65dlkSDFfjbh',
   db : {
     host : "storage.melinon.com",
-    name : "loult",
+    name : "lou_lt",
     sessionColl : "session",
   }
 }
