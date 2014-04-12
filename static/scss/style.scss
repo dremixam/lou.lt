@@ -25,7 +25,8 @@ a {
   left: 0;
   right: 250px;
   bottom: 50px;
-  margin:0;padding:0;
+  margin: 0;
+  padding: 0;
   padding-bottom: 3px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -93,9 +94,11 @@ a {
   bottom: 0;
   left: 0;
   right: 250px;
-  height: 50px;
+  height: 47px;
   background: white;
-  margin:0;padding:0;
+  margin: 0;
+  padding: 0;
+  border-top: 3px solid #0074D9;
 }
 
 #message {
@@ -107,6 +110,7 @@ a {
   padding: 4px;
   font-size: 30px;
   background: whitesmoke;
+  border: none;
   &:focus {
     background: white;
     outline: none;
@@ -129,12 +133,15 @@ a {
 }
 
 #userlist {
-  width: 250px;
+  width: 247px;
   position: absolute;
-  top:68px; right:0; bottom:50px;
+  top: 68px;
+  right: 0;
+  bottom: 50px;
   background: white;
   overflow-x: hidden;
   overflow-y: scroll;
+  border-left: 3px solid #0074D9;
   ul{
     list-style-type: none;
     padding-left: 15px;
@@ -148,6 +155,10 @@ header {
   box-sizing: border-box;
   box-shadow: 0 0 5px black;
   color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   h1 {
     margin: 0 7px;
     line-height: 68px;
