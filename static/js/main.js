@@ -190,7 +190,7 @@ toggleMute = function() {
   for ( i = 0 ; i < 10 ; i ++) {
     if (document.getElementById("audio"+i).volume == 0 ) {
       document.getElementById("audio"+i).volume = 1;
-      document.getElementById("globalMute").style.color="#000";
+      document.getElementById("globalMute").style.color="#fff";
       document.getElementById("globalMute").className="fa fa-volume-up fa-fw";
     } else {
       document.getElementById("audio"+i).volume = 0;
