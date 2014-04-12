@@ -6,8 +6,8 @@ module.exports = {
   ip: '0.0.0.0',
   secret: 't32ç!567pyqs65dlkSDFfjbh',
   db : {
-    host : "localhost",
-    name : "lou_lt",
+    host : "storage.melinon.com",
+    name : "lou_lt_test",
     sessionColl : "session",
   }
 }

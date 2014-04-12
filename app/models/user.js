@@ -18,7 +18,7 @@ module.exports.add = function (socket, fn) {
     allClients[userData.public.uuid] = userData;
     socket.handshake.session.userData = userData;
     socket.handshake.session.save();
-    socket.emit("debug", "session data saved");
+    //socket.emit("debug", "session data saved");
     fn(userData);
   } else {
     // Quand on a une nouvelle connection, on ouvre le fichier qui contient les noms possibles
