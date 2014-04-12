@@ -5,11 +5,13 @@ var socket = io.connect('/');
 var connected = false;
 var userlist = {};
 var ignorelist = [];
+var me = undefined;
 
 insereLigne("[Info]", "info", 'Connexion en cours…', null);
 
 // Quand on reçoit un message, on l'insère dans la page
 socket.on('connected', function(data) {
+  me = data;
   insereLigne("[Info]", "info", 'Votre pseudo est '+data.pseudo+'', null);
   $('#message').removeAttr("disabled").focus();
   connected = true;
@@ -77,14 +79,15 @@ socket.on('attack', function(data) {
 
 // Quand un nouveau client se connecte, on affiche l'information
 socket.on('disconnected', function(data) {
-
-  if ( userlist[data.uuid].count > 1 ) {
-    userlist[data.uuid].count--;
-  } else {
-    delete userlist[data.uuid];
-    insereLigne("[Info]", "part", 'Le '+ data.pseudo + ' sauvage s\'enfuit !', null);
+  if (me !== undefined && data.uuid != me.uuid) {
+    if ( userlist[data.uuid].count > 1 ) {
+      userlist[data.uuid].count--;
+    } else {
+      delete userlist[data.uuid];
+      insereLigne("[Info]", "part", 'Le '+ data.pseudo + ' sauvage s\'enfuit !', null);
+    }
+    updateUserList();
   }
-  updateUserList();
 })
 
 // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page

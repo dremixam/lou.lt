@@ -10,6 +10,10 @@ module.exports = function(io) {
 		// Gestion de la session
 		var hs = socket.handshake;
 
+		clientList.forEach(function(entry) {
+			console.log('client: '+ JSON.stringify(entry.public));
+		});
+
 		// setup an inteval that will keep our session fresh
 		var intervalID = setInterval(function () {
 			hs.session.reload( function () {
@@ -40,7 +44,7 @@ module.exports = function(io) {
 					socket.emit('info', elt.toString());
 				});
 
-				socket.emit('connected', {"pseudo": newUserData.public.pseudo});
+				socket.emit('connected', newUserData.public);
 
 				messagesModel.forEach(function(message){
 					socket.emit('lastmessage', message);
@@ -59,9 +63,10 @@ module.exports = function(io) {
 		socket.on('disconnect', function() {
 			var public = socket.handshake.session.userData.public;
 			var uuid = socket.handshake.session.userData.public.uuid;
+			clientList.remove(uuid);
 			setTimeout(function () {
 				socket.broadcast.emit('disconnected', public);
-				clientList.remove(uuid);
+
 			}, 4 * 1000);
 
 			clearInterval(intervalID);

@@ -79,6 +79,7 @@ module.exports.forEach = function (fn) {
 
 module.exports.remove = function(uuid) {
   delete allClients[uuid];
+    delete allSockets[uuid];
 }
 
 function updateLastMessage(socket) {
