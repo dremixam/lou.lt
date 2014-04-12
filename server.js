@@ -10,7 +10,7 @@ var connect  = require("connect");
 var session  = require('express-session');
 
 // configuration ===============================================================
-mongoose.connect('mongodb://'+config.db.host+'/'+config.db.name+'', function() {																		 // connect to mongoDB database
+mongoose.connect('mongodb://'+config.db.host+'/'+config.db.name, function() {																		 // connect to mongoDB database
 
 
 	var MongoStore = require('connect-mongo')(express);
@@ -49,7 +49,7 @@ mongoose.connect('mongodb://'+config.db.host+'/'+config.db.name+'', function() {
 		}
 		handshakeData.sessionStore = sessionStore;
 		sessionStore.load(handshakeData.sessionID, function(err, sess){
-			if (err || !sess) {
+			if (err || !sess || !sess.valid) {
 				accept('Error when creating session: '+err, false);
 			} else {
 				handshakeData.session = sess;
@@ -58,11 +58,15 @@ mongoose.connect('mongodb://'+config.db.host+'/'+config.db.name+'', function() {
 		});
 	});
 
-
 	// Chargement de la page index.html
+	app.get('/', function (req, res) {
+		req.session.valid = true;
+		res.sendfile('static/home.html');
+	});
+
+	// En cas d'URL incorrecte on redirige sur la page d'accueil
 	app.get('*', function (req, res) {
-		//req.session.connected = true;
-		res.sendfile('static/oldhome.html');
+		res.redirect("/");
 	});
 
 	// routes ======================================================================

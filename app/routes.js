@@ -51,6 +51,9 @@ module.exports = function(io) {
 
 		});
 
+
+
+
 		messagesRoute(socket);
 
 		socket.on('disconnect', function() {
