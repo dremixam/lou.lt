@@ -40,6 +40,10 @@ socket.on('ownmessage', function(data) {
   audioPlayer++;
 })
 
+socket.on('debug', function(message) {
+  insereDebug(message);
+})
+
 socket.on('errormsg', function(data) {
   document.getElementById("message").placeholder = "Votre message...";
   insereErreur(data.message);
@@ -100,6 +104,9 @@ $('#formulaire_chat').submit(function () {
 });
 
 // Ajoute un message dans la page
+function insereDebug(message) {
+  insereLigne("[Debug]", "debug", message, null);
+}
 function insereErreur(message) {
   insereLigne("[Erreur]", "error", message, null);
 }
@@ -118,7 +125,10 @@ function insereLigne(premier, classe, second, color) {
   $('#zone_chat').append('<div class="ligne '+classe+'"><div class="premier">' + premier + '</div><div class="second">' + second + '<div><div class="lineTimer">'+currentTime()+'</div></div>');
   else
   $('#zone_chat').append('<div class="ligne '+classe+'"><div class="premier" style="color: '+color+';">' + premier + '</div><div class="second">' + second + '<div><div class="lineTimer">'+currentTime()+'</div></div>');
-  $('#zone_chat').scrollTop($('#zone_chat')[0].scrollHeight);
+
+  if ($('#zone_chat').scrollTop()+$('#zone_chat').height() >  ($('#zone_chat')[0].scrollHeight-$('#zone_chat').height()/2)) {
+    $('#zone_chat').stop().animate({ scrollTop: $('#zone_chat')[0].scrollHeight }, 500);
+  }
 }
 
 function updateUserList() {
@@ -154,25 +164,25 @@ function updateUserList() {
 
 function toggleIgnore(pseudo, elt){
   if (elt !== null)
-    if (ignorelist.indexOf(pseudo) == -1) {
-      ignorelist.push(pseudo);
-      elt.parentNode.style.color="#c0c0c0";
-      elt.className="fa fa-times-circle fa-fw";
-    } else {
-      var i = ignorelist.indexOf(pseudo);
-      ignorelist.splice(i, 1);
-      elt.parentNode.style.color="black";
-      elt.className="fa fa-volume-up fa-fw";
-    }
+  if (ignorelist.indexOf(pseudo) == -1) {
+    ignorelist.push(pseudo);
+    elt.parentNode.style.color="#c0c0c0";
+    elt.className="fa fa-times-circle fa-fw";
+  } else {
+    var i = ignorelist.indexOf(pseudo);
+    ignorelist.splice(i, 1);
+    elt.parentNode.style.color="black";
+    elt.className="fa fa-volume-up fa-fw";
+  }
   else
-    if (ignorelist.indexOf(pseudo) == -1) {
-      ignorelist.push(pseudo);
-      updateUserList();
-    } else {
-      var i = ignorelist.indexOf(pseudo);
-      ignorelist.splice(i, 1);
-      updateUserList();
-    }
+  if (ignorelist.indexOf(pseudo) == -1) {
+    ignorelist.push(pseudo);
+    updateUserList();
+  } else {
+    var i = ignorelist.indexOf(pseudo);
+    ignorelist.splice(i, 1);
+    updateUserList();
+  }
 
 
 }
@@ -181,31 +191,53 @@ toggleMute = function() {
     if (document.getElementById("audio"+i).volume == 0 ) {
       document.getElementById("audio"+i).volume = 1;
       document.getElementById("globalMute").style.color="#000";
-      document.getElementById("globalMute").className="fa fa-volume-up";
+      document.getElementById("globalMute").className="fa fa-volume-up fa-fw";
     } else {
       document.getElementById("audio"+i).volume = 0;
       document.getElementById("globalMute").style.color="#c0c0c0";
-      document.getElementById("globalMute").className="fa fa-volume-off";
+      document.getElementById("globalMute").className="fa fa-volume-off fa-fw";
     }
   }
 }
 
 function currentTime() {
-      var currentTime = new Date();
-      var hours = currentTime.getHours();
-      var minutes = currentTime.getMinutes();
-      var seconds = currentTime.getSeconds();
-      if (minutes < 10){
-          minutes = "0" + minutes;
-      }
-      if (seconds < 10){
-          seconds = "0" + seconds;
-      }
-      var v = hours + ":" + minutes + ":" + seconds + " ";
-      if(hours > 11){
-          v+="PM";
-      } else {
-          v+="AM"
-      }
-      return v;
+  var currentTime = new Date();
+  var hours = currentTime.getHours();
+  var minutes = currentTime.getMinutes();
+  var seconds = currentTime.getSeconds();
+  if (minutes < 10){
+    minutes = "0" + minutes;
   }
+  if (seconds < 10){
+    seconds = "0" + seconds;
+  }
+  var v = hours + ":" + minutes + ":" + seconds + " ";
+  if(hours > 11){
+    v+="PM";
+  } else {
+    v+="AM"
+  }
+  return v;
+}
+
+function isCharacterKeyPress(evt) {
+    if (typeof evt.which == "undefined") {
+        // This is IE, which only fires keypress events for printable keys
+        return true;
+    } else if (typeof evt.which == "number" && evt.which > 0) {
+        // In other browsers except old versions of WebKit, evt.which is
+        // only greater than zero if the keypress is a printable key.
+        // We need to filter out backspace and ctrl/alt/meta key combinations
+        return !evt.ctrlKey && !evt.metaKey && !evt.altKey && evt.which != 8;
+    }
+    return false;
+}
+
+var input = document.getElementById("message");
+document.onkeypress = function(evt) {
+    evt = evt || window.event;
+    if (isCharacterKeyPress(evt)) {
+        // Do your stuff here
+        if (document.getElementById("message") !== document.activeElement) document.getElementById("message").focus();
+    }
+}

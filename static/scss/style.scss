@@ -1,6 +1,11 @@
 html, body {
-  height: 100%; width: 100%; overflow: hidden; margin: 0; padding: 0;
-  text-rendering:optimizespeed;font:16px/160% "Nexa Light","Helvetica Neue",Helvetica,sans-serif,Helvetica,sans-serif;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  text-rendering:optimizespeed;
+  font: 15px/160% "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
   background: whitesmoke;
   color: #555;
 }
@@ -27,6 +32,7 @@ a {
   .ligne {
     position: relative;
     line-height: 32px;
+    clear: both;
     img {
       vertical-align: top;
     }
@@ -38,15 +44,21 @@ a {
       color: silver;
     }
     .premier {
-      display: inline-block;
       width: 160px;
-      border-right: 1px black dotted;
       text-align: right;
-      margin-right: 10px;
-      padding-right: 10px;
+      /* margin-right: 10px; */
+      float: left;
     }
     .second {
-      display: inline-block;
+      min-height: 32px;
+      overflow: visible;
+      overflow-wrap: break-word;
+      padding-right: 70px;
+      word-wrap: break-word;
+      text-overflow: ellipsis;
+      margin-left: 170px;
+      padding-left: 10px;
+      border-left: 1px #555 dotted;
 
     }
     &.old {
@@ -70,6 +82,9 @@ a {
     &.error {
       color: #FF4136;
     }
+    &.debug {
+      color: #888;
+    }
   }
 }
 
@@ -91,6 +106,11 @@ a {
   width: 100%;
   padding: 4px;
   font-size: 30px;
+  background: whitesmoke;
+  &:focus {
+    background: white;
+    outline: none;
+  }
 }
 
 #about_zone {

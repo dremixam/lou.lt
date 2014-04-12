@@ -1,25 +1,24 @@
 var fs = require('fs');
 
 var allClients = {};
+var allSockets = {};
 
 module.exports.add = function (socket, fn) {
   var userData = {};
 
   var hs = socket.handshake;
 
-  console.log("données de session chargées : "+hs.session);
-
-  if ( hs.session.userData !== undefined ) {
-    userData = hs.session.userData;
+  if ( socket.handshake.session.userData !== undefined ) {
+    userData = socket.handshake.session.userData;
     userData.last=Date.now();
     userData.ip = socket.handshake.headers['x-real-ip'] || socket.handshake.address.address;
     userData.public.like = userData.public.like || 0;
     userData.public.thumb = userData.public.thumb || 0;
-    socket.set('userData', userData);
     updateLastMessage(socket);
     allClients[userData.public.uuid] = userData;
-    hs.session.userData = userData;
-    hs.session.save();
+    socket.handshake.session.userData = userData;
+    socket.handshake.session.save();
+    socket.emit("debug", "session data saved");
     fn(userData);
   } else {
     // Quand on a une nouvelle connection, on ouvre le fichier qui contient les noms possibles
@@ -42,7 +41,6 @@ module.exports.add = function (socket, fn) {
 
       // On sauvegarde toutes les données de l'utilisateur
       userData = {
-        socket: socket,
         voice: getRandomInt (1, 6),
         params: " -p "+getRandomInt (1, 99)+" -s "+getRandomInt (100, 175),
         last: Date.now(),
@@ -57,14 +55,16 @@ module.exports.add = function (socket, fn) {
       };
 
       allClients[uuid] = userData;
+      allSockets[uuid] = socket;
 
       // On initialise la date du dernier message
 
-      hs.session.userData = userData;
+      socket.handshake.session.userData = userData;
 
 
 
-      hs.session.save();
+      socket.handshake.session.save();
+
       updateLastMessage(socket);
       fn(userData);
     });

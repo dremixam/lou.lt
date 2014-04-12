@@ -16,7 +16,6 @@ module.exports = function(socket) {
     var hs = socket.handshake;
 
 
-
       // Si le pseudo n'est pas défini, on est pas connecté donc on jette
       if (hs.session.userData === null) {
         socket.emit('errormsg', {message: "Une erreur est survenue, veuillez réactualiser"});
