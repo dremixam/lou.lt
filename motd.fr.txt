@@ -1,5 +1,5 @@
-- Bonjour et bienvenue sur <a href="http://lou.lt">Lou.Lt</a> v0.2.2
-- Derniers changements : Correction du bug des sessions & diverses améliorations ergonomiques
+- Bonjour et bienvenue sur <a href="http://lou.lt">Lou.Lt</a> v0.2.4
+- Derniers changements : <a href="http://en.lou.lt/"><img src="/res/img/us.mini.png"> English version available here !</a>
 - N'hésitez pas à dire toutes sortes de conneries mais <strong>restez dans les limites de la loi et du respect</strong>.
 - <strong>Allumez le son</strong> pour profiter de Lou.Lt
 - Vous pouvez <strong>ignorer les utilisateurs gênants</strong> en cliquant sur le haut parleur <i class="fa fa-volume-up" style="color: black;"></i> devant leur pseudo, vous ne recevrez alors plus leurs messages.
