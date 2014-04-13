@@ -40,7 +40,7 @@ module.exports = function(socket) {
         if ( lng == 'fr' ) {
           commande = "espeak "+hs.session.userData.params+" -v mb/mb-fr1 --pho \""+messageAEnregistrer+"\" 2>/dev/null | mbrola -e /usr/share/mbrola/"+hs.session.userData.voice.fr+"/"+hs.session.userData.voice.fr+" - ./static"+audio;
         } else if ( lng == 'en' ) {
-          commande = "espeak "+hs.session.userData.params+" -v mb/mb-en1 --pho \""+messageAEnregistrer+"\" 2>/dev/null | mbrola -e /usr/share/mbrola/"+hs.session.userData.voice.en+"/"+hs.session.userData.voice.en+" - ./static"+audio;
+          commande = "espeak "+hs.session.userData.params+" -v mb/mb-us1 --pho \""+messageAEnregistrer+"\" 2>/dev/null | mbrola -e /usr/share/mbrola/"+hs.session.userData.voice.en+"/"+hs.session.userData.voice.en+" - ./static"+audio;
         } else {
           commande = "espeak "+hs.session.userData.params+" -v mb/mb-en1 --pho \""+messageAEnregistrer+"\" 2>/dev/null | mbrola -e /usr/share/mbrola/"+hs.session.userData.voice.en+"/"+hs.session.userData.voice.en+" - ./static"+audio;
         }
