@@ -38,8 +38,9 @@ mongoose.connect('mongodb://'+config.db.host+'/'+config.db.name, function() {			
 	});
 
 	io.set('authorization', function (handshakeData, accept) {
-		if (handshakeData.headers.cookie && handshakeData.headers.cookie[config.sessIdName]) {
+		if (handshakeData.headers.cookie) {
 			handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
+			if ( handshakeData.cookie[config.sessIdName] === undefined) return accept('Cookie is invalid.', false);
 			handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie[config.sessIdName], config.secret);
 			if (handshakeData.cookie[config.sessIdName] == handshakeData.sessionID) {
 				return accept('Cookie is invalid.', false);
