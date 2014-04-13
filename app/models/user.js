@@ -19,6 +19,17 @@ module.exports.add = function (socket, fn) {
       userData.ip = socket.handshake.headers['x-real-ip'] || socket.handshake.address.address;
       userData.public.like = userData.public.like || 0;
       userData.public.thumb = userData.public.thumb || 0;
+
+      if ( userData.voice[lng] === undefined ) {
+        if ( lng == 'fr' ) {
+          userData.voice[lng] = "fr"+getRandomInt (1, 6);
+        } else if ( lng == 'en' ) {
+          userData.voice[lng] = "us"+getRandomInt (1, 3);
+        } else {
+          userData.voice[lng] = "en1";
+        }
+      }
+
       updateLastMessage(socket);
       allClients[lng][userData.public.uuid] = userData;
       socket.handshake.session.userData = userData;
@@ -44,17 +55,12 @@ module.exports.add = function (socket, fn) {
 
         var uuid = makeuuid();
 
-        if ( lng == 'fr' ) {
-          var voice = "fr"+getRandomInt (1, 6);
-        } else if ( lng == 'en' ) {
-          var voice = "us"+getRandomInt (1, 3);
-        } else {
-          var voice = "en1";
-        }
-
         // On sauvegarde toutes les données de l'utilisateur
         userData = {
-          voice: voice,
+          voice: {
+            fr: "fr"+getRandomInt (1, 6),
+            en: "us"+getRandomInt (1, 3)
+          },
           params: " -p "+getRandomInt (1, 99)+" -s "+getRandomInt (100, 175),
           last: Date.now(),
           ip: socket.handshake.headers['x-real-ip'] || socket.handshake.address.address,

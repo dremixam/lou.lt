@@ -23,12 +23,18 @@ loultApp.controller('UserListCtrl', function ($scope) {
       result[0].count++;
     } else if ( result.length == 0 ) {
       data.count = 1;
+      data.muted = false;
       $scope.userlist.push(data);
+      if (me != undefined)
+        if ($scope.language == 'fr') insereLigne("[Info]", "join", 'Un '+data.pseudo.fr + ' sauvage apparait !', null);
+        else insereLigne("[Info]", "join", 'Wild '+data.pseudo.en + ' appeared!', null);
     } else {
       location.reload();
     }
+
     $scope.$apply();
   });
+
   socket.on('connecting', function(){
     console.log("connecting");
     $scope.userlist = [];
@@ -55,7 +61,9 @@ loultApp.controller('UserListCtrl', function ($scope) {
       if ( result[0].count > 1 ) {
         result[0].count--;
       } else if ( result[0].count == 1 ) {
-        delete result[0];
+        if ($scope.language == 'fr') insereLigne("[Info]", "part", 'Le '+data.pseudo.fr + ' sauvage s\'enfuit !', null);
+        else insereLigne("[Info]", "part", 'Wild '+data.pseudo.en + ' fled!', null);
+        delete $scope.userlist.splice($scope.userlist.indexOf(result[0]),1);
       }
     }
     $scope.$apply();
@@ -87,8 +95,10 @@ loultApp.controller('UserListCtrl', function ($scope) {
 
   // Quand on reçoit un message, on l'insère dans la page
   socket.on('message', function(data) {
-
-    if (ignorelist.indexOf(data.user.uuid) == -1) {
+    var result = $scope.userlist.filter(function( obj ) {
+      return obj.uuid == data.user.uuid;
+    });
+    if (!result[0].muted) {
       insereMessage(data.user.pseudo, data.message, data.color, $scope.language);
       document.getElementById("audio"+(audioPlayer%10)).src = data.audiofile;
       document.getElementById("audio"+(audioPlayer%10)).play();
@@ -103,7 +113,7 @@ loultApp.controller('UserListCtrl', function ($scope) {
     }
   })
   socket.on('ownmessage', function(data) {
-    document.getElementById("message").placeholder = "Votre message...";
+    document.getElementById("message").placeholder = "Message...";
     insereOwnMessage(data.user.pseudo, data.message, data.color, $scope.language);
     document.getElementById("audio"+(audioPlayer%10)).src = data.audiofile;
     document.getElementById("audio"+(audioPlayer%10)).play();
@@ -114,7 +124,7 @@ loultApp.controller('UserListCtrl', function ($scope) {
   })
 
   socket.on('errormsg', function(data) {
-    document.getElementById("message").placeholder = "Votre message...";
+    document.getElementById("message").placeholder = "Message...";
     insereErreur(data.message);
   })
 
@@ -211,6 +221,21 @@ function isCharacterKeyPress(evt) {
     }
     return false;
 }
+
+toggleMute = function() {
+  for ( i = 0 ; i < 10 ; i ++) {
+    if (document.getElementById("audio"+i).volume == 0 ) {
+      document.getElementById("audio"+i).volume = 1;
+      document.getElementById("globalMute").style.color="#fff";
+      document.getElementById("globalMute").className="fa fa-volume-up fa-fw";
+    } else {
+      document.getElementById("audio"+i).volume = 0;
+      document.getElementById("globalMute").style.color="#c0c0c0";
+      document.getElementById("globalMute").className="fa fa-volume-off fa-fw";
+    }
+  }
+}
+
 
 function currentTime() {
   var currentTime = new Date();

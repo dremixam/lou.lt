@@ -53,7 +53,7 @@
   <section id="userlist" ng-controller="UserListCtrl">
     <ul>
       <li ng-repeat="user in userlist | orderBy:pseudo">
-        <i class="fa fa-volume-up fa-fw" style="margin-right: 7px; cursor: pointer;" ng-click="toggleIgnore(user.uuid, this)"></i>
+        <i class="fa fa-volume-up fa-fw" style="margin-right: 7px; cursor: pointer;"  ng-class="{true: 'ignored', false: 'nonignored'}[user.muted]" ng-click="user.muted=!user.muted"></i>
         <i class="fa fa-heart-o" style="color: #fca2a3; cursor: pointer;"></i>
         <small style="color: #fca2a3; font-size: 10px; margin-right: 7px;">{{user.like}}</small>
         <i class="fa fa-thumbs-o-down" style="color: red; cursor: pointer;"></i>
