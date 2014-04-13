@@ -34,10 +34,10 @@ module.exports.add = function (socket, fn) {
 
         //Sinon on récupère un nom aléatoirement dans le fichier
         var lines = data.toString().split('\n');
-        pseudo = lines[Math.floor(Math.random()*lines.length)].replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛîÎöÖüÜëËäÄôÔñÑœŒïÏ\-♀♂]/ig, '');
+        pseudo = eval("("+lines[Math.floor(Math.random()*lines.length)]+")");
 
         // Si le nom est vide, on met magicarpe histoire de troller
-        if ( pseudo == "" ) pseudo = "Magicarpe";
+        if ( pseudo == "" ) pseudo = eval('({"n":"129", "fr": "Magicarpe", "en": "Magikarp"})');
 
         // On récupère une couleur qu'on attribue au nouvel utilisateur
         color = makecolor();
@@ -46,7 +46,7 @@ module.exports.add = function (socket, fn) {
 
         // On sauvegarde toutes les données de l'utilisateur
         userData = {
-          voice: getRandomInt (1, 6),
+          voice: lng+getRandomInt (1, 6),
           params: " -p "+getRandomInt (1, 99)+" -s "+getRandomInt (100, 175),
           last: Date.now(),
           ip: socket.handshake.headers['x-real-ip'] || socket.handshake.address.address,

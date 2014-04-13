@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="loultApp">
 <head>
   <meta charset="utf-8" />
-  <title>Lou.lt - Le tchat anonyme avec de la synthese vocale et des Pokémon dedans.</title>
+  <title translate>Lou.lt - Anonymous chat with speech synthesis and Pokémons inside!</title>
   <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <link href="/styles/style.css" rel="stylesheet">
+  <script src="/lib/angular/angular.min.js"></script>
+  <script src="/lib/angular-gettext/dist/angular-gettext.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/controller.js"></script>
 </head>
 
 <body>
@@ -20,22 +25,42 @@
   <section id="zone_chat">
   </section>
 
+  <header>
+    <h1>
+      <i class="fa fa-volume-up fa-fw" id="globalMute" style="cursor: pointer;" onclick="toggleMute();"></i>
+      <a href="/">Lou.Lt</a> <small translate>(alpha) Anonymous chat with speech synthesis and Pokémons inside!</small>
+    </h1>
+    <div class="fb-like" data-href="http://lou.lt/" data-layout="box_count" data-action="like" data-show-faces="false" data-share="false"></div>
+    <div>
+      <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://lou.lt/" data-via="DrEmixam" data-size="large">Tweet</a>
+      <script>
+        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+      </script>
+    </div>
+  </header>
+
   <section id="about_zone">
     Lou.lt - by <a href="https://twitter.com/DrEmixam" target="_blank">@DrEmixam</a>
   </section>
 
-  <header><h1><i class="fa fa-volume-up fa-fw" id="globalMute" style="cursor: pointer;" onclick="toggleMute();"></i> <a href="/">Lou.Lt</a> <small>(alpha) Le tchat anonyme avec de la synthese vocale et des Pokémon dedans.</small></h1>
-    <div class="fb-like" data-href="http://lou.lt/" data-layout="box_count" data-action="like" data-show-faces="false" data-share="false"></div>
-    <div><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://fr.lou.lt/" data-via="DrEmixam" data-size="large">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></div>
-  </header>
-
   <form action="/" method="post" id="formulaire_chat">
-    <input type="text" name="message" id="message" placeholder="Votre message..." autofocus disabled autocomplete="off" />
+    <input type="text" name="message" id="message" placeholder="Votre message..." autofocus autocomplete="off" disabled ng-model="textMessage"/>
+    <span  ng-animate ng-class="{true: 'alert', false: 'ok'}[textMessage.length>140]">{{140 - textMessage.length}}</span>
   </form>
-  <section id="userlist"></section>
-  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
+
+  <section id="userlist" ng-controller="UserListCtrl">
+    <ul>
+      <li ng-repeat="user in userlist | orderBy:pseudo">
+        <i class="fa fa-volume-up fa-fw" style="margin-right: 7px; cursor: pointer;" ng-click="toggleIgnore(user.uuid, this)"></i>
+        <i class="fa fa-heart-o" style="color: #fca2a3; cursor: pointer;"></i>
+        <small style="color: #fca2a3; font-size: 10px; margin-right: 7px;">{{user.like}}</small>
+        <i class="fa fa-thumbs-o-down" style="color: red; cursor: pointer;"></i>
+        <small style="color: red; font-size: 10px; margin-right: 7px;">{{user.thumb}}</small>
+        <span style="color: {{user.color}};">{{user.pseudo[language]}}</span>
+      </li>
+    </ul>
+  </section>
+
   <audio id="audio1"></audio>
   <audio id="audio2"></audio>
   <audio id="audio3"></audio>
@@ -47,6 +72,5 @@
   <audio id="audio9"></audio>
   <audio id="audio0"></audio>
 
-<script src="/js/main.js"></script>
 </body>
 </html>

@@ -30,7 +30,7 @@ mongoose.connect('mongodb://'+config.db.host+'/'+config.db.name, function() {			
 		app.use(express.cookieParser(config.secret));
 		app.use(session({
 			store: sessionStore,
-			key: 'express.sid',
+			key: config.sessIdName,
 			secret: config.secret,
 			cookie: { httpOnly: false, maxAge: 30*24*60*60*1000, domain: config.host }}
 		));
@@ -40,8 +40,8 @@ mongoose.connect('mongodb://'+config.db.host+'/'+config.db.name, function() {			
 	io.set('authorization', function (handshakeData, accept) {
 		if (handshakeData.headers.cookie) {
 			handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
-			handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie['express.sid'], config.secret);
-			if (handshakeData.cookie['express.sid'] == handshakeData.sessionID) {
+			handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie[config.sessIdName], config.secret);
+			if (handshakeData.cookie[config.sessIdName] == handshakeData.sessionID) {
 				return accept('Cookie is invalid.', false);
 			}
 		} else {

@@ -19,6 +19,14 @@ a {
   }
 }
 
+.alert {
+  color: #FF4136;
+}
+
+.ok {
+  color: #2ECC40;
+}
+
 #zone_chat {
   position: absolute;
   top: 68px;
@@ -99,6 +107,13 @@ a {
   margin: 0;
   padding: 0;
   border-top: 3px solid #0074D9;
+  span {
+    font-weight: bold;
+    position: absolute;
+    bottom: 0;
+    right: 6px;
+    font-size: 12px;
+  }
 }
 
 #message {
@@ -107,7 +122,7 @@ a {
   box-sizing: border-box;
   height: 100%;
   width: 100%;
-  padding: 4px;
+  padding: 4px 30px 4px 4px;
   font-size: 30px;
   background: whitesmoke;
   border: none;
