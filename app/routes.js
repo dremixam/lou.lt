@@ -15,6 +15,7 @@ module.exports = function(io) {
 		socket.set("lng", lng);
 		socket.join(lng);
 
+		if (["fr","en"].indexOf(lng) == -1) return;
 
 		// setup an inteval that will keep our session fresh
 		var intervalID = setInterval(function () {
@@ -37,14 +38,14 @@ module.exports = function(io) {
 			socket.emit('nouveau_client', newUserData.public);
 
 			fs.readFile("./motd."+lng+".txt", function(err, data){
+				if (!err) {
+					var lines = data.toString().split('\n');
 
-				var lines = data.toString().split('\n');
-
-				lines.forEach(function(elt){
-					if (elt.length > 0)
-						socket.emit('info', elt.toString());
-				});
-
+					lines.forEach(function(elt){
+						if (elt.length > 0)
+							socket.emit('info', elt.toString());
+					});
+				}
 				socket.emit('connected', newUserData.public);
 
 				messagesModel.forEach(lng, function(message){

@@ -36,7 +36,15 @@ module.exports = function(socket) {
         messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€']/ig, ' ').substring(0,140);
         message = twitter.autoLink(replaceHtmlEntites(message).replace(/卐/g," je suis homosexuel "), {target: '_blank'});
         audio = "/res/audio/"+randomGen.get()+".wav";
-        commande = "espeak "+hs.session.userData.params+" -v mb/mb-"+lng+"1 --pho \""+messageAEnregistrer+"\" 2>/dev/null | mbrola -e /usr/share/mbrola/"+hs.session.userData.voice+"/"+hs.session.userData.voice+" - ./static"+audio;
+
+        if ( lng == 'fr' ) {
+          commande = "espeak "+hs.session.userData.params+" -v mb/mb-fr1 --pho \""+messageAEnregistrer+"\" 2>/dev/null | mbrola -e /usr/share/mbrola/"+hs.session.userData.voice+"/"+hs.session.userData.voice+" - ./static"+audio;
+        } else if ( lng == 'en' ) {
+          commande = "espeak "+hs.session.userData.params+" -v mb/mb-en1 --pho \""+messageAEnregistrer+"\" 2>/dev/null | mbrola -e /usr/share/mbrola/"+hs.session.userData.voice+"/"+hs.session.userData.voice+" - ./static"+audio;
+        } else {
+          commande = "espeak "+hs.session.userData.params+" -v mb/mb-en1 --pho \""+messageAEnregistrer+"\" 2>/dev/null | mbrola -e /usr/share/mbrola/"+hs.session.userData.voice+"/"+hs.session.userData.voice+" - ./static"+audio;
+        }
+
 
 
         console.log(commande);

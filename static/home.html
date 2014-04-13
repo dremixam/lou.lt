@@ -44,7 +44,7 @@
   </section>
 
   <form action="/" method="post" id="formulaire_chat">
-    <input type="text" name="message" id="message" placeholder="Votre message..." autofocus autocomplete="off" disabled ng-model="textMessage"/>
+    <input type="text" name="message" id="message" placeholder="Message..." autofocus autocomplete="off" disabled ng-model="textMessage" value=""/>
     <span  ng-animate ng-class="{true: 'alert', false: 'ok'}[textMessage.length>140]">{{140 - textMessage.length}}</span>
   </form>
 

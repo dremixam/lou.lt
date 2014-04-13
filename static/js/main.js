@@ -35,7 +35,7 @@ socket.on('lastmessage', function(data) {
 })
 
 socket.on('ownmessage', function(data) {
-  document.getElementById("message").placeholder = "Votre message...";
+  document.getElementById("message").placeholder = "Message...";
   insereOwnMessage(data.user.pseudo, data.message, data.color);
   document.getElementById("audio"+(audioPlayer%10)).src = data.audiofile;
   document.getElementById("audio"+(audioPlayer%10)).play();
@@ -47,7 +47,7 @@ socket.on('debug', function(message) {
 })
 
 socket.on('errormsg', function(data) {
-  document.getElementById("message").placeholder = "Votre message...";
+  document.getElementById("message").placeholder = "Message...";
   insereErreur(data.message);
 })
 
@@ -64,7 +64,6 @@ socket.on('nouveau_client', function(data) {
     userlist[data.uuid].count = 1;
     if (connected) insereLigne("[Info]", "join", 'Un '+data.pseudo + ' sauvage apparait !', null);
   }
-
   updateUserList();
 })
 
@@ -105,34 +104,6 @@ $('#formulaire_chat').submit(function () {
   $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
   return false; // Permet de bloquer l'envoi "classique" du formulaire
 });
-
-// Ajoute un message dans la page
-function insereDebug(message) {
-  insereLigne("[Debug]", "debug", message, null);
-}
-function insereErreur(message) {
-  insereLigne("[Erreur]", "error", message, null);
-}
-function insereMessage(pseudo, message, color) {
-  insereLigne(pseudo+" <img src='/res/pkmn/"+pseudo+".gif'>", "", message, color);
-}
-function insereLastMessage(pseudo, message, color) {
-  insereLigne(pseudo+" <img src='/res/pkmn/"+pseudo+".gif'>", "old", message, color);
-}
-function insereOwnMessage(pseudo, message, color) {
-  insereLigne(pseudo+" <img src='/res/pkmn/"+pseudo+".gif'>", "own", message, color);
-}
-
-function insereLigne(premier, classe, second, color) {
-  if (color === null)
-  $('#zone_chat').append('<div class="ligne '+classe+'"><div class="premier">' + premier + '</div><div class="second">' + second + '<div><div class="lineTimer">'+currentTime()+'</div></div>');
-  else
-  $('#zone_chat').append('<div class="ligne '+classe+'"><div class="premier" style="color: '+color+';">' + premier + '</div><div class="second">' + second + '<div><div class="lineTimer">'+currentTime()+'</div></div>');
-
-  if ($('#zone_chat').scrollTop()+$('#zone_chat').height() >  ($('#zone_chat')[0].scrollHeight-$('#zone_chat').height()/2)) {
-    $('#zone_chat').stop().animate({ scrollTop: $('#zone_chat')[0].scrollHeight }, 500);
-  }
-}
 
 function updateUserList() {
   liste = $("<ul>");

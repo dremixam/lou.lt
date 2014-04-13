@@ -44,9 +44,17 @@ module.exports.add = function (socket, fn) {
 
         var uuid = makeuuid();
 
+        if ( lng == 'fr' ) {
+          var voice = "fr"+getRandomInt (1, 6);
+        } else if ( lng == 'en' ) {
+          var voice = "us"+getRandomInt (1, 3);
+        } else {
+          var voice = "en1";
+        }
+
         // On sauvegarde toutes les données de l'utilisateur
         userData = {
-          voice: lng+getRandomInt (1, 6),
+          voice: voice,
           params: " -p "+getRandomInt (1, 99)+" -s "+getRandomInt (100, 175),
           last: Date.now(),
           ip: socket.handshake.headers['x-real-ip'] || socket.handshake.address.address,

@@ -81,10 +81,68 @@ loultApp.controller('UserListCtrl', function ($scope) {
     connected = true;
   })
 
+  //
+// Tout ce qui suit est à revoir en grande partie
+//
+
+  // Quand on reçoit un message, on l'insère dans la page
+  socket.on('message', function(data) {
+
+    if (ignorelist.indexOf(data.user.uuid) == -1) {
+      insereMessage(data.user.pseudo, data.message, data.color, $scope.language);
+      document.getElementById("audio"+(audioPlayer%10)).src = data.audiofile;
+      document.getElementById("audio"+(audioPlayer%10)).play();
+      audioPlayer++;
+    }
+  })
+
+  // Historique des derniers messages
+  socket.on('lastmessage', function(data) {
+    if (ignorelist.indexOf(data.pseudo) == -1) {
+      insereLastMessage(data.pseudo, data.message, data.color, $scope.language);
+    }
+  })
+  socket.on('ownmessage', function(data) {
+    document.getElementById("message").placeholder = "Votre message...";
+    insereOwnMessage(data.user.pseudo, data.message, data.color, $scope.language);
+    document.getElementById("audio"+(audioPlayer%10)).src = data.audiofile;
+    document.getElementById("audio"+(audioPlayer%10)).play();
+    audioPlayer++;
+  })
+  socket.on('debug', function(message) {
+    insereDebug(message);
+  })
+
+  socket.on('errormsg', function(data) {
+    document.getElementById("message").placeholder = "Votre message...";
+    insereErreur(data.message);
+  })
+
+  socket.on('info', function(data) {
+    insereLigne("[Info]", "info", data, null);
+  })
 
 
+  socket.on('attack', function(data) {
+    if (connected) insereLigne("[Attaque]", "attack", data, null);
+  })
 
 
+  // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
+  $('#formulaire_chat').submit(function () {
+    var message = $('#message').val();
+    var first = message.split(' ')[0];
+    var next = message.substr(message.indexOf(" ") + 1);
+    if (first.charAt(0) == "/") {
+      socket.emit('command', {cmd: first.substring(1), args: next});
+    } else {
+      socket.emit('message', message); // Transmet le message aux autres
+    }
+
+    $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
+    //textMessage.$apply();
+    return false; // Permet de bloquer l'envoi "classique" du formulaire
+  });
 
   // Ajoute un message dans la page
   function insereDebug(message) {
@@ -93,14 +151,14 @@ loultApp.controller('UserListCtrl', function ($scope) {
   function insereErreur(message) {
     insereLigne("[Erreur]", "error", message, null);
   }
-  function insereMessage(pseudo, message, color) {
-    insereLigne(pseudo+" <img src='/res/pkmn/"+pseudo+".gif'>", "", message, color);
+  function insereMessage(pseudo, message, color, lng) {
+    insereLigne(pseudo[lng]+" <img src='/res/pkmn/"+pseudo.fr+".gif'>", "", message, color);
   }
-  function insereLastMessage(pseudo, message, color) {
-    insereLigne(pseudo+" <img src='/res/pkmn/"+pseudo+".gif'>", "old", message, color);
+  function insereLastMessage(pseudo, message, color, lng) {
+    insereLigne(pseudo[lng]+" <img src='/res/pkmn/"+pseudo.fr+".gif'>", "old", message, color);
   }
-  function insereOwnMessage(pseudo, message, color) {
-    insereLigne(pseudo+" <img src='/res/pkmn/"+pseudo+".gif'>", "own", message, color);
+  function insereOwnMessage(pseudo, message, color, lng) {
+    insereLigne(pseudo[lng]+" <img src='/res/pkmn/"+pseudo.fr+".gif'>", "own", message, color);
   }
 
   function insereLigne(premier, classe, second, color) {
@@ -116,3 +174,69 @@ loultApp.controller('UserListCtrl', function ($scope) {
 
 
 });
+
+
+function toggleIgnore(pseudo, elt){
+  if (elt !== null)
+  if (ignorelist.indexOf(pseudo) == -1) {
+    ignorelist.push(pseudo);
+    elt.parentNode.style.color="#c0c0c0";
+    elt.className="fa fa-times-circle fa-fw";
+  } else {
+    var i = ignorelist.indexOf(pseudo);
+    ignorelist.splice(i, 1);
+    elt.parentNode.style.color="black";
+    elt.className="fa fa-volume-up fa-fw";
+  }
+  else
+  if (ignorelist.indexOf(pseudo) == -1) {
+    ignorelist.push(pseudo);
+    updateUserList();
+  } else {
+    var i = ignorelist.indexOf(pseudo);
+    ignorelist.splice(i, 1);
+    updateUserList();
+  }
+}
+
+function isCharacterKeyPress(evt) {
+    if (typeof evt.which == "undefined") {
+        // This is IE, which only fires keypress events for printable keys
+        return true;
+    } else if (typeof evt.which == "number" && evt.which > 0) {
+        // In other browsers except old versions of WebKit, evt.which is
+        // only greater than zero if the keypress is a printable key.
+        // We need to filter out backspace and ctrl/alt/meta key combinations
+        return !evt.ctrlKey && !evt.metaKey && !evt.altKey && evt.which != 8;
+    }
+    return false;
+}
+
+function currentTime() {
+  var currentTime = new Date();
+  var hours = currentTime.getHours();
+  var minutes = currentTime.getMinutes();
+  var seconds = currentTime.getSeconds();
+  if (minutes < 10){
+    minutes = "0" + minutes;
+  }
+  if (seconds < 10){
+    seconds = "0" + seconds;
+  }
+  var v = hours + ":" + minutes + ":" + seconds + " ";
+  if(hours > 11){
+    v+="PM";
+  } else {
+    v+="AM"
+  }
+  return v;
+}
+
+var input = document.getElementById("message");
+document.onkeypress = function(evt) {
+    evt = evt || window.event;
+    if (isCharacterKeyPress(evt)) {
+        // Do your stuff here
+        if (document.getElementById("message") !== document.activeElement) document.getElementById("message").focus();
+    }
+}
