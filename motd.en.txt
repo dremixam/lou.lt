@@ -1,0 +1,5 @@
+- Hi! welcome to <a href="http://lou.lt">Lou.Lt</a> v0.2.3
+- Last changes: internationalization, various front en changes
+- Turn your volume on to use lou.lt
+- You can mute users by clicking the little speaker near their name.
+- Your name and voice are chosen randomly, to reroll, delete your cookies and refresh the page.
