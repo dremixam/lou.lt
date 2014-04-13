@@ -2,7 +2,7 @@ var clientList = require('./models/user');
 var messagesRoute = require("./routes/messages");
 var messagesModel = require('./models/messages');
 var fs = require('fs');
-
+var tldjs = require('tldjs');
 
 module.exports = function(io) {
 
@@ -10,9 +10,11 @@ module.exports = function(io) {
 		// Gestion de la session
 		var hs = socket.handshake;
 
-		clientList.forEach(function(entry) {
-			console.log('client: '+ JSON.stringify(entry.public));
-		});
+		var lng = tldjs.getSubdomain(socket.handshake.headers.host.split(":").shift());
+
+		socket.set("lng", lng);
+		socket.join(lng);
+
 
 		// setup an inteval that will keep our session fresh
 		var intervalID = setInterval(function () {
@@ -26,46 +28,39 @@ module.exports = function(io) {
 
 		clientList.add(socket, function(newUserData) {
 			// On transmet au nouveau client la liste des personnes en ligne
-			clientList.forEach(function(entry) {
+			clientList.forEach(lng, function(entry) {
 				socket.emit('nouveau_client', entry.public);
 			});
 
-			socket.broadcast.emit('nouveau_client', newUserData.public);
+			socket.broadcast.to(lng).emit('nouveau_client', newUserData.public);
 
 			socket.emit('nouveau_client', newUserData.public);
 
-			fs.readFile("./motd.txt", function(err, data){
-
-				if(err) throw err;
+			fs.readFile("./motd."+lng+".txt", function(err, data){
 
 				var lines = data.toString().split('\n');
 
 				lines.forEach(function(elt){
-					socket.emit('info', elt.toString());
+					if (elt.length > 0)
+						socket.emit('info', elt.toString());
 				});
 
 				socket.emit('connected', newUserData.public);
 
-				messagesModel.forEach(function(message){
+				messagesModel.forEach(lng, function(message){
 					socket.emit('lastmessage', message);
 				});
 			});
-
-
-
 		});
-
-
-
 
 		messagesRoute(socket);
 
 		socket.on('disconnect', function() {
 			var public = socket.handshake.session.userData.public;
 			var uuid = socket.handshake.session.userData.public.uuid;
-			clientList.remove(uuid);
+			clientList.remove(lng, uuid);
 			setTimeout(function () {
-				socket.broadcast.emit('disconnected', public);
+				socket.broadcast.to(lng).emit('disconnected', public);
 
 			}, 4 * 1000);
 

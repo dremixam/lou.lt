@@ -32,7 +32,7 @@ mongoose.connect('mongodb://'+config.db.host+'/'+config.db.name, function() {			
 			store: sessionStore,
 			key: 'express.sid',
 			secret: config.secret,
-			cookie: { httpOnly: false, maxAge: 30*24*60*60*1000 }}
+			cookie: { httpOnly: false, maxAge: 30*24*60*60*1000, domain: config.host }}
 		));
 
 	});
