@@ -145,24 +145,7 @@ loultApp.controller('UserListCtrl', function ($scope) {
   })
 
 
-  // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
-  $('#formulaire_chat').submit(function () {
-    var message = $('#message').val();
-    var first = message.split(' ')[0];
-    var next = message.substr(message.indexOf(" ") + 1);
-    if (first.charAt(0) == "/") {
-      socket.emit('command', {
-        cmd: first.substring(1),
-        args: next
-      });
-    } else {
-      socket.emit('message', message); // Transmet le message aux autres
-    }
 
-    $('#message').val('').focus(); // Vide la zone de Chat et remet le focus dessus
-    //textMessage.$apply();
-    return false; // Permet de bloquer l'envoi "classique" du formulaire
-  });
 
   // Ajoute un message dans la page
   function insereDebug(message) {
@@ -198,6 +181,26 @@ loultApp.controller('UserListCtrl', function ($scope) {
     }
   }
 
+});
+
+loultApp.controller('TextBoxCtrl', function ($scope) {
+  // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
+  $scope.submit = function () {
+    var message = $scope.textMessage;
+    var first = message.split(' ')[0];
+    var next = message.substr(message.indexOf(" ") + 1);
+    if (first.charAt(0) == "/") {
+      socket.emit('command', {
+        cmd: first.substring(1),
+        args: next
+      });
+    } else {
+      socket.emit('message', message); // Transmet le message aux autres
+    }
+    $scope.textMessage = '';
+
+    return false; // Permet de bloquer l'envoi "classique" du formulaire
+  };
 
 });
 

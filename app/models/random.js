@@ -1,10 +1,10 @@
 var fs = require('fs');
 var Buffer = require('buffer').Buffer;
 
-module.exports.get = function() {
-  var string = new Buffer(32);
-  var fd = fs.openSync('/dev/urandom', 'r');
-  fs.readSync(fd, string, 0, 32, 0);
-  fs.closeSync(fd);
-  return string.toString('hex');
+function randomIntInc(low, high) {
+  return Math.floor(Math.random() * (high - low + 1) + low);
+}
+
+module.exports.get = function () {
+  return randomIntInc(1, 99999999999999999999999999999999).toString(36);
 }
