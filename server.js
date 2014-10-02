@@ -8,7 +8,7 @@ var mongoose = require('mongoose'); // mongoose for mongodb
 var cookie = require("cookie");
 var connect = require("connect");
 var session = require('express-session');
-var fs = require('fs');
+
 
 // configuration ===============================================================
 mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function () { // connect to mongoDB database
@@ -67,19 +67,7 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
   // Chargement de la page index.html
   app.get('*', function (req, res) {
     req.session.valid = true;
-
-
-
-
-    fs.exists(__dirname + req.path, function (exists) {
-      if (exists) {
-        // serve file
-        res.sendfile(req.path);
-      } else {
-        // mongodb
-        res.sendfile('static/home.html');
-      }
-    });
+    res.sendfile('static/home.html');
 
 
   });
