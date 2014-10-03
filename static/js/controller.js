@@ -115,8 +115,11 @@ loultApp.controller('UserListCtrl', function ($scope) {
 
   // Historique des derniers messages
   socket.on('lastmessage', function (data) {
-    if (ignorelist.indexOf(data.pseudo) == -1) {
-      insereLastMessage(data.pseudo, data.message, data.color, $scope.language);
+    var result = $scope.userlist.filter(function (obj) {
+      return obj.uuid == data.user.uuid;
+    });
+    if (!result[0].muted) {
+      insereLastMessage(data.user.pseudo, data.message, data.color, $scope.language);
     }
   })
   socket.on('ownmessage', function (data) {

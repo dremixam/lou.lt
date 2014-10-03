@@ -1,13 +1,16 @@
 var messagesModel = require('../models/messages');
 var clientList = require('../models/user');
+var socketModel = require('../models/socket');
 
 module.exports = function (socket) {
 
   socket.on('join', function (channel) {
-    socket.join(channel);
 
-    socket.set("channel", channel);
+    socketModel.set(socket.id, 'channel', channel);
+
     var hs = socket.handshake;
+
+    socket.join(channel);
     // setup an inteval that will keep our session fresh
     var intervalID = setInterval(function () {
       hs.session.reload(function () {
@@ -24,6 +27,7 @@ module.exports = function (socket) {
       socket.emit('nouveau_client', newUserData.public);
       socket.emit('connected', newUserData.public);
       messagesModel.forEach(channel, function (message) {
+        console.log("Derniers messages : " + JSON.stringify(message));
         socket.emit('lastmessage', message);
       });
     });
@@ -34,6 +38,8 @@ module.exports = function (socket) {
       setTimeout(function () {
         socket.broadcast.to(channel).emit('disconnected', public);
       }, 4 * 1000);
+
+      socketModel.remove(socket.id);
 
       clearInterval(intervalID);
     });

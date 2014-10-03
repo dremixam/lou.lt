@@ -1,97 +1,97 @@
 var fs = require('fs');
 
+var socketModel = require('../models/socket');
+
 var allClients = {};
 var allSockets = {};
 
 module.exports.add = function (socket, fn) {
-  socket.get("lng", function (err, lng) {
-    socket.get("channel", function (err, channel) {
 
-      if (allClients[channel] === undefined) allClients[channel] = {};
-      if (allSockets[channel] === undefined) allSockets[channel] = {};
+  var lng = socketModel.get(socket.id, 'lng');
+  var channel = socketModel.get(socket.id, 'channel');
 
-      var userData = {};
+  if (allClients[channel] === undefined) allClients[channel] = {};
+  if (allSockets[channel] === undefined) allSockets[channel] = {};
 
-      var hs = socket.handshake;
+  var userData = {};
 
-      if (socket.handshake.session.userData !== undefined) {
-        userData = socket.handshake.session.userData;
-        userData.last = Date.now();
-        userData.ip = socket.handshake.headers['x-real-ip'] || socket.handshake.address.address;
-        userData.public.like = userData.public.like || 0;
-        userData.public.thumb = userData.public.thumb || 0;
+  var hs = socket.handshake;
 
-        if (userData.voice[lng] === undefined) {
-          if (lng == 'fr') {
-            userData.voice[lng] = "fr" + getRandomInt(1, 6);
-          } else if (lng == 'en') {
-            userData.voice[lng] = "us" + getRandomInt(1, 3);
-          } else {
-            userData.voice[lng] = "en1";
-          }
-        }
+  if (socket.handshake.session.userData !== undefined) {
+    userData = socket.handshake.session.userData;
+    userData.last = Date.now();
+    userData.ip = socket.handshake.headers['x-real-ip'] || socket.handshake.address.address;
+    userData.public.like = userData.public.like || 0;
+    userData.public.thumb = userData.public.thumb || 0;
 
-        updateLastMessage(socket);
-        allClients[channel][userData.public.uuid] = userData;
-        socket.handshake.session.userData = userData;
-        socket.handshake.session.save();
-        //socket.emit("debug", "session data saved");
-        fn(userData);
+    if (userData.voice[lng] === undefined) {
+      if (lng == 'fr') {
+        userData.voice[lng] = "fr" + getRandomInt(1, 6);
+      } else if (lng == 'en') {
+        userData.voice[lng] = "us" + getRandomInt(1, 3);
       } else {
-        // Quand on a une nouvelle connection, on ouvre le fichier qui contient les noms possibles
-        fs.readFile("./names.txt", function (err, data) {
-
-          // En cas d'erreur on arrête
-          if (err) throw err;
-
-          //Sinon on récupère un nom aléatoirement dans le fichier
-          var lines = data.toString().split('\n');
-          pseudo = eval("(" + lines[Math.floor(Math.random() * lines.length)] + ")");
-
-          // Si le nom est vide, on met magicarpe histoire de troller
-          if (pseudo == "") pseudo = eval('({"n":"129", "fr": "Magicarpe", "en": "Magikarp"})');
-
-          // On récupère une couleur qu'on attribue au nouvel utilisateur
-          color = makecolor();
-
-          var uuid = makeuuid();
-
-          // On sauvegarde toutes les données de l'utilisateur
-          userData = {
-            voice: {
-              fr: "fr" + getRandomInt(1, 6),
-              en: "us" + getRandomInt(1, 3)
-            },
-            params: " -p " + getRandomInt(1, 99) + " -s " + getRandomInt(100, 175),
-            last: Date.now(),
-            ip: socket.handshake.headers['x-real-ip'] || socket.handshake.address.address,
-            public: {
-              uuid: uuid,
-              pseudo: pseudo,
-              color: color,
-              like: 0,
-              thumb: 0
-            }
-          };
-
-          allClients[channel][uuid] = userData;
-          allSockets[channel][uuid] = socket;
-
-          // On initialise la date du dernier message
-
-          socket.handshake.session.userData = userData;
-
-
-
-          socket.handshake.session.save();
-
-          updateLastMessage(socket);
-          fn(userData);
-        });
+        userData.voice[lng] = "en1";
       }
+    }
 
+    updateLastMessage(socket);
+    allClients[channel][userData.public.uuid] = userData;
+    socket.handshake.session.userData = userData;
+    socket.handshake.session.save();
+    //socket.emit("debug", "session data saved");
+    fn(userData);
+  } else {
+    // Quand on a une nouvelle connection, on ouvre le fichier qui contient les noms possibles
+    fs.readFile("./names.txt", function (err, data) {
+
+      // En cas d'erreur on arrête
+      if (err) throw err;
+
+      //Sinon on récupère un nom aléatoirement dans le fichier
+      var lines = data.toString().split('\n');
+      pseudo = eval("(" + lines[Math.floor(Math.random() * lines.length)] + ")");
+
+      // Si le nom est vide, on met magicarpe histoire de troller
+      if (pseudo == "") pseudo = eval('({"n":"129", "fr": "Magicarpe", "en": "Magikarp"})');
+
+      // On récupère une couleur qu'on attribue au nouvel utilisateur
+      color = makecolor();
+
+      var uuid = makeuuid();
+
+      // On sauvegarde toutes les données de l'utilisateur
+      userData = {
+        voice: {
+          fr: "fr" + getRandomInt(1, 6),
+          en: "us" + getRandomInt(1, 3)
+        },
+        params: " -p " + getRandomInt(1, 99) + " -s " + getRandomInt(100, 175),
+        last: Date.now(),
+        ip: socket.handshake.headers['x-real-ip'] || socket.handshake.address.address,
+        public: {
+          uuid: uuid,
+          pseudo: pseudo,
+          color: color,
+          like: 0,
+          thumb: 0
+        }
+      };
+
+      allClients[channel][uuid] = userData;
+      allSockets[channel][uuid] = socket;
+
+      // On initialise la date du dernier message
+
+      socket.handshake.session.userData = userData;
+
+
+
+      socket.handshake.session.save();
+
+      updateLastMessage(socket);
+      fn(userData);
     });
-  });
+  }
 }
 
 module.exports.forEach = function (channel, fn) {
