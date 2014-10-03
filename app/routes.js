@@ -32,17 +32,7 @@ module.exports = function (io) {
 
     messagesRoute(socket);
 
-    socket.on('disconnect', function () {
-      var public = socket.handshake.session.userData.public;
-      var uuid = socket.handshake.session.userData.public.uuid;
-      clientList.remove(lng, uuid);
-      setTimeout(function () {
-        socket.broadcast.to(lng).emit('disconnected', public);
 
-      }, 4 * 1000);
-
-      clearInterval(intervalID);
-    });
 
   });
 };

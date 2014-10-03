@@ -20,5 +20,17 @@ module.exports = function (socket) {
         socket.emit('lastmessage', message);
       });
     });
+    socket.on('disconnect', function () {
+      var public = socket.handshake.session.userData.public;
+      var uuid = socket.handshake.session.userData.public.uuid;
+      clientList.remove(channel, uuid);
+      setTimeout(function () {
+        socket.broadcast.to(channel).emit('disconnected', public);
+
+      }, 4 * 1000);
+
+      clearInterval(intervalID);
+    });
   });
+
 };
