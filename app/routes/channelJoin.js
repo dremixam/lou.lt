@@ -7,7 +7,7 @@ module.exports = function (socket) {
     socket.join(channel);
 
     socket.set("channel", channel);
-
+    var hs = socket.handshake;
     // setup an inteval that will keep our session fresh
     var intervalID = setInterval(function () {
       hs.session.reload(function () {
