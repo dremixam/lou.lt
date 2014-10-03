@@ -18,12 +18,7 @@ module.exports = function (io) {
     socket.set("lng", lng);
 
 
-    // setup an inteval that will keep our session fresh
-    var intervalID = setInterval(function () {
-      hs.session.reload(function () {
-        hs.session.touch().save();
-      });
-    }, 60 * 1000);
+
 
     // On prévient l'utilisateur qu'il est bien en train de se connecter
     socket.emit('connecting');

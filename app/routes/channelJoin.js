@@ -8,6 +8,13 @@ module.exports = function (socket) {
 
     socket.set("channel", channel);
 
+    // setup an inteval that will keep our session fresh
+    var intervalID = setInterval(function () {
+      hs.session.reload(function () {
+        hs.session.touch().save();
+      });
+    }, 60 * 1000);
+
     clientList.add(socket, function (newUserData) {
       // On transmet au nouveau client la liste des personnes en ligne
       clientList.forEach(channel, function (entry) {
@@ -26,7 +33,6 @@ module.exports = function (socket) {
       clientList.remove(channel, uuid);
       setTimeout(function () {
         socket.broadcast.to(channel).emit('disconnected', public);
-
       }, 4 * 1000);
 
       clearInterval(intervalID);
