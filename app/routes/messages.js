@@ -15,6 +15,8 @@ module.exports = function (socket) {
 
         var messageId = randomGen.get(); // On g&eacute;n&egrave;re un id pour le message
 
+        console.log("génération du message " + messageId);
+
         // Si le message est vide on jette
         if (message.length < 1) return;
 
@@ -41,7 +43,7 @@ module.exports = function (socket) {
 
         // Génération de la voix et du message
         message = message.substring(0, 300);
-        messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€']/ig, ' ').substring(0, 140);
+        messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€']/ig, ' ').substring(0, 300);
         message = twitter.autoLink(replaceHtmlEntites(message).replace(/卐/g, " je suis homosexuel "), {
           target: '_blank'
         });
@@ -57,9 +59,10 @@ module.exports = function (socket) {
 
 
 
-        console.log(commande);
+        console.log(messageId + ' Commande : ' + commande);
 
         child = exec(commande, function (error, stdout, stderr) {
+          console.log(messageId + ' g&eacute;n&eacute;r&eacute;, envoi sur ' + channel);
           if (error !== null) {
             console.log('exec error: ' + error);
           }
@@ -75,7 +78,7 @@ module.exports = function (socket) {
             audiofile: audio,
             color: hs.session.userData.public.color
           });
-          messagesModel.push({
+          messagesModel.push(channel, {
             pseudo: hs.session.userData.public.pseudo,
             message: message,
             audiofile: audio,

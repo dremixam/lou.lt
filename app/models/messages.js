@@ -1,14 +1,14 @@
 var lastMessages = {};
 var maximum = 5;
 
-module.exports.push = function (lng, elt) {
-  if ( lastMessages[lng] === undefined ) lastMessages[lng] = [];
+module.exports.push = function (channel, elt) {
+  if (lastMessages[channel] === undefined) lastMessages[channel] = [];
 
-  lastMessages[lng].push(elt);
-  if ( lastMessages.length > maximum ) lastMessages.shift();
+  lastMessages[channel].push(elt);
+  if (lastMessages.length > maximum) lastMessages.shift();
 }
 
-module.exports.forEach = function (lng, fn) {
-  if ( lastMessages[lng] === undefined ) lastMessages[lng] = [];
-  lastMessages[lng].forEach(fn);
+module.exports.forEach = function (channel, fn) {
+  if (lastMessages[channel] === undefined) lastMessages[channel] = [];
+  lastMessages[channel].forEach(fn);
 }
