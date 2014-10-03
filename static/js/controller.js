@@ -15,7 +15,10 @@ loultApp.controller('UserListCtrl', function ($scope) {
   if (["fr", "en"].indexOf($scope.language) == -1) $scope.language = "en"; //default language if language is not recognized
 
 
-  socket.emit('join', location.pathname);
+
+  socket.on('connect', function () {
+    socket.emit('join', location.pathname);
+  });
 
   // Quand un nouveau client se connecte, on affiche l'information
   socket.on('nouveau_client', function (data) {
@@ -35,7 +38,6 @@ loultApp.controller('UserListCtrl', function ($scope) {
     } else {
       location.reload();
     }
-
     $scope.$apply();
   });
 
@@ -74,7 +76,6 @@ loultApp.controller('UserListCtrl', function ($scope) {
     $scope.$apply();
   });
 
-  // Quand on reçoit un message, on l'insère dans la page
   socket.on('connected', function (data) {
     console.log("connected" + JSON.stringify(data));
 
@@ -95,10 +96,6 @@ loultApp.controller('UserListCtrl', function ($scope) {
     $('#message').removeAttr("disabled").focus();
     connected = true;
   })
-
-  //
-  // Tout ce qui suit est à revoir en grande partie
-  //
 
   // Quand on reçoit un message, on l'insère dans la page
   socket.on('message', function (data) {
