@@ -76,7 +76,7 @@ module.exports = function (socket) {
         color: hs.session.userData.public.color
       });
       messagesModel.push(channel, {
-        pseudo: hs.session.userData.public,
+        user: hs.session.userData.public,
         message: message,
         audiofile: audio,
         color: hs.session.userData.public.color
