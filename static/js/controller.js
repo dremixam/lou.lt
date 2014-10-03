@@ -26,7 +26,14 @@ loultApp.controller('UserListCtrl', function ($scope) {
     setTimeout(function () {
       socket = io.connect('/');
     }, 3000);
+  });
 
+  socket.on('error', function () {
+    connected = false;
+    insereLigne("[Info]", "join", 'Waiting 3s for new connection…', null);
+    setTimeout(function () {
+      socket = io.connect('/');
+    }, 3000);
   });
 
   // Quand un nouveau client se connecte, on affiche l'information
