@@ -18,15 +18,12 @@ module.exports = function (io) {
 
     var lng = tldjs.getSubdomain(socket.handshake.headers.host.split(":").shift());
 
-
     if (["fr", "en"].indexOf(lng) == -1) lng = "en";
 
     socketModel.set(socket.id, 'lng', lng);
 
     // On prévient l'utilisateur qu'il est bien en train de se connecter
     socket.emit('connecting');
-
-
 
     channelJoinRoute(socket);
 

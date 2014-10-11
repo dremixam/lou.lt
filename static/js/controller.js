@@ -14,8 +14,6 @@ loultApp.controller('UserListCtrl', function ($scope) {
   $scope.language = window.location.hostname.split(".")[0];
   if (["fr", "en"].indexOf($scope.language) == -1) $scope.language = "en"; //default language if language is not recognized
 
-
-
   socket.on('connect', function () {
     socket.emit('join', location.pathname);
   });
@@ -128,13 +126,9 @@ loultApp.controller('UserListCtrl', function ($scope) {
 
   // Historique des derniers messages
   socket.on('lastmessage', function (data) {
-    var result = $scope.userlist.filter(function (obj) {
-      return obj.uuid == data.user.uuid;
-    });
-    if (!result[0].muted) {
-      insereLastMessage(data.user.pseudo, data.message, data.color, $scope.language);
-    }
-  })
+    insereLastMessage(data.user.pseudo, data.message, data.color, $scope.language);
+  });
+
   socket.on('ownmessage', function (data) {
     document.getElementById("message").placeholder = "Message...";
     insereOwnMessage(data.user.pseudo, data.message, data.color, $scope.language);
