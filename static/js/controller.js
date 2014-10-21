@@ -294,8 +294,8 @@ toggleMute = function () {
 
 
 function currentTime(currentTime) {
-  if (typeof currentTime === 'undefined ') {
-    var currentTime = new Date();
+  if (!(currentTime instanceof Date)) {
+    currentTime = new Date();
   }
   var hours = currentTime.getHours();
   var minutes = currentTime.getMinutes();

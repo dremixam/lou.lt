@@ -13,7 +13,7 @@ module.exports = function (socket) {
     var lng = socketModel.get(socket.id, 'lng');
     var channel = socketModel.get(socket.id, 'channel');
 
-    var messageId = chance.uuid(); // On g&eacute;n&egrave;re un id pour le message
+    var messageId = chance.guid(); // On g&eacute;n&egrave;re un id pour le message
 
     console.log("génération du message " + messageId);
 
