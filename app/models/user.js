@@ -52,12 +52,12 @@ module.exports.add = function (socket, fn) {
       var selectedName = '';
       do {
         selectedName = lines[Math.floor(Math.random() * lines.length)];
-      } while (selectedName == '');
+      } while (selectedName === '');
 
-      pseudo = eval("(" + lines[Math.floor(Math.random() * lines.length)] + ")");
+      var pseudo = eval("(" + selectedName + ")");
 
       // On récupère une couleur qu'on attribue au nouvel utilisateur
-      color = makecolor();
+      var color = makecolor();
 
       var uuid = makeuuid();
 
@@ -94,16 +94,25 @@ module.exports.add = function (socket, fn) {
       fn(userData);
     });
   }
-}
+
+
+
+
+
+
+
+
+
+};
 
 module.exports.forEach = function (channel, fn) {
 
   if (allClients[channel] === undefined) allClients[channel] = {};
   if (allSockets[channel] === undefined) allSockets[channel] = {};
-  for (uuid in allClients[channel]) {
+  for (var uuid in allClients[channel]) {
     fn(allClients[channel][uuid]);
   }
-}
+};
 
 module.exports.remove = function (channel, uuid) {
 
@@ -111,7 +120,7 @@ module.exports.remove = function (channel, uuid) {
   if (allSockets[channel] === undefined) allSockets[channel] = {};
   delete allClients[channel][uuid];
   delete allSockets[channel][uuid];
-}
+};
 
 function updateLastMessage(socket) {
   socket.handshake.session.userData.last = socket.handshake.session.userData.last || Date.now();
