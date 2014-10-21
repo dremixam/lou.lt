@@ -5,15 +5,16 @@
   "main": "lou.lt.js",
   "author": "Dr Emixam",
   "dependencies": {
+    "chance": "^0.6.1",
+    "connect": "~2.14.3",
+    "connect-mongo": "~0.4.0",
+    "cookie": "~0.1.1",
     "express": "~3.4.4",
+    "express-session": "~1.0.2",
     "mongoose": "~3.6.2",
     "socket.io": "~0.9.16",
-    "cookie": "~0.1.1",
-    "twitter-text": "~1.9.0",
-    "express-session": "~1.0.2",
-    "connect-mongo": "~0.4.0",
-    "connect": "~2.14.3",
-    "tldjs": "~1.3.1"
+    "tldjs": "~1.3.1",
+    "twitter-text": "~1.9.0"
   },
   "scripts": {
     "start": "node server.js"

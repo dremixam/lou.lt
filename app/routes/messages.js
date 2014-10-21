@@ -2,8 +2,8 @@ var twitter = require('twitter-text');
 var exec = require('child_process').exec;
 var userModel = require('../models/user');
 var messagesModel = require('../models/messages');
-var randomGen = require('../models/random');
 var socketModel = require('../models/socket');
+var chance = require('chance').Chance();
 
 module.exports = function (socket) {
 
@@ -13,7 +13,7 @@ module.exports = function (socket) {
     var lng = socketModel.get(socket.id, 'lng');
     var channel = socketModel.get(socket.id, 'channel');
 
-    var messageId = randomGen.get(); // On g&eacute;n&egrave;re un id pour le message
+    var messageId = chance.uuid(); // On g&eacute;n&egrave;re un id pour le message
 
     console.log("génération du message " + messageId);
 

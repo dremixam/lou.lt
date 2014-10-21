@@ -49,10 +49,12 @@ module.exports.add = function (socket, fn) {
 
       //Sinon on récupère un nom aléatoirement dans le fichier
       var lines = data.toString().split('\n');
-      pseudo = eval("(" + lines[Math.floor(Math.random() * lines.length)] + ")");
+      var selectedName = '';
+      do {
+        selectedName = lines[Math.floor(Math.random() * lines.length)];
+      } while (selectedName == '');
 
-      // Si le nom est vide, on met magicarpe histoire de troller
-      if (pseudo == "") pseudo = eval('({"n":"129", "fr": "Magicarpe", "en": "Magikarp"})');
+      pseudo = eval("(" + lines[Math.floor(Math.random() * lines.length)] + ")");
 
       // On récupère une couleur qu'on attribue au nouvel utilisateur
       color = makecolor();
