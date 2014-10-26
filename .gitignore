@@ -30,3 +30,6 @@ static/lib
 config.js
 
 static*/.*
+/convert.js
+/names.json
+/banlist.json
