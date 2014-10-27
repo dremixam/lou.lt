@@ -5,6 +5,17 @@ var socketModel = require('../models/socket');
 var allClients = {};
 var allSockets = {};
 
+
+/*
+
+Mise &agrave; jour il va falloir utiliser la base de donn&eacute;es pour choisir le pok&eacute;mon maintenant. Elle contient tout ce qu'il faut.
+
+pkmn.find({$or:[{ 'gen': 1 }, { 'gen': 2 }], 'uncommon':false, randomKey: {$gte: Math.random()}}).sort({'randomKey':1}).skip(0).limit(1)
+
+
+*/
+
+
 module.exports.add = function (socket, fn) {
 
   var lng = socketModel.get(socket.id, 'lng');
