@@ -22,6 +22,11 @@ module.exports = function (socket) {
       }
 
       var banlist = JSON.parse(data);
+
+      if ( typeof socket.handshake === 'undefined' ) {
+        return;
+      }
+
       var userIp = socket.handshake.headers['x-real-ip'] || socket.handshake.address.address;
 
 
