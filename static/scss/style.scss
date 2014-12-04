@@ -35,6 +35,19 @@ a {
   color: #555;
 }
 
+#adblockDisclaimer {
+  position: fixed;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background: #CC4136;
+  z-index: 900;
+  color: whitesmoke;
+  &>div {
+    margin: 100px auto;
+    width: 400px;
+  }
+}
+
 #zone_chat {
   position: absolute;
   top: 68px;

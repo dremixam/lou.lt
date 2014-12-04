@@ -28,6 +28,8 @@
 
 var loultApp = angular.module('loultApp', []);
 
+var adblock = false;
+
 var audioPlayer = 0;
 // Connexion à socket.io
 var socket = io.connect('/');
