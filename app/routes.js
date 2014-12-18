@@ -16,6 +16,8 @@ module.exports = function (io) {
     // Gestion de la session
     var hs = socket.handshake;
 
+
+
     var lng = tldjs.getSubdomain(socket.handshake.headers.host.split(":").shift());
 
     if (["fr", "en"].indexOf(lng) == -1) lng = "en";

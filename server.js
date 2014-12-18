@@ -26,7 +26,7 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
     app.use(express.favicon(__dirname + '/static/favicon.png'));
     app.use(express.static(__dirname + '/static')); // set the static files location /public/img will be /img for users
     if (config.devel) app.use(express.logger('dev')); // log every request to the console
-    else app.use(express.logger());
+    else app.use(express.logger('tiny'));
 
     app.use(express.cookieParser(config.secret));
     app.use(session({
@@ -41,6 +41,9 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
     }));
 
   });
+
+  if (config.devel) io.set('log level', 4);
+  else io.set('log level', 1);
 
   io.set('authorization', function (handshakeData, accept) {
     if (handshakeData.headers.cookie) {
@@ -77,5 +80,5 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
 
   // listen (start app with node server.js) ======================================
   server.listen(config.port, config.ip);
-  console.log("App listening on " + config.ip + ":" + config.port);
+  //console.log("App listening on " + config.ip + ":" + config.port);
 });

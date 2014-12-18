@@ -2,7 +2,7 @@ var lastMessages = {};
 var maximum = 10;
 
 module.exports.push = function (channel, elt) {
-  //console.log('message:push');
+  console.log('MSG ' + channel + "\t" + elt.user.pseudo.fr + ' ('+elt.ip+')'+"\t"+elt.message);
   if (lastMessages[channel] === undefined) lastMessages[channel] = [];
 
   lastMessages[channel].push(elt);

@@ -4,7 +4,7 @@ module.exports = {
     if (typeof this.socket[newSocketID] === 'undefined') {
       this.socket[newSocketID] = {};
     }
-    console.log(this.socket);
+    //console.log(this.socket);
   },
   remove: function (socketID) {
     if (typeof this.socket[socketID] !== 'undefined') {
@@ -22,7 +22,7 @@ module.exports = {
     }
   },
   get: function (id, key) {
-    console.log(this.socket);
+    //console.log(this.socket);
     if (typeof this.socket[id] !== 'undefined') {
       return this.socket[id][key];
     }

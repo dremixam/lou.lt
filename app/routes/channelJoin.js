@@ -9,13 +9,13 @@ module.exports = function (socket) {
 
   fs.readFile('banlist.json', 'utf8', function (err, data) {
     if (err) {
-      console.log('Error: ' + err);
+      //console.log('Error: ' + err);
       return;
     }
 
-          if ( typeof socket.handshake === 'undefined' ) {
-        return;
-      }
+    if (typeof socket.handshake === 'undefined') {
+      return;
+    }
 
     var banlist = JSON.parse(data);
     var userIp = socket.handshake.headers['x-real-ip'] || socket.handshake.address.address;
@@ -55,7 +55,7 @@ module.exports = function (socket) {
           socket.emit('nouveau_client', newUserData.public);
           socket.emit('connected', newUserData.public);
           messagesModel.forEach(channel, function (message) {
-            console.log("Derniers messages : " + JSON.stringify(message));
+            //console.log("Derniers messages : " + JSON.stringify(message));
             socket.emit('lastmessage', message);
           });
         });

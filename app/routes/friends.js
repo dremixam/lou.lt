@@ -1,5 +1,4 @@
 
-
 module.exports = function(socket) {
   socket.on('add-friend', function (message) {
 

@@ -6,6 +6,7 @@
   "author": "Dr Emixam",
   "dependencies": {
     "chance": "^0.6.1",
+    "cleverbot-node": "^0.1.8",
     "connect": "~2.14.3",
     "connect-mongo": "~0.4.0",
     "cookie": "~0.1.1",
