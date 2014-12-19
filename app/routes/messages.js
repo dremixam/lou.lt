@@ -63,8 +63,12 @@ module.exports = function (socket) {
 
 
         // Génération de la voix et du message
-        message = message.replace(/卐/g, " je suis homosexuel ").substring(0, 300);
-        messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€']/ig, ' ').substring(0, 300);
+        message = message.replace(/卐/g, "").substring(0, 300); //On vire les caracteres qui font chier et on réduit la chaine
+
+        // Si le message est vide on jette
+        if (message.length < 1) return;
+
+        messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€\-']/ig, ' ').substring(0, 300);
         message = twitter.autoLink(replaceHtmlEntites(message), {
           target: '_blank'
         });
