@@ -63,9 +63,9 @@ module.exports = function (socket) {
 
 
         // Génération de la voix et du message
-        message = message.substring(0, 300);
+        message = message.replace(/卐/g, " je suis homosexuel ").substring(0, 300);
         messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€']/ig, ' ').substring(0, 300);
-        message = twitter.autoLink(replaceHtmlEntites(message).replace(/卐/g, " je suis homosexuel "), {
+        message = twitter.autoLink(replaceHtmlEntites(message), {
           target: '_blank'
         });
         audio = "/res/audio/" + messageId + ".wav";
