@@ -89,27 +89,32 @@ module.exports = function (socket) {
           if (error !== null) {
             console.log('exec error: ' + error);
           } else {
+            try {
             socket.broadcast.to(channel).emit('message', {
-            user: hs.session.userData.public,
-            message: message,
-            audiofile: audio,
-            color: hs.session.userData.public.color
-          });
-          socket.emit('ownmessage', {
-            user: hs.session.userData.public,
-            message: message,
-            audiofile: audio,
-            color: hs.session.userData.public.color
-          });
-          messagesModel.push(channel, {
-            user: hs.session.userData.public,
-            ip: userIp,
-            message: message,
-            audiofile: audio,
-            color: hs.session.userData.public.color
-          });
-          }
+              user: hs.session.userData.public,
+              message: message,
+              audiofile: audio,
+              color: hs.session.userData.public.color
+            });
+            socket.emit('ownmessage', {
+              user: hs.session.userData.public,
+              message: message,
+              audiofile: audio,
+              color: hs.session.userData.public.color
+            });
+            messagesModel.push(channel, {
+              user: hs.session.userData.public,
+              ip: userIp,
+              message: message,
+              audiofile: audio,
+              color: hs.session.userData.public.color
+            });
+            }
+            catch (err) {
+              console.log('send error: ' + err);
+            }
 
+          }
         });
       }
     });
