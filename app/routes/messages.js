@@ -5,6 +5,7 @@ var messagesModel = require('../models/messages');
 var socketModel = require('../models/socket');
 var chance = require('chance').Chance();
 var fs = require('fs');
+var config = require('../../config'); // load the config
 
 module.exports = function (socket) {
 
@@ -17,7 +18,6 @@ module.exports = function (socket) {
 
     fs.readFile('banlist.json', 'utf8', function (err, data) {
       if (err) {
-        //console.log('Error: ' + err);
         return;
       }
 
@@ -37,8 +37,6 @@ module.exports = function (socket) {
 
 
         var messageId = chance.guid(); // On g&eacute;n&egrave;re un id pour le message
-
-        //console.log("génération du message " + messageId);
 
         // Si le message est vide on jette
         if (message.length < 1) return;
@@ -82,15 +80,16 @@ module.exports = function (socket) {
           commande = "espeak " + hs.session.userData.params + " -v mb/mb-en1 --pho \"" + messageAEnregistrer + "\" 2>/dev/null | mbrola -e /usr/share/mbrola/" + hs.session.userData.voice.en + "/" + hs.session.userData.voice.en + " - ./static" + audio;
         }
 
-        //console.log(messageId + ' Commande : ' + commande);
+
 
         exec(commande, function (error, stdout, stderr) {
-          //console.log(messageId + ' g&eacute;n&eacute;r&eacute;, envoi sur ' + channel);
-          //console.log(error + '/' + stdout + '/' + stderr);
+
+          if (config.devel) console.log("DEBUG MESSAGE "+hs.session.userData+":"+messageAEnregistrer+":"+commande);
+
           if (error !== null) {
             console.log('exec error: ' + error);
-          }
-          socket.broadcast.to(channel).emit('message', {
+          } else {
+            socket.broadcast.to(channel).emit('message', {
             user: hs.session.userData.public,
             message: message,
             audiofile: audio,
@@ -109,6 +108,8 @@ module.exports = function (socket) {
             audiofile: audio,
             color: hs.session.userData.public.color
           });
+          }
+
         });
       }
     });
