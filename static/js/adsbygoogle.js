@@ -74,7 +74,7 @@ loultApp.controller('UserListCtrl', function ($scope) {
   });
 
 
-  socket.on('thumberror', function (data) {
+  socket.on('thumberr', function (data) {
     var nodelist = document.getElementsByClassName('link-placeholder-' + data.hash);
     Array.prototype.forEach.call(nodelist, function (elt) {
       elt.innerHTML = "Can't load preview";

@@ -99,7 +99,7 @@ module.exports = function (socket) {
               insert += '<span class="link-placeholder-' + imgHash + ' link-placeholder" style="background: url(/res/img/thumbs/' + imgHash + '.png);"><a target="_blank" href="' + links[index] + '"><span>' + parsedURL.host + '</span></a></span>';
               delete links[index];
             } else {
-              insert += '<span class="link-placeholder-' + imgHash + ' link-placeholder">Chargement du lien…</span>';
+              insert += '<span class="link-placeholder-' + imgHash + ' link-placeholder">Loading preview…</span>';
             }
             insertHisto += '<span class="link-placeholder-' + imgHash + ' link-placeholder" style="background: url(/res/img/thumbs/' + imgHash + '.png);"><a target="_blank" href="' + links[index] + '"><span>' + parsedURL.host + '</span></a></span>';
           }
