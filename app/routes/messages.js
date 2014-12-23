@@ -23,6 +23,7 @@ module.exports = function (socket) {
 
     fs.readFile('banlist.json', 'utf8', function (err, data) {
       if (err) {
+        console.log(err);
         return;
       }
 
@@ -166,8 +167,10 @@ module.exports = function (socket) {
                 var filename = './static' + pathname;
 
                 webshot(site, function (err, imageStream) {
+                  console.log("Erreur webshot "+err);
                   gm(imageStream, 'thumb.jpg').resize(200).write(filename, function (err) {
                     if (err) {
+                      console.log("erreur gm "+err);
                       socket.broadcast.to(channel).emit('thumberr',
                         crypto.createHash('sha1').update('URL' + site).digest('hex')
                       );
