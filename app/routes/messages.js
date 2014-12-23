@@ -89,7 +89,7 @@ module.exports = function (socket) {
 
           for (index = 0; index < links.length && index < 3; ++index) {
             if (links[index].indexOf('http') !== 0) {
-              links[index] = 'http://' + site;
+              links[index] = 'http://' + links[index];
             }
             var imgHash = crypto.createHash('sha1').update('URL' + links[index]).digest('hex');
             var imgPath = './static/res/img/thumbs/' + imgHash + '.png';
