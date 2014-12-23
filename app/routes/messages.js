@@ -4,8 +4,13 @@ var userModel = require('../models/user');
 var messagesModel = require('../models/messages');
 var socketModel = require('../models/socket');
 var chance = require('chance').Chance();
-var fs = require('fs');
+var crypto = require('crypto');
+var fs = require('fs'),
+  gm = require('gm');
 var config = require('../../config'); // load the config
+var embed = require("embed-video");
+var webshot = require('webshot');
+var url = require('url');
 
 module.exports = function (socket) {
 
@@ -23,7 +28,7 @@ module.exports = function (socket) {
 
       var banlist = JSON.parse(data);
 
-      if ( typeof socket.handshake === 'undefined' ) {
+      if (typeof socket.handshake === 'undefined') {
         return;
       }
 
@@ -59,7 +64,6 @@ module.exports = function (socket) {
           return;
         }
 
-
         // Génération de la voix et du message
         message = message.replace(/卐/g, "").substring(0, 300); //On vire les caracteres qui font chier et on réduit la chaine
 
@@ -67,9 +71,38 @@ module.exports = function (socket) {
         if (message.length < 1) return;
 
         messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€\-']/ig, ' ').substring(0, 300);
+
+        var links = twitter.extractUrls(message);
+
         message = twitter.autoLink(replaceHtmlEntites(message), {
           target: '_blank'
         });
+
+        var messageHisto = message;
+        if (links.length > 0) {
+          var insert = '';
+          var insertHisto = '';
+
+          for (index = 0; index < links.length && index < 3; ++index) {
+            if (links[index].indexOf('http') !== 0) {
+              links[index] = 'http://' + site;
+            }
+            var imgHash = crypto.createHash('sha1').update('URL' + links[index]).digest('hex');
+            var imgPath = './static/res/img/thumbs/' + imgHash + '.png';
+            var parsedURL = url.parse(links[index]);
+            if (fs.existsSync(imgPath)) {
+              console.log(parsedURL);
+              insert += '<span class="link-placeholder-' + imgHash + ' link-placeholder" style="background: url(/res/img/thumbs/' + imgHash + '.png);"><a target="_blank" href="' + links[index] + '"><span>' + parsedURL.host + '</span></a></span>';
+              delete links[index];
+            } else {
+              insert += '<span class="link-placeholder-' + imgHash + ' link-placeholder">Chargement du lien…</span>';
+            }
+            insertHisto += '<span class="link-placeholder-' + imgHash + ' link-placeholder" style="background: url(/res/img/thumbs/' + imgHash + '.png);"><a target="_blank" href="' + links[index] + '"><span>' + parsedURL.host + '</span></a></span>';
+          }
+          message += '<div style="display: table; border-spacing:4px;">' + insert + "</div>";
+          messageHisto += '<div style="display: table; border-spacing:4px;">' + insertHisto + "</div>";
+        }
+
         audio = "/res/audio/" + messageId + ".wav";
 
         if (lng == 'fr') {
@@ -80,51 +113,114 @@ module.exports = function (socket) {
           commande = "espeak " + hs.session.userData.params + " -v mb/mb-en1 --pho \"" + messageAEnregistrer + "\" 2>/dev/null | mbrola -e /usr/share/mbrola/" + hs.session.userData.voice.en + "/" + hs.session.userData.voice.en + " - ./static" + audio;
         }
 
-
-
         exec(commande, function (error, stdout, stderr) {
-
-          if (config.devel) console.log("DEBUG MESSAGE "+hs.session.userData+":"+messageAEnregistrer+":"+commande);
-
-          if (error !== null) {
+          console.log("DEBUG MESSAGE " + hs.session.userData + ":" + messageAEnregistrer + ":" + commande);
+          if (error !== null && config.devel === false) {
             console.log('exec error: ' + error);
           } else {
             try {
-            socket.broadcast.to(channel).emit('message', {
-              user: hs.session.userData.public,
-              message: message,
-              audiofile: audio,
-              color: hs.session.userData.public.color
-            });
-            socket.emit('ownmessage', {
-              user: hs.session.userData.public,
-              message: message,
-              audiofile: audio,
-              color: hs.session.userData.public.color
-            });
-            messagesModel.push(channel, {
-              user: hs.session.userData.public,
-              ip: userIp,
-              message: message,
-              audiofile: audio,
-              color: hs.session.userData.public.color
-            });
-            }
-            catch (err) {
+              socket.broadcast.to(channel).emit('message', {
+                user: hs.session.userData.public,
+                message: message,
+                audiofile: audio,
+                color: hs.session.userData.public.color
+              });
+              socket.emit('ownmessage', {
+                user: hs.session.userData.public,
+                message: message,
+                audiofile: audio,
+                color: hs.session.userData.public.color
+              });
+              messagesModel.push(channel, {
+                user: hs.session.userData.public,
+                ip: userIp,
+                message: messageHisto,
+                audiofile: audio,
+                color: hs.session.userData.public.color,
+                time: new Date()
+              });
+            } catch (err) {
               console.log('send error: ' + err);
             }
 
+
+
+            //Création et envoi des miniatures
+            links.forEach(function (site) {
+              if (site.indexOf('http') !== 0) {
+                site = 'http://' + site;
+              }
+              var embeded = embed(site);
+              if (typeof embeded !== 'undefined') {
+                socket.broadcast.to(channel).emit('embed', {
+                  id: crypto.createHash('sha1').update('URL' + site).digest('hex'),
+                  code: embeded
+                });
+                socket.emit('embed', {
+                  id: crypto.createHash('sha1').update('URL' + site).digest('hex'),
+                  code: embeded
+                });
+              } else {
+
+                var pathname = '/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '.png';
+                var filename = './static' + pathname;
+
+                webshot(site, function (err, imageStream) {
+                  gm(imageStream, 'thumb.jpg').resize(200).write(filename, function (err) {
+                    if (err) {
+                      socket.broadcast.to(channel).emit('thumberr',
+                        crypto.createHash('sha1').update('URL' + site).digest('hex')
+                      );
+                      socket.emit('thumberr',
+                        crypto.createHash('sha1').update('URL' + site).digest('hex')
+                      );
+                    } else {
+                      socket.broadcast.to(channel).emit('thumbok', {
+                        url: site,
+                        title: url.parse(site),
+                        hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
+                      });
+                      socket.emit('thumbok',{
+                        url: site,
+                        title: url.parse(site),
+                        hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
+                      });
+                    }
+                  });
+                });
+              }
+            });
+
+
           }
         });
+
       }
     });
   });
-
-
-
 };
 
 
 var replaceHtmlEntites = (function (mystring) {
   return mystring.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 });
+
+/*
+
+
+var webshot = require('webshot');
+var crypto = require('crypto');
+var fs = require('fs'),
+  gm = require('gm');
+
+var embed = require("embed-video");
+
+var site = process.argv[2] || 'google.fr';
+
+
+
+console.log(site);
+
+
+
+*/

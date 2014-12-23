@@ -33,3 +33,4 @@ static*/.*
 /convert.js
 /names.json
 /banlist.json
+/static/res/img/thumbs/*

@@ -64,6 +64,23 @@ loultApp.controller('UserListCtrl', function ($scope) {
     }, 3000);
   });
 
+  socket.on('thumbok', function (data) {
+    var nodelist = document.getElementsByClassName('link-placeholder-' + data.hash);
+    Array.prototype.forEach.call(nodelist, function (elt) {
+      elt.style.backgroundImage = "url(/res/img/thumbs/" + data.hash + ".png)";
+      elt.innerHTML = "<a target='_blank' href='"+data.url+"'><span>"+data.title.hostname+"</span></a>";
+    });
+
+  });
+
+
+  socket.on('thumberror', function (data) {
+    var nodelist = document.getElementsByClassName('link-placeholder-' + data.hash);
+    Array.prototype.forEach.call(nodelist, function (elt) {
+      elt.innerHTML = "Can't load preview";
+    });
+  });
+
   // Quand un nouveau client se connecte, on affiche l'information
   socket.on('nouveau_client', function (data) {
     console.log("nouveau client" + data);
