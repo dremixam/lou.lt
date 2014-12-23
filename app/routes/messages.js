@@ -179,19 +179,8 @@ module.exports = function (socket) {
                   })
                   .dest('./static/res/img/thumbs/');
 
-                pageres.run(function (err) {
-                  if (err) {
-                    console.log("erreur gm " + err);
-                    socket.broadcast.to(channel).emit('thumberr',
-                      crypto.createHash('sha1').update('URL' + site).digest('hex')
-                    );
-                    socket.emit('thumberr',
-                      crypto.createHash('sha1').update('URL' + site).digest('hex')
-                    );
-                    return;
-                  }
-
-                  gm(filenameBig).resize(200).write(filename, function (err) {
+                try {
+                  pageres.run(function (err) {
                     if (err) {
                       console.log("erreur gm " + err);
                       socket.broadcast.to(channel).emit('thumberr',
@@ -200,23 +189,44 @@ module.exports = function (socket) {
                       socket.emit('thumberr',
                         crypto.createHash('sha1').update('URL' + site).digest('hex')
                       );
-                    } else {
-                      socket.broadcast.to(channel).emit('thumbok', {
-                        url: site,
-                        title: url.parse(site),
-                        hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
-                      });
-                      socket.emit('thumbok', {
-                        url: site,
-                        title: url.parse(site),
-                        hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
-                      });
+                      return;
                     }
+
+                    gm(filenameBig).resize(200).write(filename, function (err) {
+                      if (err) {
+                        console.log("erreur gm " + err);
+                        socket.broadcast.to(channel).emit('thumberr',
+                          crypto.createHash('sha1').update('URL' + site).digest('hex')
+                        );
+                        socket.emit('thumberr',
+                          crypto.createHash('sha1').update('URL' + site).digest('hex')
+                        );
+                      } else {
+                        socket.broadcast.to(channel).emit('thumbok', {
+                          url: site,
+                          title: url.parse(site),
+                          hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
+                        });
+                        socket.emit('thumbok', {
+                          url: site,
+                          title: url.parse(site),
+                          hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
+                        });
+                      }
+                    });
+
+
+                    console.log('done');
                   });
+                } catch (err) {
+                  socket.broadcast.to(channel).emit('thumberr',
+                    crypto.createHash('sha1').update('URL' + site).digest('hex')
+                  );
+                  socket.emit('thumberr',
+                    crypto.createHash('sha1').update('URL' + site).digest('hex')
+                  );
+                }
 
-
-                  console.log('done');
-                });
 
 
                 /*
