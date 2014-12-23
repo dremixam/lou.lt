@@ -6,11 +6,14 @@ var socketModel = require('../models/socket');
 var chance = require('chance').Chance();
 var crypto = require('crypto');
 var fs = require('fs'),
-  gm = require('gm').subClass({ imageMagick: true });
+  gm = require('gm').subClass({
+    imageMagick: true
+  });
 var config = require('../../config'); // load the config
 var embed = require("embed-video");
 var webshot = require('webshot');
 var url = require('url');
+var Pageres = require('pageres');
 
 module.exports = function (socket) {
 
@@ -163,19 +166,34 @@ module.exports = function (socket) {
                 });
               } else {
 
-                var pathname = '/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '.png';
-                var filename = './static' + pathname;
-
-                webshot(site, function (err, imageStream) {
-                  console.log("Erreur webshot "+err+" IMAGE : "+JSON.stringify(imageStream));
+                var filename = './static' + '/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '.png';
+                var filenameBig = './static' + '/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '_large.png';
 
 
-                  if(!fs.existsSync(imageStream)) console.log("il semblerait que l'image n'existe pas");
+                var pageres = new Pageres({
+                    delay: 2,
+                    filename: crypto.createHash('sha1').update('URL' + site).digest('hex') + '_large'
+                  })
+                  .src(site, ['1280x960'], {
+                    crop: true
+                  })
+                  .dest('./static/res/img/thumbs/');
 
+                pageres.run(function (err) {
+                  if (err) {
+                    console.log("erreur gm " + err);
+                    socket.broadcast.to(channel).emit('thumberr',
+                      crypto.createHash('sha1').update('URL' + site).digest('hex')
+                    );
+                    socket.emit('thumberr',
+                      crypto.createHash('sha1').update('URL' + site).digest('hex')
+                    );
+                    return;
+                  }
 
-                  gm(imageStream, 'thumb.jpg').resize(200).write(filename, function (err) {
+                  gm(filenameBig).resize(200).write(filename, function (err) {
                     if (err) {
-                      console.log("erreur gm "+err);
+                      console.log("erreur gm " + err);
                       socket.broadcast.to(channel).emit('thumberr',
                         crypto.createHash('sha1').update('URL' + site).digest('hex')
                       );
@@ -188,14 +206,30 @@ module.exports = function (socket) {
                         title: url.parse(site),
                         hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
                       });
-                      socket.emit('thumbok',{
+                      socket.emit('thumbok', {
                         url: site,
                         title: url.parse(site),
                         hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
                       });
                     }
                   });
+
+
+                  console.log('done');
                 });
+
+
+                /*
+                webshot(site, function (err, imageStream) {
+                  console.log("Erreur webshot "+err+" IMAGE : "+JSON.stringify(imageStream));
+
+
+                  if(!fs.existsSync(imageStream)) console.log("il semblerait que l'image n'existe pas");
+
+
+
+                });*/
+
               }
             });
 
