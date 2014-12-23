@@ -167,7 +167,12 @@ module.exports = function (socket) {
                 var filename = './static' + pathname;
 
                 webshot(site, function (err, imageStream) {
-                  console.log("Erreur webshot "+err);
+                  console.log("Erreur webshot "+err+" IMAGE : "+imageStream);
+
+
+                  if(!fs.existsSync(imageStream)) console.log("il semblerait que l'image n'existe pas");
+
+
                   gm(imageStream, 'thumb.jpg').resize(200).write(filename, function (err) {
                     if (err) {
                       console.log("erreur gm "+err);
