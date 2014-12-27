@@ -49,7 +49,7 @@ module.exports = function (socket) {
         var messageId = chance.guid(); // On g&eacute;n&egrave;re un id pour le message
 
         // Si le message est vide on jette
-        if (message.length < 1) { return };
+        if (message.length < 1) { return; }
 
         var hs = socket.handshake;
 
@@ -73,7 +73,7 @@ module.exports = function (socket) {
         message = message.replace(/卐/g, "").substring(0, 300); //On vire les caracteres qui font chier et on réduit la chaine
 
         // Si le message est vide on jette
-        if (message.length < 1) { return };
+        if (message.length < 1) { return; }
 
         var messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€\-']/ig, ' ').substring(0, 300),
 
