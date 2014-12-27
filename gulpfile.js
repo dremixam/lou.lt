@@ -8,6 +8,7 @@ var gulp = require('gulp'),
   nodemon = require('gulp-nodemon'),
   minifyHTML = require('gulp-minify-html'),
   imagemin = require('gulp-imagemin'),
+  clean = require('gulp-clean'),
   install = require('gulp-install'),
   concat = require('gulp-concat');
 
@@ -71,8 +72,15 @@ gulp.task('install', function () {
 
 //Action par d&eacute;faut : compilation complete du site pour le déploiement
 
-gulp.task('default', ['install'], function () {
-  gulp.start('styles', 'scripts', 'html', 'images', 'favicon');
+gulp.task('clean', function () {
+  return gulp.src(['static/dist/styles/*.css', 'static/dist/js/*.js', 'static/dist/*.html', 'static/dist/favicon.png', 'static/dist/res/**/*.jpg', 'static/dist/res/**/*.png', 'static/dist/res/**/*.gif'], {
+      read: false
+    })
+    .pipe(clean());
+});
+
+gulp.task('default', ['install', 'images'], function () {
+  gulp.start('styles', 'scripts', 'html', 'favicon');
 });
 
 //Action devel, compilation + surveillance pour utiliser pendant le dev
