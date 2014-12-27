@@ -88,7 +88,7 @@ module.exports = function (socket) {
           var insert = '';
           var insertHisto = '';
 
-          for (index = 0; index < links.length && index < 3; ++index) {
+          for (var index = 0; index < links.length && index < 3; ++index) {
             if (links[index].indexOf('http') !== 0) {
               links[index] = 'http://' + links[index];
             }
