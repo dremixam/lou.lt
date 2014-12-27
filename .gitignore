@@ -34,3 +34,6 @@ static*/.*
 /names.json
 /banlist.json
 /static/res/img/thumbs/*
+.sass-cache
+/static/js/adsbygoogle.min.js
+/static/styles/style.css

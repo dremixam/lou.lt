@@ -6,9 +6,6 @@ var socketModel = require('../models/socket');
 var fs = require('fs');
 
 module.exports = function (socket) {
-
-
-
   fs.readFile('banlist.json', 'utf8', function (err, data) {
     if (err) {
       //console.log('Error: ' + err);
@@ -27,19 +24,9 @@ module.exports = function (socket) {
       socket.disconnect('unauthorized');
       return 0;
     } else {
-
-
-
-
-
       socket.on('join', function (channel) {
-
         socketModel.set(socket.id, 'channel', channel);
-
         var hs = socket.handshake;
-
-
-
         socket.join(channel);
         // setup an inteval that will keep our session fresh
         var intervalID = setInterval(function () {
@@ -62,10 +49,11 @@ module.exports = function (socket) {
           });
         });
         socket.on('disconnect', function () {
+          var publicData = socket.handshake.session.userData.public;
           var uuid = socket.handshake.session.userData.public.uuid;
           clientList.remove(channel, uuid);
           setTimeout(function () {
-            socket.broadcast.to(channel).emit('disconnected', public);
+            socket.broadcast.to(channel).emit('disconnected', publicData);
           }, 4 * 1000);
 
           socketModel.remove(socket.id);
@@ -73,13 +61,6 @@ module.exports = function (socket) {
           clearInterval(intervalID);
         });
       });
-
-
-
-
     }
   });
-
-
-
 };
