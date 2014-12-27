@@ -8,7 +8,6 @@ var fs = require('fs');
 module.exports = function (socket) {
   fs.readFile('banlist.json', 'utf8', function (err, data) {
     if (err) {
-      //console.log('Error: ' + err);
       return;
     }
 

@@ -1,15 +1,16 @@
+'use strict';
 var Cleverbot = require('cleverbot');
 var messagesModel = require('../models/messages');
 
 
-module.exports = new function () {
-  var CBot = new Cleverbot;
+module.exports = function () {
+  var CBot = new Cleverbot();
   var botInfo;
   var ready = false;
-}
+};
 
 module.exports.prototype.connect = function (callback) {
-  fs.readFile("./names.txt", function (err, data) {
+  fs.readFile('./names.txt', function (err, data) {
 
     // En cas d'erreur on arrête
     if (err) throw err;
@@ -21,7 +22,7 @@ module.exports.prototype.connect = function (callback) {
       selectedName = lines[Math.floor(Math.random() * lines.length)];
     } while (selectedName === '');
 
-    var pseudo = eval("(" + selectedName + ")");
+    var pseudo = eval('(' + selectedName + ')');
 
     // On récupère une couleur qu'on attribue au nouvel utilisateur
     var color = makecolor();
@@ -30,14 +31,14 @@ module.exports.prototype.connect = function (callback) {
 
     // On sauvegarde toutes les données de l'utilisateur
     botInfo = {
-      voice: {
-        fr: "fr" + getRandomInt(1, 6),
-        en: "us" + getRandomInt(1, 3)
+      'voice': {
+        fr: 'fr' + getRandomInt(1, 6),
+        en: 'us' + getRandomInt(1, 3)
       },
-      params: " -p " + getRandomInt(1, 99) + " -s " + getRandomInt(100, 175),
-      last: Date.now(),
-      ip: ,
-      public: {
+      'params': ' -p ' + getRandomInt(1, 99) + ' -s ' + getRandomInt(100, 175),
+      'last': Date.now(),
+      'ip': null,
+      'public': {
         uuid: uuid,
         pseudo: pseudo,
         color: color,
@@ -49,7 +50,7 @@ module.exports.prototype.connect = function (callback) {
     allClients[channel][uuid] = userData;
     callback();
   });
-}
+};
 
 module.exports.prototype.talk = function (callback) {
   repeatTalking = function () {
@@ -57,20 +58,20 @@ module.exports.prototype.talk = function (callback) {
     this.CBot.write();
 
     setTimeout(repeatTalking, getRandomInt(5000, 20000));
-  }
-}
+  };
+};
 
 
 
 
 
 
-var CBots = [new Cleverbot, new Cleverbot, new Cleverbot],
+var CBots = [new Cleverbot(), new Cleverbot(), new Cleverbot()],
   i = 0,
   name = ['George', 'Jack', 'Sam'],
   callback = function callback(resp) {
-    CBots[i].write(resp['message'], callback);
-    console.log(name[i = ((i + 1) % 3)], ' : ', resp['message'])
+    CBots[i].write(resp.message, callback);
+    console.log(name[i = ((i + 1) % 3)], ' : ', resp.message);
   };
 
 
@@ -78,4 +79,4 @@ var CBots = [new Cleverbot, new Cleverbot, new Cleverbot],
 
 callback({
   message: 'Bonjour'
-})
+});

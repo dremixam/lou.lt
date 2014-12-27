@@ -92,7 +92,7 @@ module.exports = function (socket) {
               links[index] = 'http://' + links[index];
             }
             var imgHash = crypto.createHash('sha1').update('URL' + links[index]).digest('hex');
-            var imgPath = './static/res/img/thumbs/' + imgHash + '.png';
+            var imgPath = './static/dist/res/img/thumbs/' + imgHash + '.png';
             var parsedURL = url.parse(links[index]);
             if (fs.existsSync(imgPath)) {
               insert += '<span class="link-placeholder-' + imgHash + ' link-placeholder" style="background: url(/res/img/thumbs/' + imgHash + '.png);"><a target="_blank" href="' + links[index] + '"><span>' + parsedURL.host + '</span></a></span>';
@@ -111,11 +111,11 @@ module.exports = function (socket) {
         // Configuration du synthétiseur vocal.
         var params = [];
         if (lng === 'fr') {
-          params = [hs.session.userData.params, 'fr', messageAEnregistrer, hs.session.userData.voice.fr, './static' + audio];
+          params = [hs.session.userData.params, 'fr', messageAEnregistrer, hs.session.userData.voice.fr, './static/dist' + audio];
         } else if (lng === 'en') {
-          params = [hs.session.userData.params, 'us', messageAEnregistrer, hs.session.userData.voice.en, './static' + audio];
+          params = [hs.session.userData.params, 'us', messageAEnregistrer, hs.session.userData.voice.en, './static/dist' + audio];
         } else {
-          params = [hs.session.userData.params, 'en', messageAEnregistrer, hs.session.userData.voice.en, './static' + audio];
+          params = [hs.session.userData.params, 'en', messageAEnregistrer, hs.session.userData.voice.en, './static/dist' + audio];
         }
 
         //Lancement du synthétiseur vocal
@@ -167,8 +167,8 @@ module.exports = function (socket) {
                 });
               } else {
 
-                var filename = './static' + '/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '.png';
-                var filenameBig = './static' + '/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '_large.png';
+                var filename = './static' + '/dist/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '.png';
+                var filenameBig = './static' + '/dist/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '_large.png';
 
 
                 var pageres = new Pageres({
@@ -178,7 +178,7 @@ module.exports = function (socket) {
                   .src(site, ['1280x960'], {
                     crop: true
                   })
-                  .dest('./static/res/img/thumbs/');
+                  .dest('./static/dist/res/img/thumbs/');
                 try {
                   pageres.run(function (err) {
                     if (err) {

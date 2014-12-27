@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 module.exports = function(socket) {
   socket.on('add-friend', function (message) {
 
@@ -8,3 +8,4 @@ module.exports = function(socket) {
 
   });
 };
+*/

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html ng-app="loultApp">
+
+<head>
+  <meta charset="utf-8" />
+  <title translate>Lou.lt - expérimental</title>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link href="/styles/style.css" rel="stylesheet">
+  <script>var adblock = true;</script>
+  <script src="/lib/angular/angular.min.js"></script>
+  <script src="/lib/angular-gettext/dist/angular-gettext.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/main.min.js"></script>
+</head>
+
+<body>
+  <div id="fb-root"></div>
+
+  <section id="zone_chat">
+  </section>
+
+  <header>
+    <h1>
+      <i class="fa fa-volume-up fa-fw" id="globalMute" style="cursor: pointer;" onclick="toggleMute();"></i>
+      <a href="/">Lou.Lt</a> <small translate>expérimental</small>
+    </h1>
+    <div class="fb-like" data-href="http://lou.lt/" data-layout="box_count" data-action="like" data-show-faces="false" data-share="false"></div>
+    <div>
+      <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://lou.lt/" data-via="DrEmixam" data-size="large">Tweet</a>
+    </div>
+    <div style="text-align: center">
+      <a href="http://fr.lou.lt/" style="color: white;">
+        <img src="/res/img/fr.png" style="margin: -5px 15px -15px">
+        <br>Français</a>
+    </div>
+    <div style="text-align: center">
+      <a href="http://en.lou.lt/" style="color: white;">
+        <img src="/res/img/us.png" style="margin: -5px 15px -15px">
+        <br>English</a>
+    </div>
+  </header>
+
+  <section id="about_zone">
+    Lou.lt - by <a href="https://twitter.com/DrEmixam" target="_blank">@DrEmixam</a>
+  </section>
+
+  <form method="post" id="formulaire_chat" ng-controller="TextBoxCtrl" ng-submit="submit()">
+    <input type="text" name="message" id="message" placeholder="Message..." autofocus autocomplete="off" disabled ng-model="textMessage" value="" />
+    <span ng-animate ng-class="{true: 'alert', false: 'ok'}[textMessage.length>300]">{{300 - textMessage.length}}</span>
+  </form>
+
+  <section id="userlist" ng-controller="UserListCtrl">
+    <ul>
+      <li ng-repeat="user in userlist | orderBy:pseudo[language]">
+        <i class="fa fa-volume-up fa-fw" style="margin-right: 7px; cursor: pointer;" ng-class="{true: 'ignored', false: 'nonignored'}[user.muted]" ng-click="user.muted=!user.muted"></i>
+        <i class="fa fa-heart-o" style="color: #fca2a3; cursor: pointer;"></i>
+        <small style="color: #fca2a3; font-size: 10px; margin-right: 7px;">{{user.like}}</small>
+        <i class="fa fa-thumbs-o-down" style="color: red; cursor: pointer;"></i>
+        <small style="color: red; font-size: 10px; margin-right: 7px;">{{user.thumb}}</small>
+        <span style="color: {{user.color}};" title="{{user.uuid}}">{{user.pseudo[language]}}</span>
+      </li>
+    </ul>
+  </section>
+
+  <audio id="audio1"></audio>
+  <audio id="audio2"></audio>
+  <audio id="audio3"></audio>
+  <audio id="audio4"></audio>
+  <audio id="audio5"></audio>
+  <audio id="audio6"></audio>
+  <audio id="audio7"></audio>
+  <audio id="audio8"></audio>
+  <audio id="audio9"></audio>
+  <audio id="audio0"></audio>
+</body>
+
+</html>

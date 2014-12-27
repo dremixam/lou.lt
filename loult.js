@@ -1,3 +1,4 @@
+'use strict';
 // imports =====================================================================
 var config = require('./config'); // load the config
 var express = require('express'); // load express
@@ -5,8 +6,8 @@ var app = express(); // create express app
 var server = require('http').createServer(app); // create webserver
 var io = require('socket.io').listen(server); // create socket.io connection
 var mongoose = require('mongoose'); // mongoose for mongodb
-var cookie = require("cookie");
-var connect = require("connect");
+var cookie = require('cookie');
+var connect = require('connect');
 var session = require('express-session');
 
 
@@ -23,8 +24,8 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
   });
 
   app.configure(function () {
-    app.use(express.favicon(__dirname + '/static/favicon.png'));
-    app.use(express.static(__dirname + '/static')); // set the static files location /public/img will be /img for users
+    app.use(express.favicon(__dirname + '/static/dist/favicon.png'));
+    app.use(express.static(__dirname + '/static/dist')); // set the static files location /public/img will be /img for users
     if (config.devel) app.use(express.logger('dev')); // log every request to the console
     else app.use(express.logger('tiny'));
 
@@ -50,7 +51,7 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
       handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
       if (handshakeData.cookie[config.sessIdName] === undefined) return accept('Cookie is invalid.', false);
       handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie[config.sessIdName], config.secret);
-      if (handshakeData.cookie[config.sessIdName] == handshakeData.sessionID) {
+      if (handshakeData.cookie[config.sessIdName] === handshakeData.sessionID) {
         return accept('Cookie is invalid.', false);
       }
     } else {
@@ -70,7 +71,7 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
   // Chargement de la page index.html
   app.get('*', function (req, res) {
     req.session.valid = true;
-    res.sendfile('static/home.html');
+    res.sendfile('static/dist/home.html');
 
 
   });

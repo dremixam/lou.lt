@@ -3,36 +3,64 @@
 var gulp = require('gulp'),
   compass = require('gulp-compass'),
   minifycss = require('gulp-minify-css'),
-  jshint = require('gulp-jshint'),
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
   nodemon = require('gulp-nodemon'),
-  install = require('gulp-install');
+  minifyHTML = require('gulp-minify-html'),
+  imagemin = require('gulp-imagemin'),
+  install = require('gulp-install'),
+  concat = require('gulp-concat');
 
 //Compilation des SCSS
 
 gulp.task('styles', function () {
-  return gulp.src(['static/scss/**/*.scss'])
+  return gulp.src(['static/src/scss/*.scss'])
     .pipe(compass({
-      sass: 'static/scss',
-      css: 'static/styles',
-      image: 'static/res/img'
+      sass: 'static/src/scss',
+      css: 'static/dist/styles',
+      image: 'static/src/res/img'
     }))
     .pipe(minifycss())
-    .pipe(gulp.dest('static/styles'));
+    .pipe(gulp.dest('static/dist/styles'));
+});
+
+gulp.task('favicon', function () {
+  return gulp.src('static/src/favicon.png')
+    .pipe(imagemin({
+      optimizationLevel: 3,
+      progressive: true,
+      interlaced: true
+    }))
+    .pipe(gulp.dest('static/dist'));
+});
+
+gulp.task('images', function () {
+  return gulp.src('static/src/res/**/*')
+    .pipe(imagemin({
+      optimizationLevel: 3,
+      progressive: true,
+      interlaced: true
+    }))
+    .pipe(gulp.dest('static/dist/res'));
+});
+
+gulp.task('html', function () {
+  return gulp.src(['static/src/*.html'])
+    .pipe(minifyHTML())
+    .pipe(gulp.dest('static/dist'));
 });
 
 //Compilation des fichiers javascript en un seul fichier main.js uglifié
 
 gulp.task('scripts', function () {
-  return gulp.src('static/js/adsbygoogle.js')
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('default'))
+  return gulp.src('static/src/js/*.js')
+    .pipe(concat('main.js'))
+    .pipe(gulp.dest('static/dist/js'))
     .pipe(rename({
       suffix: '.min'
     }))
     .pipe(uglify())
-    .pipe(gulp.dest('static/js'));
+    .pipe(gulp.dest('static/dist/js'));
 });
 
 
@@ -44,7 +72,7 @@ gulp.task('install', function () {
 //Action par d&eacute;faut : compilation complete du site pour le déploiement
 
 gulp.task('default', ['install'], function () {
-  gulp.start('styles', 'scripts');
+  gulp.start('styles', 'scripts', 'html', 'images', 'favicon');
 });
 
 //Action devel, compilation + surveillance pour utiliser pendant le dev
@@ -52,12 +80,12 @@ gulp.task('default', ['install'], function () {
 gulp.task('devel', ['default'], function () {
 
   // watch for JS changes
-  gulp.watch('static/js/*.js', function () {
+  gulp.watch('static/src/js/*.js', function () {
     gulp.start('scripts');
   });
 
 
-  gulp.watch('static/src/styles/**/*.scss', function () {
+  gulp.watch('static/src/scss/**/*.scss', function () {
     gulp.start('styles');
   });
 

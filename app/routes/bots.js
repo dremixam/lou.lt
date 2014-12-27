@@ -9,7 +9,7 @@ var Robots = require('../models/bots.js');
 
 module.exports = function (socket) {
 
-
+    var message;
     var lng = 'fr';
     var channel = '/';
 
@@ -21,17 +21,17 @@ module.exports = function (socket) {
     // Génération de la voix et du message
     message = message.substring(0, 300);
     messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€']/ig, ' ').substring(0, 300);
-    message = twitter.autoLink(replaceHtmlEntites(message).replace(/卐/g, ""), {
+    message = twitter.autoLink(replaceHtmlEntites(message).replace(/卐/g, ''), {
       target: '_blank'
     });
-    audio = "/res/audio/" + messageId + ".wav";
+    audio = '/res/audio/' + messageId + '.wav';
 
-    if (lng == 'fr') {
-      commande = "espeak " + hs.session.userData.params + " -v mb/mb-fr1 --pho \"" + messageAEnregistrer + "\" 2>/dev/null | mbrola -e /usr/share/mbrola/" + hs.session.userData.voice.fr + "/" + hs.session.userData.voice.fr + " - ./static" + audio;
-    } else if (lng == 'en') {
-      commande = "espeak " + hs.session.userData.params + " -v mb/mb-us1 --pho \"" + messageAEnregistrer + "\" 2>/dev/null | mbrola -e /usr/share/mbrola/" + hs.session.userData.voice.en + "/" + hs.session.userData.voice.en + " - ./static" + audio;
+    if (lng === 'fr') {
+      commande = 'espeak ' + hs.session.userData.params + ' -v mb/mb-fr1 --pho \'' + messageAEnregistrer + '\' 2>/dev/null | mbrola -e /usr/share/mbrola/' + hs.session.userData.voice.fr + '/' + hs.session.userData.voice.fr + ' - ./static' + audio;
+    } else if (lng === 'en') {
+      commande = 'espeak ' + hs.session.userData.params + ' -v mb/mb-us1 --pho \'' + messageAEnregistrer + '\' 2>/dev/null | mbrola -e /usr/share/mbrola/' + hs.session.userData.voice.en + '/' + hs.session.userData.voice.en + ' - ./static' + audio;
     } else {
-      commande = "espeak " + hs.session.userData.params + " -v mb/mb-en1 --pho \"" + messageAEnregistrer + "\" 2>/dev/null | mbrola -e /usr/share/mbrola/" + hs.session.userData.voice.en + "/" + hs.session.userData.voice.en + " - ./static" + audio;
+      commande = 'espeak ' + hs.session.userData.params + ' -v mb/mb-en1 --pho \'' + messageAEnregistrer + '\' 2>/dev/null | mbrola -e /usr/share/mbrola/' + hs.session.userData.voice.en + '/' + hs.session.userData.voice.en + ' - ./static' + audio;
     }
 
     exec(commande, function (error, stdout, stderr) {
@@ -58,5 +58,5 @@ module.exports = function (socket) {
 
 
 var replaceHtmlEntites = (function (mystring) {
-  return mystring.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  return mystring.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;').replace(/'/g, '&quot;');
 });
