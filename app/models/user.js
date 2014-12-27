@@ -1,3 +1,4 @@
+'use strict';
 var fs = require('fs');
 
 var socketModel = require('../models/socket');
@@ -8,12 +9,34 @@ var allSockets = {};
 
 /*
 
+Le code de ce module est à revoir completement
+
 Mise &agrave; jour il va falloir utiliser la base de donn&eacute;es pour choisir le pok&eacute;mon maintenant. Elle contient tout ce qu'il faut.
 
 pkmn.find({$or:[{ 'gen': 1 }, { 'gen': 2 }], 'uncommon':false, randomKey: {$gte: Math.random()}}).sort({'randomKey':1}).skip(0).limit(1)
 
 
 */
+
+
+function makecolor() {
+  var lines = ['#001F3F', '#0074D9', '#39CCCC', '#3D9970', '#01FF70', '#FF851B', '#85144B', '#F012BE', '#B10DC9'];
+  var text = lines[Math.floor(Math.random() * lines.length)];
+  return text;
+}
+
+function makeuuid() {
+  var text = '';
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  for (var i = 0; i < 32; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
+}
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 
 
 module.exports.add = function (socket, fn) {
@@ -26,8 +49,6 @@ module.exports.add = function (socket, fn) {
 
   var userData = {};
 
-  var hs = socket.handshake;
-
   if (socket.handshake.session.userData !== undefined) {
     userData = socket.handshake.session.userData;
     userData.last = Date.now();
@@ -36,12 +57,12 @@ module.exports.add = function (socket, fn) {
     userData.public.thumb = userData.public.thumb || 0;
 
     if (userData.voice[lng] === undefined) {
-      if (lng == 'fr') {
-        userData.voice[lng] = "fr" + getRandomInt(1, 6);
-      } else if (lng == 'en') {
-        userData.voice[lng] = "us" + getRandomInt(1, 3);
+      if (lng === 'fr') {
+        userData.voice[lng] = 'fr' + getRandomInt(1, 6);
+      } else if (lng === 'en') {
+        userData.voice[lng] = 'us' + getRandomInt(1, 3);
       } else {
-        userData.voice[lng] = "en1";
+        userData.voice[lng] = 'en1';
       }
     }
 
@@ -49,11 +70,11 @@ module.exports.add = function (socket, fn) {
     allClients[channel][userData.public.uuid] = userData;
     socket.handshake.session.userData = userData;
     socket.handshake.session.save();
-    //socket.emit("debug", "session data saved");
+    //socket.emit('debug', 'session data saved');
     fn(userData);
   } else {
     // Quand on a une nouvelle connection, on ouvre le fichier qui contient les noms possibles
-    fs.readFile("./names.txt", function (err, data) {
+    fs.readFile('./names.txt', function (err, data) {
 
       // En cas d'erreur on arrête
       if (err) throw err;
@@ -65,7 +86,7 @@ module.exports.add = function (socket, fn) {
         selectedName = lines[Math.floor(Math.random() * lines.length)];
       } while (selectedName === '');
 
-      var pseudo = eval("(" + selectedName + ")");
+      var pseudo = eval('(' + selectedName + ')');
 
       // On récupère une couleur qu'on attribue au nouvel utilisateur
       var color = makecolor();
@@ -75,10 +96,10 @@ module.exports.add = function (socket, fn) {
       // On sauvegarde toutes les données de l'utilisateur
       userData = {
         voice: {
-          fr: "fr" + getRandomInt(1, 6),
-          en: "us" + getRandomInt(1, 3)
+          fr: 'fr' + getRandomInt(1, 6),
+          en: 'us' + getRandomInt(1, 3)
         },
-        params: " -p " + getRandomInt(1, 99) + " -s " + getRandomInt(100, 175),
+        params: ' -p ' + getRandomInt(1, 99) + ' -s ' + getRandomInt(100, 175),
         last: Date.now(),
         ip: socket.handshake.headers['x-real-ip'] || socket.handshake.address.address,
         public: {
@@ -121,7 +142,9 @@ module.exports.forEach = function (channel, fn) {
   if (allClients[channel] === undefined) allClients[channel] = {};
   if (allSockets[channel] === undefined) allSockets[channel] = {};
   for (var uuid in allClients[channel]) {
-    fn(allClients[channel][uuid]);
+    if ( allClients.hasOwnProperty(channel)) {
+      fn(allClients[channel][uuid]);
+    }
   }
 };
 
@@ -145,21 +168,3 @@ function updateLastMessage(socket) {
 }
 
 module.exports.updateLastMessage = updateLastMessage;
-
-function makecolor() {
-  var lines = ["#001F3F", "#0074D9", "#39CCCC", "#3D9970", "#01FF70", "#FF851B", "#85144B", "#F012BE", "#B10DC9"];
-  var text = lines[Math.floor(Math.random() * lines.length)];
-  return text;
-}
-
-function makeuuid() {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
-  for (var i = 0; i < 32; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  return text;
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}

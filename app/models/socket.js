@@ -1,3 +1,4 @@
+'use strict';
 module.exports = {
   socket: {},
   push: function (newSocketID) {
@@ -28,4 +29,4 @@ module.exports = {
     }
 
   }
-}
+};

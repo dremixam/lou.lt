@@ -1,3 +1,5 @@
+'use strict';
+
 var twitter = require('twitter-text');
 var exec = require('child_process').exec;
 var messagesModel = require('../models/messages');

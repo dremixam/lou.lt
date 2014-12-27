@@ -1,3 +1,4 @@
+'use strict';
 
 var twitter = require('twitter-text');
 var spawn = require('child_process').spawn;
@@ -11,20 +12,18 @@ var fs = require('fs'),
     imageMagick: true
   });
 var config = require('../../config'); // load the config
-var embed = require("embed-video");
-var webshot = require('webshot');
+var embed = require('embed-video');
 var url = require('url');
 var Pageres = require('pageres');
 
+var replaceHtmlEntites = (function (mystring) {
+  return mystring.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+});
+
 module.exports = function (socket) {
-  'use strict';
-
-
   socket.on('message', function (message) {
     var lng = socketModel.get(socket.id, 'lng'),
       channel = socketModel.get(socket.id, 'channel');
-
-
     fs.readFile('banlist.json', 'utf8', function (err, data) {
       if (err) {
         console.log(err);
@@ -56,7 +55,7 @@ module.exports = function (socket) {
         // Si le pseudo n'est pas défini, on est pas connecté donc on jette
         if (hs.session.userData === null) {
           socket.emit('errormsg', {
-            message: "Une erreur est survenue, veuillez réactualiser"
+            message: 'Une erreur est survenue, veuillez réactualiser'
           });
           return;
         }
@@ -64,13 +63,13 @@ module.exports = function (socket) {
         // Si le dernier message a moins de deux secondes on jette
         if (userModel.updateLastMessage(socket) === false) {
           socket.emit('errormsg', {
-            message: "Ne postez pas trop vite"
+            message: 'Ne postez pas trop vite'
           });
           return;
         }
 
         // Génération de la voix et du message
-        message = message.replace(/卐/g, "").substring(0, 300); //On vire les caracteres qui font chier et on réduit la chaine
+        message = message.replace(/卐/g, '').substring(0, 300); //On vire les caracteres qui font chier et on réduit la chaine
 
         // Si le message est vide on jette
         if (message.length < 1) { return; }
@@ -103,17 +102,17 @@ module.exports = function (socket) {
             }
             insertHisto += '<span class="link-placeholder-' + imgHash + ' link-placeholder" style="background: url(/res/img/thumbs/' + imgHash + '.png);"><a target="_blank" href="' + links[index] + '"><span>' + parsedURL.host + '</span></a></span>';
           }
-          message += '<div style="display: table; border-spacing:4px;">' + insert + "</div>";
-          messageHisto += '<div style="display: table; border-spacing:4px;">' + insertHisto + "</div>";
+          message += '<div style="display: table; border-spacing:4px;">' + insert + '</div>';
+          messageHisto += '<div style="display: table; border-spacing:4px;">' + insertHisto + '</div>';
         }
 
-        var audio = "/res/audio/" + messageId + ".wav";
+        var audio = '/res/audio/' + messageId + '.wav';
 
         // Configuration du synthétiseur vocal.
         var params = [];
-        if (lng == 'fr') {
+        if (lng === 'fr') {
           params = [hs.session.userData.params, 'fr', messageAEnregistrer, hs.session.userData.voice.fr, './static' + audio];
-        } else if (lng == 'en') {
+        } else if (lng === 'en') {
           params = [hs.session.userData.params, 'us', messageAEnregistrer, hs.session.userData.voice.en, './static' + audio];
         } else {
           params = [hs.session.userData.params, 'en', messageAEnregistrer, hs.session.userData.voice.en, './static' + audio];
@@ -125,7 +124,7 @@ module.exports = function (socket) {
         synth.on('exit', function(exitCode){
 
           if (exitCode !== 0 && config.devel === false) {
-            console.log('exec error: ' + error);
+            console.log('Une erreur est survenue lors de la génération du son');
           } else {
             try {
               socket.broadcast.to(channel).emit('message', {
@@ -232,6 +231,4 @@ module.exports = function (socket) {
 };
 
 
-var replaceHtmlEntites = (function (mystring) {
-  return mystring.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
-});
+

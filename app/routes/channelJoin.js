@@ -1,3 +1,5 @@
+'use strict';
+
 var messagesModel = require('../models/messages');
 var clientList = require('../models/user');
 var socketModel = require('../models/socket');
@@ -21,7 +23,7 @@ module.exports = function (socket) {
     var userIp = socket.handshake.headers['x-real-ip'] || socket.handshake.address.address;
 
 
-    if (banlist.banned.indexOf(userIp) != -1) {
+    if (banlist.banned.indexOf(userIp) !== -1) {
       socket.disconnect('unauthorized');
       return 0;
     } else {
@@ -60,7 +62,6 @@ module.exports = function (socket) {
           });
         });
         socket.on('disconnect', function () {
-          var public = socket.handshake.session.userData.public;
           var uuid = socket.handshake.session.userData.public.uuid;
           clientList.remove(channel, uuid);
           setTimeout(function () {
