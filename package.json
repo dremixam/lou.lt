@@ -1,8 +1,8 @@
 {
   "name": "lou.lt",
-  "version": "0.2.4",
+  "version": "0.3.0a",
   "description": "Anonymous chat with vocal synthesis.",
-  "main": "lou.lt.js",
+  "main": "loult.js",
   "author": "Dr Emixam",
   "dependencies": {
     "chance": "^0.6.1",
@@ -33,7 +33,7 @@
     "webshot": "^0.15.3"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node loult.js"
   },
   "devDependencies": {},
   "repository": {
