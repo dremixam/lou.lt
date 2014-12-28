@@ -3,39 +3,18 @@ var fs = require('fs');
 
 var socketModel = require('../models/socket');
 
+var tools = require('./tools.js');
+
 var allClients = {};
 var allSockets = {};
 
 
 /*
-
 Le code de ce module est à revoir completement
-
 Mise &agrave; jour il va falloir utiliser la base de donn&eacute;es pour choisir le pok&eacute;mon maintenant. Elle contient tout ce qu'il faut.
-
 pkmn.find({$or:[{ 'gen': 1 }, { 'gen': 2 }], 'uncommon':false, randomKey: {$gte: Math.random()}}).sort({'randomKey':1}).skip(0).limit(1)
-
-
 */
 
-
-function makecolor() {
-  var lines = ['#001F3F', '#0074D9', '#39CCCC', '#3D9970', '#01FF70', '#FF851B', '#85144B', '#F012BE', '#B10DC9'];
-  var text = lines[Math.floor(Math.random() * lines.length)];
-  return text;
-}
-
-function makeuuid() {
-  var text = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-  for (var i = 0; i < 32; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  return text;
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 
 
@@ -58,15 +37,15 @@ module.exports.add = function (socket, fn) {
 
     if (userData.voice[lng] === undefined) {
       if (lng === 'fr') {
-        userData.voice[lng] = 'fr' + getRandomInt(1, 6);
+        userData.voice[lng] = 'fr' + tools.randomIntRange(1, 6);
       } else if (lng === 'en') {
-        userData.voice[lng] = 'us' + getRandomInt(1, 3);
+        userData.voice[lng] = 'us' + tools.randomIntRange(1, 3);
       } else {
         userData.voice[lng] = 'en1';
       }
     }
 
-    updateLastMessage(socket);
+    module.exports.updateLastMessage(socket);
     allClients[channel][userData.public.uuid] = userData;
     socket.handshake.session.userData = userData;
     socket.handshake.session.save();
@@ -86,20 +65,22 @@ module.exports.add = function (socket, fn) {
         selectedName = lines[Math.floor(Math.random() * lines.length)];
       } while (selectedName === '');
 
+      /*jshint -W061 */ //On ignore les erreurs liées à la commande EVAL même si on sait que c'pas bien
       var pseudo = eval('(' + selectedName + ')');
+      /*jshint +W061 */
 
       // On récupère une couleur qu'on attribue au nouvel utilisateur
-      var color = makecolor();
+      var color = tools.randomColor();
 
-      var uuid = makeuuid();
+      var uuid = tools.randomUUID();
 
       // On sauvegarde toutes les données de l'utilisateur
       userData = {
         voice: {
-          fr: 'fr' + getRandomInt(1, 6),
-          en: 'us' + getRandomInt(1, 3)
+          fr: 'fr' + tools.randomIntRange(1, 6),
+          en: 'us' + tools.randomIntRange(1, 3)
         },
-        params: ' -p ' + getRandomInt(1, 99) + ' -s ' + getRandomInt(100, 175),
+        params: ' -p ' + tools.randomIntRange(1, 99) + ' -s ' + tools.randomIntRange(100, 175),
         last: Date.now(),
         ip: socket.handshake.headers['x-real-ip'] || socket.handshake.address.address,
         public: {
@@ -118,27 +99,15 @@ module.exports.add = function (socket, fn) {
 
       socket.handshake.session.userData = userData;
 
-
-
       socket.handshake.session.save();
 
-      updateLastMessage(socket);
+      module.exports.updateLastMessage(socket);
       fn(userData);
     });
   }
-
-
-
-
-
-
-
-
-
 };
 
 module.exports.forEach = function (channel, fn) {
-
   if (allClients[channel] === undefined) allClients[channel] = {};
   if (allSockets[channel] === undefined) allSockets[channel] = {};
   for (var uuid in allClients[channel]) {
@@ -156,7 +125,7 @@ module.exports.remove = function (channel, uuid) {
   delete allSockets[channel][uuid];
 };
 
-function updateLastMessage(socket) {
+module.exports.updateLastMessage = function(socket) {
   socket.handshake.session.userData.last = socket.handshake.session.userData.last || Date.now();
   if (Date.now() < socket.handshake.session.userData.last + 300) {
     return false;
@@ -165,6 +134,4 @@ function updateLastMessage(socket) {
     socket.handshake.session.save();
     return true;
   }
-}
-
-module.exports.updateLastMessage = updateLastMessage;
+};

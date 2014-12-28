@@ -9,15 +9,22 @@
   <script>var adblock = true;</script>
   <script src="/lib/angular/angular.min.js"></script>
   <script src="/lib/angular-gettext/dist/angular-gettext.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/main.min.js"></script>
+  <script src="/js/main.js"></script>
 </head>
 
 <body>
   <div id="fb-root"></div>
 
-  <section id="zone_chat">
+  <section id="zone_chat" ng-controller="MessageListCtrl">
+    <div class="ligne {{message.classe}}" ng-repeat="message in messagelist">
+      <div class="premier" style="color: {{message.color}};">{{message.premier}}</div>
+      <div class="second">{{message.second}}
+        <div>
+          <div class="lineTimer">{{message.date}}</div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <header>
@@ -46,7 +53,7 @@
   </section>
 
   <form method="post" id="formulaire_chat" ng-controller="TextBoxCtrl" ng-submit="submit()">
-    <input type="text" name="message" id="message" placeholder="Message..." autofocus autocomplete="off" disabled ng-model="textMessage" value="" />
+    <input type="text" name="message" id="message" placeholder="Message..." autofocus autocomplete="off" ng-model="textMessage" value="" />
     <span ng-animate ng-class="{true: 'alert', false: 'ok'}[textMessage.length>300]">{{300 - textMessage.length}}</span>
   </form>
 

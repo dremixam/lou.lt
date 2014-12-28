@@ -39,8 +39,7 @@ module.exports = function (socket) {
           clientList.forEach(channel, function (entry) {
             socket.emit('nouveau_client', entry.public);
           });
-          socket.broadcast.to(channel).emit('nouveau_client', newUserData.public);
-          socket.emit('nouveau_client', newUserData.public);
+          socket.to(channel).emit('nouveau_client', newUserData.public);
           socket.emit('connected', newUserData.public);
           messagesModel.forEach(channel, function (message) {
             //console.log("Derniers messages : " + JSON.stringify(message));
@@ -51,12 +50,8 @@ module.exports = function (socket) {
           var publicData = socket.handshake.session.userData.public;
           var uuid = socket.handshake.session.userData.public.uuid;
           clientList.remove(channel, uuid);
-          setTimeout(function () {
-            socket.broadcast.to(channel).emit('disconnected', publicData);
-          }, 4 * 1000);
-
+          socket.to(channel).emit('disconnected', publicData);
           socketModel.remove(socket.id);
-
           clearInterval(intervalID);
         });
       });

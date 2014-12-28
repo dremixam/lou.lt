@@ -1,43 +1,47 @@
-/*
- * * g o a t s e x * g o a t s e x * g o a t s e x *
- * g                                               g
- * o /     \             \            /    \       o
- * a|       |             \          |      |      a
- * t|       `.             |         |       :     t
- * s`        |             |        \|       |     s
- * e \       | /       /  \\\   --__ \\       :    e
- * x  \      \/   _--~~          ~--__| \     |    x
- * *   \      \_-~                    ~-_\    |    *
- * g    \_     \        _.--------.______\|   |    g
- * o      \     \______// _ ___ _ (_(__>  \   |    o
- * a       \   .  C ___)  ______ (_(____>  |  /    a
- * t       /\ |   C ____)/      \ (_____>  |_/     t
- * s      / /\|   C_____)       |  (___>   /  \    s
- * e     |   (   _C_____)\______/  // _/ /     \   e
- * x     |    \  |__   \\_________// (__/       |  x
- * *    | \    \____)   `----   --'             |  *
- * g    |  \_          ___\       /_          _/ | g
- * o   |              /    |     |  \            | o
- * a   |             |    /       \  \           | a
- * t   |          / /    |         |  \           |t
- * s   |         / /      \__/\___/    |          |s
- * e  |           /        |    |       |         |e
- * x  |          |         |    |       |         |x
- * * g o a t s e x * g o a t s e x * g o a t s e x *
- */
-
 var loultApp = angular.module('loultApp', []);
 
 var audioPlayer = 0;
-// Connexion à socket.io
-var socket = io.connect('/');
-
 var connected = false;
 var ignorelist = [];
 var me;
 
-loultApp.controller('UserListCtrl', ['$scope',
-  function ($scope) {
+//Factory pour la gestion de la connexion socket.io
+
+loultApp.service('$socket', ['$rootScope',
+  function ($rootScope) {
+    'use strict';
+    var socket = io.connect('/', {
+      'force new connection': true,
+      'reconnection limit': 10000,
+      'max reconnection attempts': Infinity
+    });
+    this.on = function (eventName, callback) {
+      socket.on(eventName, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          if (callback) {
+            callback.apply(socket, args);
+          }
+        });
+      });
+    };
+    this.emit = function (eventName, data, callback) {
+      socket.emit(eventName, data, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          if (callback) {
+            callback.apply(socket, args);
+          }
+        });
+      });
+    };
+    this.removeAllListeners = function () {
+      socket.removeAllListeners();
+    };
+}]);
+
+loultApp.controller('UserListCtrl', ['$scope', '$socket',
+  function ($scope, $socket) {
     'use strict';
     $scope.userlist = [];
 
@@ -46,18 +50,23 @@ loultApp.controller('UserListCtrl', ['$scope',
       $scope.language = 'en'; //default language if language is not recognized
     }
 
-    socket.on('connect', function () {
-      socket.emit('join', location.pathname);
+    //ÇA SERAIT BIEN DE GÉRER ÇA DANS LE FACTORY
+    $socket.on('connect', function () {
+      $socket.emit('join', location.pathname);
     });
 
-    socket.on('disconnect', function () {
+    /*
+// Ça sera à gérer dans le factory
+    $socket.on('disconnect', function () {
       connected = false;
-      insereLigne('[Info]', 'join', 'Waiting 3s for new connection…', null);
       setTimeout(function () {
         socket = io.connect('/');
       }, 3000);
     });
+*/
 
+    /*
+    // Ça faut le gérer aussi dans le factory
     socket.on('error', function () {
       connected = false;
       insereLigne('[Info]', 'join', 'Waiting 3s for new connection…', null);
@@ -66,7 +75,10 @@ loultApp.controller('UserListCtrl', ['$scope',
       }, 3000);
     });
 
-    socket.on('thumbok', function (data) {
+*/
+
+    //ÇA A GÉRER DANS LE CONTROLEUR DE ZONE MESSAGE
+    $socket.on('thumbok', function (data) {
       var nodelist = document.getElementsByClassName('link-placeholder-' + data.hash);
       Array.prototype.forEach.call(nodelist, function (elt) {
         elt.style.backgroundImage = 'url(/res/img/thumbs/' + data.hash + '.png)';
@@ -75,16 +87,17 @@ loultApp.controller('UserListCtrl', ['$scope',
 
     });
 
-
-    socket.on('thumberr', function (data) {
+    // IDEM CONTROLEUR ZONE MESSAGE
+    $socket.on('thumberr', function (data) {
       var nodelist = document.getElementsByClassName('link-placeholder-' + data);
       Array.prototype.forEach.call(nodelist, function (elt) {
         elt.innerHTML = 'Can&apos;t load preview';
       });
     });
 
+    //À SCINDER EN DEUX POUR GÉRER ICI LES CHANGEMENTS SUR LA LISTE ET DANS LA ZONE MESSAGE L'AFFICHAGE DU MESSAGE
     // Quand un nouveau client se connecte, on affiche l'information
-    socket.on('nouveau_client', function (data) {
+    $socket.on('nouveau_client', function (data) {
       console.log('nouveau client' + data);
       var result = $scope.userlist.filter(function (obj) {
         return obj.uuid === data.uuid;
@@ -97,36 +110,39 @@ loultApp.controller('UserListCtrl', ['$scope',
         $scope.userlist.push(data);
         if (me !== undefined) {
           if ($scope.language === 'fr') {
-            insereLigne('[Info]', 'join', 'Un ' + data.pseudo.fr + ' sauvage apparait !', null);
+            //insereLigne('[Info]', 'join', 'Un ' + data.pseudo.fr + ' sauvage apparait !', null);
           } else {
-            insereLigne('[Info]', 'join', 'Wild ' + data.pseudo.en + ' appeared!', null);
+            //insereLigne('[Info]', 'join', 'Wild ' + data.pseudo.en + ' appeared!', null);
           }
         }
       } else {
         location.reload();
       }
-      $scope.$apply();
+
     });
 
-    socket.on('connecting', function () {
+    //ÇA DANS LA ZONE MESSAGE
+    $socket.on('connecting', function () {
       console.log('connecting');
-      insereLigne('[Info]', 'join', 'Connecting…', null);
+      //insereLigne('[Info]', 'join', 'Connecting…', null);
       $scope.userlist = [];
-      $scope.$apply();
+
     });
 
-    socket.on('update_user', function (data) {
+    //ÇA RESTE ICI
+    $socket.on('update_user', function (data) {
       var result = $scope.userlist.filter(function (obj) {
         return obj.uuid === data.uuid;
       });
       if (result.length === 1) {
         result[0] = data;
       }
-      $scope.$apply();
+
     });
 
+    //ÇA À SCINDER EN DEUX
     // Quand un nouveau client se connecte, on affiche l'information
-    socket.on('disconnected', function (data) {
+    $socket.on('disconnected', function (data) {
       console.log('disconnected' + data);
       var result = $scope.userlist.filter(function (obj) {
         return obj.uuid === data.uuid;
@@ -136,21 +152,22 @@ loultApp.controller('UserListCtrl', ['$scope',
           result[0].count--;
         } else if (result[0].count === 1) {
           if ($scope.language === 'fr') {
-            insereLigne('[Info]', 'part', 'Le ' + data.pseudo.fr + ' sauvage s\'enfuit !', null);
+            //insereLigne('[Info]', 'part', 'Le ' + data.pseudo.fr + ' sauvage s\'enfuit !', null);
           } else {
-            insereLigne('[Info]', 'part', 'Wild ' + data.pseudo.en + ' fled!', null);
+            //insereLigne('[Info]', 'part', 'Wild ' + data.pseudo.en + ' fled!', null);
           }
           $scope.userlist.splice($scope.userlist.indexOf(result[0]), 1);
         }
       }
-      $scope.$apply();
+
     });
 
-    socket.on('connected', function (data) {
+    //ÇA À SCINDER EN DEUX
+    $socket.on('connected', function (data) {
       console.log('connected' + JSON.stringify(data));
 
       me = data;
-      insereLigne('[Info]', 'join', 'Connected as ' + data.pseudo.fr, null);
+      //insereLigne('[Info]', 'join', 'Connected as ' + data.pseudo.fr, null);
       var result = $scope.userlist.filter(function (obj) {
         return obj.uuid === data.uuid;
       });
@@ -162,100 +179,126 @@ loultApp.controller('UserListCtrl', ['$scope',
       } else {
         location.reload();
       }
-      $scope.$apply();
-      $('#message').removeAttr('disabled').focus();
+
+      //$('#message').removeAttr('disabled').focus();
+
+
+
+
       connected = true;
     });
 
-    // Quand on reçoit un message, on l'insère dans la page
-    socket.on('message', function (data) {
+}]);
+
+loultApp.controller('MessageListCtrl', ['$scope', '$socket',
+  function ($scope, $socket) {
+    'use strict';
+    $scope.messagelist = [];
+
+    $socket.on('message', function (data) {
       var result = $scope.userlist.filter(function (obj) {
         return obj.uuid === data.user.uuid;
       });
       if (!result[0].muted) {
-        insereMessage(data.user.pseudo, data.message, data.color, $scope.language);
+        $scope.messagelist.push({
+          'premier': data.user.pseudo,
+          'classe': '',
+          'second': data.message,
+          'color': data.color,
+          'date': Date()
+        });
+
         document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
         document.getElementById('audio' + (audioPlayer % 10)).play();
         audioPlayer++;
       }
     });
 
-    // Historique des derniers messages
-    socket.on('lastmessage', function (data) {
-      insereLastMessage(data.user.pseudo, data.message, data.color, $scope.language);
+    $socket.on('lastmessage', function (data) {
+      $scope.messagelist.push({
+        'premier': data.user.pseudo,
+        'classe': 'old',
+        'second': data.message,
+        'color': data.color,
+        'date': data.time
+      });
     });
 
-    socket.on('ownmessage', function (data) {
+    $socket.on('ownmessage', function (data) {
       document.getElementById('message').placeholder = 'Message...';
-      insereOwnMessage(data.user.pseudo, data.message, data.color, $scope.language);
       document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
       document.getElementById('audio' + (audioPlayer % 10)).play();
       audioPlayer++;
-    });
-    socket.on('debug', function (message) {
-      insereDebug(message);
+      $scope.messagelist.push({
+        'premier': data.user.pseudo,
+        'classe': 'own',
+        'second': data.message,
+        'color': data.color,
+        'date': Date()
+      });
     });
 
-    socket.on('errormsg', function (data) {
+    $socket.on('errormsg', function (data) {
       document.getElementById('message').placeholder = 'Message...';
-      insereErreur(data.message);
+      $scope.messagelist.push({
+        'premier': '[Error]',
+        'classe': 'error',
+        'second': data.message,
+        'color': null,
+        'date': Date()
+      });
     });
 
-    socket.on('info', function (data) {
-      insereLigne('[Info]', 'info', data, null);
+    $socket.on('info', function (data) {
+      $scope.messagelist.push({
+        'premier': '[Info]',
+        'classe': 'info',
+        'second': data,
+        'color': null,
+        'date': Date()
+      });
+    });
+
+    $socket.on('disconnect', function () {
+      $scope.messagelist.push({
+        'premier': '[Info]',
+        'classe': 'join',
+        'second': 'Waiting for new connection…',
+        'color': null,
+        'date': Date()
+      });
+    });
+
+    $socket.on('connecting', function () {
+      $scope.messagelist.push({
+        'premier': '[Info]',
+        'classe': 'join',
+        'second': 'Connecting…',
+        'color': null,
+        'date': Date()
+      });
+    });
+
+    $socket.on('connected', function (data) {
+      $scope.messagelist.push({
+        'premier': '[Info]',
+        'classe': 'join',
+        'second': 'Connected as '+data.pseudo+'.',
+        'color': null,
+        'date': Date()
+      });
     });
 
 
-    socket.on('attack', function (data) {
-      if (connected) {
-        insereLigne('[Attaque]', 'attack', data, null);
-      }
-    });
 
 
-
-
-    // Ajoute un message dans la page
-    function insereDebug(message) {
-      insereLigne('[Debug]', 'debug', message, null);
-    }
-
-    function insereErreur(message) {
-      insereLigne('[Erreur]', 'error', message, null);
-    }
-
-    function insereMessage(pseudo, message, color, lng) {
-      insereLigne(pseudo[lng] + ' <img src="/res/pkmn/' + pseudo.fr + '.gif">', '', message, color);
-    }
-
-    function insereLastMessage(pseudo, message, color, lng) {
-      insereLigne(pseudo[lng] + ' <img src="/res/pkmn/' + pseudo.fr + '.gif">', 'old', message, color);
-    }
-
-    function insereOwnMessage(pseudo, message, color, lng) {
-      insereLigne(pseudo[lng] + ' <img src="/res/pkmn/' + pseudo.fr + '.gif">', 'own', message, color);
-    }
-
-    // À REVOIR COMPLETEMENT SANS UTILISER JQUERY
-
-    function insereLigne(premier, classe, second, color) {
-      if (color === null) {
-        $('#zone_chat').append('<div class="ligne ' + classe + '"><div class="premier">' + premier + '</div><div class="second">' + second + '<div><div class="lineTimer">' + currentTime() + '</div></div>');
-      } else {
-        $('#zone_chat').append('<div class="ligne ' + classe + '"><div class="premier" style="color: ' + color + ';">' + premier + '</div><div class="second">' + second + '<div><div class="lineTimer">' + currentTime() + '</div></div>');
-      }
-
-      if ($('#zone_chat').scrollTop() + $('#zone_chat').height() > ($('#zone_chat')[0].scrollHeight - $('#zone_chat').height() / 2)) {
-        $('#zone_chat').stop().animate({
-          scrollTop: $('#zone_chat')[0].scrollHeight
-        }, 500);
-      }
-    }
 
 }]);
 
-loultApp.controller('TextBoxCtrl', ['$scope',
-  function ($scope) {
+
+
+loultApp.controller('TextBoxCtrl', ['$scope', '$socket',
+  function ($scope, $socket) {
     'use strict';
     // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
     $scope.submit = function () {
@@ -263,12 +306,12 @@ loultApp.controller('TextBoxCtrl', ['$scope',
       var first = message.split(' ')[0];
       var next = message.substr(message.indexOf(' ') + 1);
       if (first.charAt(0) === '/') {
-        socket.emit('command', {
+        $socket.emit('command', {
           cmd: first.substring(1),
           args: next
         });
       } else {
-        socket.emit('message', message); // Transmet le message aux autres
+        $socket.emit('message', message); // Transmet le message aux autres
       }
       $scope.textMessage = '';
 
@@ -278,30 +321,6 @@ loultApp.controller('TextBoxCtrl', ['$scope',
 }]);
 
 
-function toggleIgnore(pseudo, elt) {
-  'use strict';
-  if (elt !== null) {
-    if (ignorelist.indexOf(pseudo) === -1) {
-      ignorelist.push(pseudo);
-      elt.parentNode.style.color = '#c0c0c0';
-      elt.className = 'fa fa-times-circle fa-fw';
-    } else {
-      var i = ignorelist.indexOf(pseudo);
-      ignorelist.splice(i, 1);
-      elt.parentNode.style.color = 'black';
-      elt.className = 'fa fa-volume-up fa-fw';
-    }
-  } else {
-    if (ignorelist.indexOf(pseudo) === -1) {
-      ignorelist.push(pseudo);
-      updateUserList();
-    } else {
-      var i = ignorelist.indexOf(pseudo);
-      ignorelist.splice(i, 1);
-      updateUserList();
-    }
-  }
-}
 
 function isCharacterKeyPress(evt) {
   'use strict';
@@ -317,44 +336,6 @@ function isCharacterKeyPress(evt) {
   return false;
 }
 
-toggleMute = function () {
-  'use strict';
-  for (var i = 0; i < 10; i++) {
-    if (document.getElementById('audio' + i).volume === 0) {
-      document.getElementById('audio' + i).volume = 1;
-      document.getElementById('globalMute').style.color = '#fff';
-      document.getElementById('globalMute').className = 'fa fa-volume-up fa-fw';
-    } else {
-      document.getElementById('audio' + i).volume = 0;
-      document.getElementById('globalMute').style.color = '#c0c0c0';
-      document.getElementById('globalMute').className = 'fa fa-volume-off fa-fw';
-    }
-  }
-};
-
-
-function currentTime(currentTime) {
-  'use strict';
-  if (!(currentTime instanceof Date)) {
-    currentTime = new Date();
-  }
-  var hours = currentTime.getHours();
-  var minutes = currentTime.getMinutes();
-  var seconds = currentTime.getSeconds();
-  if (minutes < 10) {
-    minutes = '0' + minutes;
-  }
-  if (seconds < 10) {
-    seconds = '0' + seconds;
-  }
-  var v = hours + ':' + minutes + ':' + seconds + ' ';
-  if (hours > 11) {
-    v += 'PM';
-  } else {
-    v += 'AM';
-  }
-  return v;
-}
 
 document.onkeypress = function (evt) {
   'use strict';

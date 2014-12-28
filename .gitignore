@@ -20,8 +20,6 @@ node_modules
 
 config.js
 
-
-
 /banlist.json
 /static/dist/res/img/thumbs/*
 .sass-cache

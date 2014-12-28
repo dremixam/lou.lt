@@ -14,7 +14,6 @@ var session = require('express-session');
 // configuration ===============================================================
 mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function () { // connect to mongoDB database
 
-
   var MongoStore = require('connect-mongo')(express);
   var sessionStore = new MongoStore({
     host: config.db.host,

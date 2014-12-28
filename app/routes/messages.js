@@ -5,7 +5,6 @@ var spawn = require('child_process').spawn;
 var userModel = require('../models/user');
 var messagesModel = require('../models/messages');
 var socketModel = require('../models/socket');
-var chance = require('chance').Chance();
 var crypto = require('crypto');
 var fs = require('fs'),
   gm = require('gm').subClass({
@@ -15,10 +14,7 @@ var config = require('../../config'); // load the config
 var embed = require('embed-video');
 var url = require('url');
 var Pageres = require('pageres');
-
-var replaceHtmlEntites = (function (mystring) {
-  return mystring.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-});
+var tools = require('../models/tools.js');
 
 module.exports = function (socket) {
   socket.on('message', function (message) {
@@ -45,10 +41,12 @@ module.exports = function (socket) {
       } else {
 
 
-        var messageId = chance.guid(); // On g&eacute;n&egrave;re un id pour le message
+        var messageId = tools.randomUUID(); // On g&eacute;n&egrave;re un id pour le message
 
         // Si le message est vide on jette
-        if (message.length < 1) { return; }
+        if (message.length < 1) {
+          return;
+        }
 
         var hs = socket.handshake;
 
@@ -72,13 +70,15 @@ module.exports = function (socket) {
         message = message.replace(/卐/g, '').substring(0, 300); //On vire les caracteres qui font chier et on réduit la chaine
 
         // Si le message est vide on jette
-        if (message.length < 1) { return; }
+        if (message.length < 1) {
+          return;
+        }
 
         var messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€\-']/ig, ' ').substring(0, 300),
 
           links = twitter.extractUrls(message);
 
-        message = twitter.autoLink(replaceHtmlEntites(message), {
+        message = twitter.autoLink(tools.replaceHtmlEntites(message), {
           target: '_blank'
         });
 
@@ -121,8 +121,7 @@ module.exports = function (socket) {
         //Lancement du synthétiseur vocal
         var synth = spawn('./voiceSynth.sh', params);
 
-        synth.on('exit', function(exitCode){
-
+        synth.on('exit', function (exitCode) {
           if (exitCode !== 0 && config.devel === false) {
             console.log('Une erreur est survenue lors de la génération du son');
           } else {
@@ -152,28 +151,35 @@ module.exports = function (socket) {
             }
             //Création et envoi des miniatures
             links.forEach(function (site) {
+              // Si l'URL ne commence pas par le protocole (https?), on ajoute http:// avant.
               if (site.indexOf('http') !== 0) {
                 site = 'http://' + site;
               }
+              // On crée le hash qui va servir de référence pour le lien
+              var fileHash = crypto.createHash('sha1').update('URL' + site).digest('hex');
+
+              // Vérification de la présence d'une vidéo embeddable
               var embeded = embed(site);
               if (typeof embeded !== 'undefined') {
-                socket.broadcast.to(channel).emit('embed', {
-                  id: crypto.createHash('sha1').update('URL' + site).digest('hex'),
+                // Si la vidéo est embeddable on envoie embed avec l'id du lien et le code embeddable via la socket
+                socket.to(channel).emit('embed', {
+                  id: fileHash,
                   code: embeded
                 });
+                /*
                 socket.emit('embed', {
-                  id: crypto.createHash('sha1').update('URL' + site).digest('hex'),
+                  id: fileHash,
                   code: embeded
-                });
+                });*/
               } else {
 
-                var filename = './static' + '/dist/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '.png';
-                var filenameBig = './static' + '/dist/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '_large.png';
+                var filename = './static' + '/dist/res/img/thumbs/' + fileHash + '.png';
+                var filenameBig = './static' + '/dist/res/img/thumbs/' + fileHash + '_large.png';
 
 
                 var pageres = new Pageres({
                     delay: 2,
-                    filename: crypto.createHash('sha1').update('URL' + site).digest('hex') + '_large'
+                    filename: fileHash + '_large'
                   })
                   .src(site, ['1280x960'], {
                     crop: true
@@ -182,44 +188,23 @@ module.exports = function (socket) {
                 try {
                   pageres.run(function (err) {
                     if (err) {
-                      socket.broadcast.to(channel).emit('thumberr',
-                        crypto.createHash('sha1').update('URL' + site).digest('hex')
-                      );
-                      socket.emit('thumberr',
-                        crypto.createHash('sha1').update('URL' + site).digest('hex'),
-                        crypto.createHash('sha1').update('URL' + site).digest('hex')
-                      );
+                      socket.to(channel).emit('thumberr', fileHash);
                       return;
                     }
                     gm(filenameBig).resize(200).write(filename, function (err) {
                       if (err) {
-                        socket.broadcast.to(channel).emit('thumberr',
-                          crypto.createHash('sha1').update('URL' + site).digest('hex')
-                        );
-                        socket.emit('thumberr',
-                          crypto.createHash('sha1').update('URL' + site).digest('hex')
-                        );
+                        socket.to(channel).emit('thumberr', fileHash);
                       } else {
-                        socket.broadcast.to(channel).emit('thumbok', {
+                        socket.to(channel).emit('thumbok', {
                           url: site,
                           title: url.parse(site),
-                          hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
-                        });
-                        socket.emit('thumbok', {
-                          url: site,
-                          title: url.parse(site),
-                          hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
+                          hash: fileHash
                         });
                       }
                     });
                   });
                 } catch (err) {
-                  socket.broadcast.to(channel).emit('thumberr',
-                    crypto.createHash('sha1').update('URL' + site).digest('hex')
-                  );
-                  socket.emit('thumberr',
-                    crypto.createHash('sha1').update('URL' + site).digest('hex')
-                  );
+                  socket.to(channel).emit('thumberr', fileHash);
                 }
               }
             });
@@ -229,6 +214,3 @@ module.exports = function (socket) {
     });
   });
 };
-
-
-

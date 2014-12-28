@@ -60,7 +60,7 @@ gulp.task('scripts', function () {
     .pipe(rename({
       suffix: '.min'
     }))
-    .pipe(uglify())
+    .pipe(uglify({'preserveComments': 'some'}))
     .pipe(gulp.dest('static/dist/js'));
 });
 
@@ -92,6 +92,10 @@ gulp.task('devel', ['default'], function () {
     gulp.start('scripts');
   });
 
+    // watch for HTML changes
+  gulp.watch('static/src/*.html', function () {
+    gulp.start('html');
+  });
 
   gulp.watch('static/src/scss/**/*.scss', function () {
     gulp.start('styles');
@@ -100,11 +104,10 @@ gulp.task('devel', ['default'], function () {
   nodemon({
     script: 'loult.js',
     ext: 'js',
-    ignore: ['./static/**', '.*/**']
+    ignore: ['./static/**']
   })
     .on('change', [])
     .on('restart', function () {
       console.log('restarted!');
     });
-
 });
