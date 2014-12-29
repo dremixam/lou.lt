@@ -30,4 +30,5 @@ config.js
 /_workdir/*
 /static/dist/home.html
 /static/dist/favicon.png
+/static/dist/lib/*
 !.gitignore
