@@ -24,7 +24,6 @@ config.js
 /static/dist/res/img/thumbs/*
 .sass-cache
 .sass-cache/*
-/static/**/.*
 /static/**/.*/*
 /_workdir
 /_workdir/*
