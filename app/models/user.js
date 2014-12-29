@@ -1,5 +1,4 @@
 'use strict';
-var fs = require('fs');
 
 var socketModel = require('../models/socket');
 
@@ -49,25 +48,11 @@ module.exports.add = function (socket, fn) {
     allClients[channel][userData.public.uuid] = userData;
     socket.handshake.session.userData = userData;
     socket.handshake.session.save();
-    //socket.emit('debug', 'session data saved');
     fn(userData);
   } else {
-    // Quand on a une nouvelle connection, on ouvre le fichier qui contient les noms possibles
-    fs.readFile('./names.txt', function (err, data) {
 
-      // En cas d'erreur on arrête
-      if (err) throw err;
 
-      //Sinon on récupère un nom aléatoirement dans le fichier
-      var lines = data.toString().split('\n');
-      var selectedName = '';
-      do {
-        selectedName = lines[Math.floor(Math.random() * lines.length)];
-      } while (selectedName === '');
-
-      /*jshint -W061 */ //On ignore les erreurs liées à la commande EVAL même si on sait que c'pas bien
-      var pseudo = eval('(' + selectedName + ')');
-      /*jshint +W061 */
+      var pseudo = 'Jacques Chirac';
 
       // On récupère une couleur qu'on attribue au nouvel utilisateur
       var color = tools.randomColor();
@@ -88,7 +73,8 @@ module.exports.add = function (socket, fn) {
           pseudo: pseudo,
           color: color,
           like: 0,
-          thumb: 0
+          thumb: 0,
+          avatar: 'Jacques Chirac.jpg'
         }
       };
 
@@ -103,7 +89,7 @@ module.exports.add = function (socket, fn) {
 
       module.exports.updateLastMessage(socket);
       fn(userData);
-    });
+
   }
 };
 

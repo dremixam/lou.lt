@@ -1,4 +1,4 @@
-var loultApp = angular.module('loultApp', []);
+var loultApp = angular.module('loultApp', ['ngMaterial']);
 
 var audioPlayer = 0;
 var connected = false;
@@ -98,7 +98,7 @@ loultApp.controller('UserListCtrl', ['$scope', '$socket',
     //À SCINDER EN DEUX POUR GÉRER ICI LES CHANGEMENTS SUR LA LISTE ET DANS LA ZONE MESSAGE L'AFFICHAGE DU MESSAGE
     // Quand un nouveau client se connecte, on affiche l'information
     $socket.on('nouveau_client', function (data) {
-      console.log('nouveau client' + data);
+
       var result = $scope.userlist.filter(function (obj) {
         return obj.uuid === data.uuid;
       });
@@ -123,7 +123,7 @@ loultApp.controller('UserListCtrl', ['$scope', '$socket',
 
     //ÇA DANS LA ZONE MESSAGE
     $socket.on('connecting', function () {
-      console.log('connecting');
+
       //insereLigne('[Info]', 'join', 'Connecting…', null);
       $scope.userlist = [];
 
@@ -143,7 +143,7 @@ loultApp.controller('UserListCtrl', ['$scope', '$socket',
     //ÇA À SCINDER EN DEUX
     // Quand un nouveau client se connecte, on affiche l'information
     $socket.on('disconnected', function (data) {
-      console.log('disconnected' + data);
+
       var result = $scope.userlist.filter(function (obj) {
         return obj.uuid === data.uuid;
       });
@@ -164,7 +164,7 @@ loultApp.controller('UserListCtrl', ['$scope', '$socket',
 
     //ÇA À SCINDER EN DEUX
     $socket.on('connected', function (data) {
-      console.log('connected' + JSON.stringify(data));
+
 
       me = data;
       //insereLigne('[Info]', 'join', 'Connected as ' + data.pseudo.fr, null);
@@ -195,17 +195,25 @@ loultApp.controller('MessageListCtrl', ['$scope', '$socket',
     'use strict';
     $scope.messagelist = [];
 
+
+    $scope.glued = true;
+
     $socket.on('message', function (data) {
       var result = $scope.userlist.filter(function (obj) {
         return obj.uuid === data.user.uuid;
       });
       if (!result[0].muted) {
-        $scope.messagelist.push({
+        $scope.pushMessage({
           'premier': data.user.pseudo,
-          'classe': '',
-          'second': data.message,
+          'paragraphes': [{
+            text: data.message,
+            class: '',
+            count: 1
+          }],
           'color': data.color,
-          'date': Date()
+          'date': new Date(),
+          'uuid': data.user.uuid,
+          'avatar': '/res/charapic/' + data.user.avatar
         });
 
         document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
@@ -215,84 +223,129 @@ loultApp.controller('MessageListCtrl', ['$scope', '$socket',
     });
 
     $socket.on('lastmessage', function (data) {
-      $scope.messagelist.push({
+      $scope.pushMessage({
         'premier': data.user.pseudo,
-        'classe': 'old',
-        'second': data.message,
+        'paragraphes': [{
+          text: data.message,
+          class: 'old',
+          count: 1
+          }],
         'color': data.color,
-        'date': data.time
+        'date': new Date(Date.parse(data.time)),
+        'uuid': data.user.uuid,
+        'avatar': '/res/charapic/' + data.user.avatar
       });
     });
 
     $socket.on('ownmessage', function (data) {
-      document.getElementById('message').placeholder = 'Message...';
+      //document.getElementById('message').placeholder = 'Message...';
       document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
       document.getElementById('audio' + (audioPlayer % 10)).play();
       audioPlayer++;
-      $scope.messagelist.push({
+      $scope.pushMessage({
         'premier': data.user.pseudo,
-        'classe': 'own',
-        'second': data.message,
+        'paragraphes': [{
+          text: data.message,
+          class: 'own',
+          count: 1
+          }],
         'color': data.color,
-        'date': Date()
+        'date': new Date(),
+        'uuid': data.user.uuid,
+        'avatar': '/res/charapic/' + data.user.avatar
       });
     });
 
     $socket.on('errormsg', function (data) {
-      document.getElementById('message').placeholder = 'Message...';
-      $scope.messagelist.push({
+      //document.getElementById('message').placeholder = 'Message...';
+      $scope.pushMessage({
         'premier': '[Error]',
-        'classe': 'error',
-        'second': data.message,
+        'paragraphes': [{
+          text: data.message,
+          class: 'error',
+          count: 1
+          }],
         'color': null,
-        'date': Date()
+        'date': new Date(),
+        'uuid': 'error',
+        'avatar': '/lib/material-design-icons/action/svg/design/ic_info_24px.svg'
       });
     });
 
     $socket.on('info', function (data) {
-      $scope.messagelist.push({
+      $scope.pushMessage({
         'premier': '[Info]',
-        'classe': 'info',
-        'second': data,
+        'paragraphes': [{
+          text: data,
+          class: 'info',
+          count: 1
+          }],
         'color': null,
-        'date': Date()
+        'date': new Date(),
+        'uuid': 'info',
+        'avatar': '/lib/material-design-icons/action/svg/design/ic_info_24px.svg'
       });
     });
 
     $socket.on('disconnect', function () {
-      $scope.messagelist.push({
+      $scope.pushMessage({
         'premier': '[Info]',
-        'classe': 'join',
-        'second': 'Waiting for new connection…',
+        'paragraphes': [{
+          text: 'Waiting for new connection…',
+          class: 'join',
+          count: 1
+          }],
         'color': null,
-        'date': Date()
+        'date': new Date(),
+        'uuid': 'info',
+        'avatar': '/lib/material-design-icons/action/svg/design/ic_info_24px.svg'
       });
     });
 
     $socket.on('connecting', function () {
-      $scope.messagelist.push({
+      $scope.pushMessage({
         'premier': '[Info]',
-        'classe': 'join',
-        'second': 'Connecting…',
+        'paragraphes': [{
+          text: 'Connecting…',
+          class: 'join',
+          count: 1
+          }],
         'color': null,
-        'date': Date()
+        'date': new Date(),
+        'uuid': 'info',
+        'avatar': '/lib/material-design-icons/action/svg/design/ic_info_24px.svg'
       });
     });
 
     $socket.on('connected', function (data) {
-      $scope.messagelist.push({
+      $scope.pushMessage({
         'premier': '[Info]',
-        'classe': 'join',
-        'second': 'Connected as '+data.pseudo+'.',
+        'paragraphes': [{
+          text: 'Connected as ' + data.pseudo + '.',
+          class: 'join',
+          count: 1
+          }],
         'color': null,
-        'date': Date()
+        'date': new Date(),
+        'uuid': 'info',
+        'avatar': '/lib/material-design-icons/action/svg/design/ic_info_24px.svg'
       });
     });
 
-
-
-
-
+    $scope.pushMessage = function (messageObject) {
+      var lastMessage = $scope.messagelist[$scope.messagelist.length - 1];
+      if (typeof lastMessage !== 'undefined' && lastMessage.uuid === messageObject.uuid) {
+        var lastParagraphe = lastMessage.paragraphes[lastMessage.paragraphes.length - 1];
+        if (lastParagraphe.text === messageObject.paragraphes[0].text) {
+          lastParagraphe.count++;
+        } else {
+          lastMessage.paragraphes.push(messageObject.paragraphes[0]);
+        }
+        lastMessage.date = new Date();
+      } else {
+        $scope.messagelist.push(messageObject);
+      }
+    }
 }]);
 
 
@@ -342,8 +395,9 @@ document.onkeypress = function (evt) {
   evt = evt || window.event;
   if (isCharacterKeyPress(evt)) {
     // Do your stuff here
+    /*
     if (document.getElementById('message') !== document.activeElement) {
       document.getElementById('message').focus();
-    }
+    }*/
   }
 };

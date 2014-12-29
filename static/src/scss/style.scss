@@ -1,244 +1,69 @@
-@import "compass";
+@import "compass/css3/flexbox";
 
-html, body {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  text-rendering:optimizespeed;
-  font: 15px/160% "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
-  background: whitesmoke;
-  color: #555;
-}
-
-
-a {
-  color: #0084B4;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.alert {
-  color: #FF4136;
-}
-
-.ok {
-  color: #2ECC40;
-}
-
-.ignored {
-  color: #c0c0c0;
-}
-
-.nonignored {
-  color: #555;
-}
-
-.link-placeholder {
-  background: #555;
-  color: whitesmoke;
-  width: 200px;
-  height: 150px;
-  display: table-cell;
-  vertical-align: bottom;
-  div {
-    text-align: center;
-  }
-  a {
-    display: block;
+.message-content {
+  p {
     position: relative;
-    width: 200px;
-    height: 150px;
-    @include background-image(linear-gradient(transparent, transparent, transparent, rgba(0,0,0,0.4), rgba(0,0,0,0.7)));
-    color: white;
-    overflow:hidden;
-    span {
-      position: absolute;
-      bottom: 0;
-      left:0;
+    font-size: 1em;
+    &.old {
+      color: silver;
+    }
+    &.info {
+      color: #881280;
+      font-style: italic;
+    }
+    &.join {
+      color: #236E25;
+      font-style: italic;
+    }
+    &.error {
+      color: #C80000;
+      font-style: italic;
+    }
+    .count {
+      background: #C80000;
+      border-radius: 20px;
+      color: white;
+      font-size: 0.75em;
+      font-weight: bold;
+      padding: 1px 5px;
     }
   }
-}
-
-#adblockDisclaimer {
-  position: fixed;
-  top: 0; left: 0;
-  right: 0; bottom: 0;
-  background: #CC4136;
-  z-index: 900;
-  color: whitesmoke;
-  &>div {
-    margin: 100px auto;
-    width: 400px;
+  footer {
+    font-size: 0.75em;
+    color: silver;
   }
+}
+.message-zone-avatar {
+  img {
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    width: 48px;
+    height: 48px;
+    margin: 16px;
+  }
+}
+md-item-content.message-item-content {
+  @include align-items(flex-start);
 }
 
 #zone_chat {
-  position: absolute;
-  top: 68px;
-  left: 0;
-  right: 250px;
-  bottom: 50px;
-  margin: 0;
-  padding: 0;
-  padding-bottom: 3px;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
-  .ligne {
-    position: relative;
-    line-height: 32px;
-    clear: both;
-    img {
-      vertical-align: top;
-    }
-    .lineTimer {
-      position: absolute;
-      top: 0;
-      right: 3px;
-      font-size: 10px;
-      color: silver;
-    }
-    .premier {
-      width: 160px;
-      text-align: right;
-      /* margin-right: 10px; */
-      float: left;
-    }
-    .second {
-      min-height: 32px;
-      overflow: visible;
-      overflow-wrap: break-word;
-      padding-right: 70px;
-      word-wrap: break-word;
-      text-overflow: ellipsis;
-      margin-left: 170px;
-      padding-left: 10px;
-      border-left: 1px #555 dotted;
-
-    }
-    &.old {
-      color: #c0c0c0;
-    }
-    &:nth-child(odd) {
-      background: #EEE;
-    }
-    &.info {
-      color: #2ECC40;
-    }
-    &.attack {
-      color: #B10DC9;
-    }
-    &.join {
-      color: #2ECC40;
-    }
-    &.part {
-      color: #0074D9;
-    }
-    &.error {
-      color: #FF4136;
-    }
-    &.debug {
-      color: #888;
-    }
-  }
+}
+.title-bar {
+  position: fixed;
+  top:0;
+  left:0;
+  right:0;
+    
+}
+.main-section {
+  margin-top: 64px;
 }
 
 #formulaire_chat {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
-  right: 250px;
-  height: 47px;
-  background: white;
-  margin: 0;
-  padding: 0;
-  border-top: 3px solid #0074D9;
-  span {
-    font-weight: bold;
-    position: absolute;
-    bottom: 0;
-    right: 6px;
-    font-size: 12px;
-  }
-}
-
-#message {
-  display: block;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%;
-  padding: 4px 30px 4px 4px;
-  font-size: 30px;
-  background: whitesmoke;
-  border: none;
-  &:focus {
-    background: white;
-    outline: none;
-  }
-}
-
-#about_zone {
-  position: absolute;
-  bottom: 0; right:0;
-  width: 250px;
-  background: #0074D9;
-  height: 50px;
-  color: white;
-  line-height: 50px;
-  text-align: center;
-  font-size: 11px;
-  a {
-    color: white;
-  }
-}
-
-#userlist {
-  width: 247px;
-  position: absolute;
-  top: 68px;
   right: 0;
-  bottom: 50px;
-  background: white;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  border-left: 3px solid #0074D9;
-  ul{
-    list-style-type: none;
-    padding-left: 15px;
-  }
-}
-
-header {
-  height: 68px;
-  overflow: hidden;
-  background: #0074D9;
-  box-sizing: border-box;
-  box-shadow: 0 0 5px black;
-  color: white;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  h1 {
-    margin: 0 7px;
-    line-height: 68px;
-    display: inline-block;
-    a {
-      text-decoration: none;
-      color: white;
-    }
-    small {
-      font-size: 0.5em;
-      color: #eee;
-    }
-  }
-  div {
-    float: right;
-    height: 62px;
-    padding: 3px;
-  }
 }

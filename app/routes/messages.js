@@ -144,7 +144,7 @@ module.exports = function (socket) {
                 message: messageHisto,
                 audiofile: audio,
                 color: hs.session.userData.public.color,
-                time: new Date()
+                time: new Date().toUTCString()
               });
             } catch (err) {
               console.log('send error: ' + err);
