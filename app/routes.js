@@ -13,9 +13,16 @@ module.exports = function (io) {
 
     socketModel.push(socket.id);
 
+    /*
+    //La gestion de la langue ne se fait plus par le sous domaine.
+
     var lng = tldjs.getSubdomain(socket.handshake.headers.host.split(':').shift());
 
     if (['fr', 'en'].indexOf(lng) === -1) lng = 'en';
+
+    */
+
+    var lng = 'fr';
 
     socketModel.set(socket.id, 'lng', lng);
 

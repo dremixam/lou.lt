@@ -45,11 +45,14 @@ loultApp.controller('UserListCtrl', ['$scope', '$socket',
     'use strict';
     $scope.userlist = [];
 
+    /*
+    //Gestion de la langue à revoir
     $scope.language = window.location.hostname.split('.')[0];
     if (['fr', 'en'].indexOf($scope.language) === -1) {
       $scope.language = 'en'; //default language if language is not recognized
     }
-
+    */
+    $scope.language = 'fr';
     //ÇA SERAIT BIEN DE GÉRER ÇA DANS LE FACTORY
     $socket.on('connect', function () {
       $socket.emit('join', location.pathname);
