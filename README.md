@@ -8,6 +8,7 @@ Dépendances :
     sudo apt-get install nodejs npm mongodb ruby-full rubygems1.8 espeak mbrola mbrola-fr* mbrola-en*
     sudo npm install -g forever
     sudo npm install -g gulp
+    sudo npm install -g bower
     sudo gem install sass
     sudo gem install compass
 
