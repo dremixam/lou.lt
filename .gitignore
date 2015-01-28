@@ -31,3 +31,4 @@ config.js
 /static/dist/favicon.png
 /static/dist/lib/*
 !.gitignore
+/config.json

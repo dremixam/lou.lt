@@ -348,7 +348,7 @@ loultApp.controller('MessageListCtrl', ['$scope', '$socket',
       } else {
         $scope.messagelist.push(messageObject);
       }
-    }
+    };
 }]);
 
 
