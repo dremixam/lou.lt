@@ -65,7 +65,7 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
   ));
 
   app.get('*', function (req, res) {
-
+    req.session.valid = true;
     res.sendfile(__dirname + '/static/dist/home.html');
   });
 
