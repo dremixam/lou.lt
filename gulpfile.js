@@ -47,7 +47,9 @@ gulp.task('images', function () {
 
 gulp.task('html', function () {
   return gulp.src(['static/src/*.html'])
-    .pipe(minifyHTML())
+    .pipe(minifyHTML({
+      empty: true
+    }))
     .pipe(gulp.dest('static/dist'));
 });
 
@@ -60,7 +62,9 @@ gulp.task('scripts', function () {
     .pipe(rename({
       suffix: '.min'
     }))
-    .pipe(uglify({'preserveComments': 'some'}))
+    .pipe(uglify({
+      'preserveComments': 'some'
+    }))
     .pipe(gulp.dest('static/dist/js'));
 });
 
@@ -92,7 +96,7 @@ gulp.task('devel', ['default'], function () {
     gulp.start('scripts');
   });
 
-    // watch for HTML changes
+  // watch for HTML changes
   gulp.watch('static/src/*.html', function () {
     gulp.start('html');
   });
@@ -102,10 +106,10 @@ gulp.task('devel', ['default'], function () {
   });
 
   nodemon({
-    script: 'loult.js',
-    ext: 'js',
-    ignore: ['./static/**']
-  })
+      script: 'loult.js',
+      ext: 'js',
+      ignore: ['./static/**']
+    })
     .on('change', [])
     .on('restart', function () {
       console.log('restarted!');

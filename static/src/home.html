@@ -1,118 +1,135 @@
 <!DOCTYPE html>
-<html ng-app="loultApp">
+<html lang="en" class="no-js">
 
-  <head>
-    <meta charset="utf-8" />
-    <title translate>Lou.lt - expérimental</title>
+<head>
+  <title translate>Lou.lt - expérimental</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Lou.lt anonymous chat with vocal synthesis">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
 
+  <link rel="stylesheet" href="lib/angular-material/angular-material.min.css">
+  <link rel="stylesheet" href="styles/style.css">
 
-    <link rel="stylesheet" href="/lib/angular-material/angular-material.css">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="lib/angular/angular.min.js"></script>
+  <script src="lib/angular-route/angular-route.min.js"></script>
+  <script src="lib/angular-aria/angular-aria.min.js"></script>
+  <script src="lib/angular-animate/angular-animate.min.js"></script>
+  <script src="lib/angular-messages/angular-messages.min.js"></script>
+  <script src="lib/angular-material/angular-material.min.js"></script>
+  <script src="js/main.js"></script>
+</head>
 
+<body ng-app="loultApp" layout="column" ng-controller="mainCtrl">
 
-    <script src="/lib/hammerjs/hammer.js"></script>
-    <script src="/lib/angular/angular.min.js"></script>
-    <script src="/lib/angular-animate/angular-animate.js"></script>
-    <script src="/lib/angular-aria/angular-aria.js"></script>
+  <md-toolbar layout="row">
+    <button ng-click="toggleSideNav('left')" class="menuBtn">
+      <span class="visuallyhidden">Menu</span>
+    </button>
+    <h1><a href="{{channel}}">{{channel}}</a></h1>
 
-    <script src="/lib/angular-material/angular-material.js"></script>
+    <button ng-click="toggleSideNav('right')" hide-gt-sm class="userlistBtn">
+      <span class="visuallyhidden">Userlist</span>
+    </button>
+  </md-toolbar>
 
-    <script src="/lib/angular-i18n/angular-locale_fr-fr.js"></script>
+  <div layout="row" flex>
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+      <md-toolbar class="md-theme-indigo" layout="row">
+        <button ng-click="toggleSideNav('left')" class="backBtn">
+          <span class="visuallyhidden">Menu</span>
+        </button>
+        <h1 class="md-toolbar-logo"><a href="/">Lou.lt</a></h1>
+      </md-toolbar>
+      <md-list>
+        <md-item>
+          <md-item-content class="md-padding">
+            <md-button ng-click="">
+              Menu 1
+            </md-button>
+          </md-item-content>
+        </md-item>
+        <md-item>
+          <md-item-content class="md-padding">
+            <md-button ng-click="">
+              Menu 2
+            </md-button>
+          </md-item-content>
+        </md-item>
+        <md-item>
+          <md-item-content class="md-padding">
+            <md-button ng-click="">
+              Menu 3
+            </md-button>
+          </md-item-content>
+        </md-item>
+        <md-item>
+          <md-item-content class="md-padding">
+            <md-button ng-click="">
+              Menu 4
+            </md-button>
+          </md-item-content>
+        </md-item>
+      </md-list>
+    </md-sidenav>
 
-    <link href="/styles/style.css" rel="stylesheet">
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/main.js"></script>
-
-  </head>
-
-  <body>
-
-    <md-toolbar class="md-theme-light md-whiteframe-z1 title-bar" layout="row">
-      <h1 flex class="md-toolbar-tools">
-        <span>Lou.lt</span>
-      </h1>
-    </md-toolbar>
-
-    <section class="main-section">
-      <md-content id="zone_chat" ng-controller="MessageListCtrl">
-        <md-list layout-fill>
-          <md-item ng-repeat="message in messagelist track by $index">
-            <md-item-content class="message-item-content">
-              <div class="md-tile-left message-zone-avatar">
-                <img ng-src="{{message.avatar}}" class="face" alt="{{message.premier}}">
-              </div>
-              <div class="md-tile-content message-content">
-                <p class="{{paragraph.class}}" ng-repeat="paragraph in message.paragraphes track by $index" ng-bind-html-unsafe="paragraph.text">
-                  <span ng-if="paragraph.count > 1" class="animate-if count">{{paragraph.count}}</span>
-                  {{paragraph.text}}
-                </p>
-                <footer>{{message.premier}} <small>{{message.date | date:'medium'}}</small>
-                </footer>
-
-              </div>
-            </md-item-content>
-            <md-divider md-inset ng-if="!$last"></md-divider>
-          </md-item>
-        </md-list>
-      </md-content>
-
-      <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right"  md-is-locked-open="$media('min-width: 333px')">
-        <md-toolbar class="md-theme-light">
-          <h1 class="md-toolbar-tools">Connectés</h1>
-        </md-toolbar>
-        <ul ng-controller="UserListCtrl">
-          <li ng-repeat="user in userlist track by $index | orderBy:pseudo">
-            <i class="fa fa-volume-up fa-fw" style="margin-right: 7px; cursor: pointer;" ng-class="{true: 'ignored', false: 'nonignored'}[user.muted]" ng-click="user.muted=!user.muted"></i>
-            <i class="fa fa-heart-o" style="color: #fca2a3; cursor: pointer;"></i>
-            <small style="color: #fca2a3; font-size: 10px; margin-right: 7px;">{{user.like}}</small>
-            <i class="fa fa-thumbs-o-down" style="color: red; cursor: pointer;"></i>
-            <small style="color: red; font-size: 10px; margin-right: 7px;">{{user.thumb}}</small>
-            <span style="color: {{user.color}};" title="{{user.uuid}}">{{user.pseudo}}</span>
-          </li>
-        </ul>
-      </md-sidenav>
-    </section>
-    <!--header>
-<h1>
-<i class="fa fa-volume-up fa-fw" id="globalMute" style="cursor: pointer;" onclick="toggleMute();"></i>
-<a href="/">Lou.Lt</a> <small translate>expérimental</small>
-</h1>
-<div class="fb-like" data-href="http://lou.lt/" data-layout="box_count" data-action="like" data-show-faces="false" data-share="false"></div>
-<div>
-<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://lou.lt/" data-via="DrEmixam" data-size="large">Tweet</a>
-</div>
-<div style="text-align: center">
-<a href="http://fr.lou.lt/" style="color: white;">
-<img src="/res/img/fr.png" style="margin: -5px 15px -15px">
-<br>Français</a>
-</div>
-<div style="text-align: center">
-<a href="http://en.lou.lt/" style="color: white;">
-<img src="/res/img/us.png" style="margin: -5px 15px -15px">
-<br>English</a>
-</div>
-</header-->
-
-
-
-          <form method="post" id="formulaire_chat" ng-controller="TextBoxCtrl" ng-submit="submit()">
-            <md-text-float label="Message" ng-model="textMessage"></md-text-float>
-            <span ng-animate ng-class="{true: 'alert', false: 'ok'}[textMessage.length>300]">{{300 - textMessage.length}}</span>
+    <md-content layout="column" flex class="content-wrapper md-padding" id="content" ng-controller="MessageListCtrl">
+      <md-list layout-fill style="overflow-y: scroll;">
+        <md-item ng-repeat="message in messagelist track by $index">
+          <md-item-content class="message-item-content">
+            <div class="md-tile-left message-zone-avatar">
+              <img ng-src="{{message.avatar}}" class="face" alt="{{message.premier}}">
             </div>
-          </form>
+            <div class="md-tile-content message-content">
+              <p class="{{paragraph.class}}" ng-repeat="paragraph in message.paragraphes track by $index" ng-bind-html-unsafe="paragraph.text">
+                <span ng-if="paragraph.count > 1" class="animate-if count">{{paragraph.count}}</span> {{paragraph.text}}
+              </p>
+              <footer>{{message.premier}} <small>{{message.date | date:'medium'}}</small>
+              </footer>
+
+            </div>
+          </md-item-content>
+          <md-divider md-inset ng-if="!$last"></md-divider>
+        </md-item>
+      </md-list>
+    </md-content>
+
+    <md-sidenav class="md-sidenav-right md-whiteframe-z1" md-component-id="right" md-is-locked-open="$media('gt-sm')">
+      <md-toolbar class="md-theme-indigo" hide-gt-sm layout="row">
+        <h1 class="md-toolbar-title">Userlist</h1>
+        <button ng-click="toggleSideNav('right')" class="forwardBtn">
+          <span class="visuallyhidden">Userlist</span>
+        </button>
+      </md-toolbar>
+      <md-list>
+        <md-item ng-repeat="user in userlist track by $index | orderBy:pseudo">
+          <md-item-content>
+            <md-button ng-click="" ng-class="">
+              <span class="user-{{user.uuid}} avatar"></span> {{user.pseudo}}
+            </md-button>
+          </md-item-content>
+        </md-item>
+      </md-list>
+    </md-sidenav>
+
+  </div>
+
+  <div>
+    <md-content md-theme="docs-dark" class="md-whiteframe-z1" ng-controller="TextBoxCtrl">
+      <form name="messageForm">
+        <md-input-container>
+          <label>Message</label>
+          <input md-maxlength="300" name="message" id="fgfg" ng-model="messageForm.message">
+          <div ng-messages="messageForm.message.$error">
+            <div ng-message="md-maxlength">Le message est trop long.</div>
+          </div>
+        </md-input-container>
+      </form>
+    </md-content>
+  </div>
 
 
-    <audio id="audio1"></audio>
-    <audio id="audio2"></audio>
-    <audio id="audio3"></audio>
-    <audio id="audio4"></audio>
-    <audio id="audio5"></audio>
-    <audio id="audio6"></audio>
-    <audio id="audio7"></audio>
-    <audio id="audio8"></audio>
-    <audio id="audio9"></audio>
-    <audio id="audio0"></audio>
-
-
-  </body>
+</body>
 
 </html>

@@ -1,69 +1,125 @@
-@import "compass/css3/flexbox";
+/* Toolbar area */
 
-.message-content {
-  p {
-    position: relative;
-    font-size: 1em;
-    &.old {
-      color: silver;
-    }
-    &.info {
-      color: #881280;
-      font-style: italic;
-    }
-    &.join {
-      color: #236E25;
-      font-style: italic;
-    }
-    &.error {
-      color: #C80000;
-      font-style: italic;
-    }
-    .count {
-      background: #C80000;
-      border-radius: 20px;
-      color: white;
-      font-size: 0.75em;
-      font-weight: bold;
-      padding: 1px 5px;
-    }
-  }
-  footer {
-    font-size: 0.75em;
-    color: silver;
-  }
-}
-.message-zone-avatar {
-  img {
-    border-radius: 30px;
-    border: 1px solid #ddd;
-    width: 48px;
-    height: 48px;
-    margin: 16px;
-  }
-}
-md-item-content.message-item-content {
-  @include align-items(flex-start);
+.menuBtn,
+.userlistBtn,
+.backBtn,
+.forwardBtn {
+  background-color: transparent;
+  border: none;
+  height: 38px;
+  margin: 16px;
+  width: 36px;
 }
 
-#zone_chat {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-.title-bar {
-  position: fixed;
-  top:0;
-  left:0;
-  right:0;
-    
-}
-.main-section {
-  margin-top: 64px;
+md-toolbar h1 {
+  margin: auto;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  &.md-toolbar-logo {
+    margin: auto auto auto 0.68em;
+  }
+  &.md-toolbar-title {
+    margin: auto auto auto 0.68em;
+  }
 }
 
-#formulaire_chat {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+/* Sidenav area */
+
+md-sidenav {
+  &.md-locked-open {
+    z-index: 50;
+  }
+}
+
+md-list .md-button {
+  color: inherit;
+  font-weight: 500;
+  text-align: left;
+  width: 100%;
+}
+
+md-list .md-button.selected {
+  color: #03a9f4;
+}
+
+.avatar {
+  border: 1px solid #ddd;
+  display: inline-block;
+  margin: 0px;
+  vertical-align: middle;
+}
+
+/* Primary content area */
+
+#content {
+  overflow: hidden;
+}
+
+#content md-content {
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 5px;
+}
+
+#content .md-button.action {
+  background-color: transparent;
+  border: none;
+  height: 38px;
+  margin: 8px auto 16px 0;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  width: 36px;
+}
+
+#content img {
+  display: block;
+  height: auto;
+  max-width: 500px;
+}
+
+/* Utils */
+
+.content-wrapper {
+  position: relative;
+}
+
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/* Typography support coming in 0.8.0 */
+
+md-toolbar h1 {
+  font-size: 1.250em;
+  font-weight: 400;
+}
+
+/* Using Data-URI converted from svg until <md-icon> becomes available
+https://github.com/google/material-design-icons
+*/
+
+.menuBtn {
+  background: url("../res/menu_white.svg") no-repeat center center;
+}
+
+.backBtn {
+  background: url("../res/ic_arrow_back_24px.svg") no-repeat center center;
+}
+
+.forwardBtn {
+  background: url("../res/ic_arrow_forward_24px.svg") no-repeat center center;
+}
+
+.userlistBtn {
+  background: url("../res/ic_group_24px.svg") no-repeat center center;
 }
