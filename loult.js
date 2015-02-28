@@ -12,6 +12,7 @@ var passportSocketIo = require('passport.socketio');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('./app/models/account.js');
+var cookie = require('cookie');
 
 // configuration ===============================================================
 mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function () { // connect to mongoDB database
@@ -63,6 +64,28 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
       });
     }
   ));
+
+  io.set('authorization', function (handshakeData, accept) {
+    if (handshakeData.headers.cookie) {
+      handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
+      if (handshakeData.cookie[config.sessIdName] === undefined) return accept('Cookie is invalid.', false);
+      handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie[config.sessIdName], config.secret);
+      if (handshakeData.cookie[config.sessIdName] === handshakeData.sessionID) {
+        return accept('Cookie is invalid.', false);
+      }
+    } else {
+      return accept('No cookie transmitted.', false);
+    }
+    handshakeData.sessionStore = sessionStore;
+    sessionStore.load(handshakeData.sessionID, function (err, sess) {
+      if (err || !sess || !sess.valid) {
+        accept('Error when creating session: ' + err, false);
+      } else {
+        handshakeData.session = sess;
+        accept(null, true);
+      }
+    });
+  });
 
   app.get('*', function (req, res) {
     req.session.valid = true;
@@ -116,11 +139,10 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
 
 
 
-  /*
+
   // routes ======================================================================
   require('./app/routes.js')(io);
-*/
   // listen (start app with node server.js) ======================================
   server.listen(config.port, config.ip);
-  //console.log("App listening on " + config.ip + ":" + config.port);
+  console.log("App listening on " + config.ip + ":" + config.port);
 });
