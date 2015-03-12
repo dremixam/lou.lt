@@ -11,6 +11,7 @@ var gulp = require('gulp'),
   clean = require('gulp-clean'),
   install = require('gulp-install'),
   concat = require('gulp-concat');
+var jshint = require('gulp-jshint');
 
 //Compilation des SCSS
 
@@ -58,7 +59,6 @@ gulp.task('html', function () {
 gulp.task('scripts', function () {
   return gulp.src('static/src/js/*.js')
     .pipe(concat('main.js'))
-    .pipe(gulp.dest('static/dist/js'))
     .pipe(rename({
       suffix: '.min'
     }))
@@ -68,6 +68,15 @@ gulp.task('scripts', function () {
     .pipe(gulp.dest('static/dist/js'));
 });
 
+gulp.task('scripts-devel', function () {
+  return gulp.src('static/src/js/*.js')
+    .pipe(concat('main.js'))
+    .pipe(rename({
+      suffix: '.min'
+    }))
+    .pipe(jshint())
+    .pipe(gulp.dest('static/dist/js'));
+});
 
 gulp.task('install', function () {
   return gulp.src(['./bower.json', './package.json'])
@@ -77,7 +86,13 @@ gulp.task('install', function () {
 //Action par d&eacute;faut : compilation complete du site pour le déploiement
 
 gulp.task('clean', function () {
-  return gulp.src(['static/dist/styles/*.css', 'static/dist/js/*.js', 'static/dist/*.html', 'static/dist/favicon.png', 'static/dist/res/**/*.jpg', 'static/dist/res/**/*.png', 'static/dist/res/**/*.gif'], {
+  return gulp.src(['static/dist/styles/*.css',
+                   'static/dist/js/*.js',
+                   'static/dist/*.html',
+                   'static/dist/favicon.png',
+                   'static/dist/res/**/*.jpg',
+                   'static/dist/res/**/*.png',
+                   'static/dist/res/**/*.gif'], {
       read: false
     })
     .pipe(clean());
@@ -89,15 +104,17 @@ gulp.task('default', ['install', 'images'], function () {
 
 //Action devel, compilation + surveillance pour utiliser pendant le dev
 
-gulp.task('devel', ['default'], function () {
+gulp.task('devel', ['install', 'images'], function () {
+
+  gulp.start('styles', 'scripts-devel', 'html', 'favicon');
 
   // watch for JS changes
-  gulp.watch('static/src/js/*.js', function () {
-    gulp.start('scripts');
+  gulp.watch('static/src/js/**.js', function () {
+    gulp.start('scripts-devel');
   });
 
   // watch for HTML changes
-  gulp.watch('static/src/*.html', function () {
+  gulp.watch('static/src/**.html', function () {
     gulp.start('html');
   });
 
@@ -108,7 +125,7 @@ gulp.task('devel', ['default'], function () {
   nodemon({
       script: 'loult.js',
       ext: 'js',
-      ignore: ['./static/**']
+      ignore: ['static/**', 'node_modules/**', '.sass-cache/**']
     })
     .on('change', [])
     .on('restart', function () {

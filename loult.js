@@ -7,7 +7,9 @@ var server = require('http').createServer(app); // create webserver
 var io = require('socket.io').listen(server); // create socket.io connection
 var mongoose = require('mongoose'); // mongoose for mongodb
 var MongoStore = require('connect-mongo')(express);
-var passportSocketIo = require('passport.socketio');
+
+var connect = require('connect');
+var session = require('express-session');
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -92,57 +94,12 @@ mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name, function 
     res.sendfile(__dirname + '/static/dist/home.html');
   });
 
-  //Configuration des autorisations de io
-  io.use(passportSocketIo.authorize({
-    cookieParser: express.cookieParser,
-    key: 'express.sid', // the name of the cookie where express/connect stores its session_id
-    secret: 'session_secret', // the session_secret to parse the cookie
-    store: sessionStore, // we NEED to use a sessionstore. no memorystore please
-    success: function (data, accept) {
-      console.log('successful connection to socket.io');
-
-      accept();
-    }, // *optional* callback on success - read more below
-    fail: function (data, message, error, accept) {
-      if (error)
-        throw new Error(message);
-      console.log('failed connection to socket.io:', message);
-      if (error)
-        accept(new Error(message));
-    }, // *optional* callback on fail/error - read more below
-  }));
-
   if (config.devel) io.set('log level', 4);
   else io.set('log level', 1);
-
-
-
-
-
-
-
-
-
-  /*
-  // Chargement de la page index.html
-  app.get('*', function (req, res) {
-    req.session.valid = true;
-    res.sendfile('static/dist/home.html');
-
-
-  });
-*/
-
-
-
-
-
-
-
 
   // routes ======================================================================
   require('./app/routes.js')(io);
   // listen (start app with node server.js) ======================================
   server.listen(config.port, config.ip);
-  console.log("App listening on " + config.ip + ":" + config.port);
+  console.log('App listening on ' + config.ip + ':' + config.port);
 });
