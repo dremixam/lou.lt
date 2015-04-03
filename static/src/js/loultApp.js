@@ -127,7 +127,7 @@ loultApp.controller('UserListCtrl', ['$scope',
 
     // Quand un nouveau client se connecte, on affiche l'information
     socket.on('disconnected', function (data) {
-      console.log('disconnected' + data);
+      console.log('disconnected' + JSON.stringify(data));
       var result = $scope.userlist.filter(function (obj) {
         return obj.uuid === data.uuid;
       });
