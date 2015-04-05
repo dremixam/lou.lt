@@ -1,66 +1,66 @@
-{"_id":{"$oid":"55210bd364929325582b87a7"},"id":"4b4cae3f-fef0-4881-9287-44ce457c0980","nom":"Jacques Chirac","bio":"Jacques Chirac (1932-) 22e président de la République française."}
-{"_id":{"$oid":"55210bd364929325582b87aa"},"id":"4678716e-f025-4a65-8813-35a63d6a58cc","nom":"Toutânkhamon","bio":"Toutânkhamon (1342 av. J.-C.-1327 av. J.-C.) Onzième pharaon de la XVIIIᵉ dynastie."}
-{"_id":{"$oid":"55210bd364929325582b87a9"},"id":"f0232a6c-3e4c-42b8-a801-085944d7468e","nom":"Akhénaton","bio":"Akhénaton (?-1338 av. J.-C.) Dixième pharaon de la XVIIIe dynastie."}
-{"_id":{"$oid":"55210bd364929325582b87ab"},"id":"1af69fd8-988c-4717-9d48-46c8bff9a0e0","nom":"Ramsès II","bio":"Ramsès II (1303 av. J.-C.-1213 av. J.-C.) Troisième pharaon de la XIXᵉ dynastie."}
-{"_id":{"$oid":"55210bd364929325582b87a8"},"id":"887041b0-e16d-44e4-b8e8-641fb44b9fe0","nom":"Vercingétorix","bio":"Vercingétorix (82 av. J.-C.-46 av. J.-C.) Chef de la révolte gauloise en 52 av. J.-C."}
-{"_id":{"$oid":"55210bd364929325582b87ae"},"id":"8bfa0ab0-9183-4683-b36f-123cbdeebf44","nom":"Alexandre le Grand","bio":"Alexandre le Grand (356 av. J.-C.-323 av. J.-C.) Roi de Macédoine."}
-{"_id":{"$oid":"55210bd364929325582b87ac"},"id":"a5100442-754c-4ce8-a1f5-86b9cfbb5972","nom":"Cléopâtre","bio":"Cléopâtre (70 av. J.-C.-30 av. J.-C.) Reine d'Égypte antique."}
-{"_id":{"$oid":"55210bd364929325582b87af"},"id":"6d96f8e7-4725-4c83-85c6-972423d8e565","nom":"Aristote","bio":"Aristote (384 av. J.-C.-322 av. J.-C.) Philosophe grec de l'Antiquité. "}
-{"_id":{"$oid":"55210bd364929325582b87ad"},"id":"52425120-5f75-446a-ba1d-0bd95add0596","nom":"Périclès","bio":"Périclès (495 av. J.-C.-429 av. J.-C.) Homme de guerre de la Grèce antique."}
-{"_id":{"$oid":"55210bd364929325582b87b4"},"id":"a31aa501-11dc-4dd8-bfa1-839ebadd9a03","nom":"Archimède","bio":"Archimède (287 av. J.-C.-212 av. J.-C.) Grand scientifique grec de Sicile de l'Antiquité, physicien, mathématicien"}
-{"_id":{"$oid":"55210bd364929325582b87b3"},"id":"655182b6-78e3-45ea-a2ba-d5f10e707f12","nom":"Pythagore","bio":"Pythagore (~580 av. J.-C.-395 av. J.-C.) Philosophe grec de l'Antiquité"}
-{"_id":{"$oid":"55210bd364929325582b87b2"},"id":"94e38364-8eed-48b7-842b-25b1f1d6fba9","nom":"Diogène","bio":"Diogène (412 av. J.-C.-323 av. J.-C.) Philosophe grec de l'Antiquité"}
-{"_id":{"$oid":"55210bd364929325582b87b1"},"id":"83e05cc5-e387-46ad-a646-8559bde65fa1","nom":"Socrate","bio":"Socrate (469 av. J.-C.-399 av. J.-C.) Philosophe grec de l'Antiquité"}
-{"_id":{"$oid":"55210bd364929325582b87b0"},"id":"2d9ac08f-121a-40fa-9ae8-a4c5d3030a7a","nom":"Aristophane","bio":"Aristophane (445 av. J.-C.-385 av. J.-C.) Poète comique grec de l'Antiquité."}
-{"_id":{"$oid":"55210bd364929325582b87b5"},"id":"c610b52d-2f9a-4d08-8c23-c61bcb52c566","nom":"Euclide","bio":"Euclide (inconnu) Mathématicien de la Grèce antique"}
-{"_id":{"$oid":"55210bd364929325582b87b6"},"id":"57e53c6d-494b-4c67-9b6a-00c6a5c342c2","nom":"Platon","bio":"Platon (427 av. J.-C.-348 av. J.-C.) Philosophe de la Grèce antique"}
-{"_id":{"$oid":"55210bd364929325582b87b7"},"id":"880a168a-d653-453a-ab10-d6caae0f47af","nom":"Jules César","bio":"César (100 av. J.-C.-44 av. J.-C.) Général, homme politique et écrivain romain"}
-{"_id":{"$oid":"55210bd364929325582b87b9"},"id":"cd235003-695e-4d46-9289-409c0a1ee599","nom":"Auguste","bio":"Auguste (63 av. J.-C.-14) Premier empereur romain"}
-{"_id":{"$oid":"55210bd364929325582b87ba"},"id":"8077e5cb-71d4-4ca0-b6bd-34bba21d0cd2","nom":"Néron","bio":"Néron (37-68) Dernier empereur romain de la dynastie julio-claudienne"}
-{"_id":{"$oid":"55210bd364929325582b87b8"},"id":"e9d7f2b5-834b-471e-acfe-6af2ff2834e8","nom":"Pompée","bio":"Pompée (106 av. J.-C.-48 av. J.-C.) Général et homme d'État romain"}
-{"_id":{"$oid":"55210bd364929325582b87bf"},"id":"0ef20ae4-6c45-48e3-9781-b83c737c5a37","nom":"Hugues Capet","bio":"Hugues Capet (940-996) Premier souverain de la dynastie capétienne."}
-{"_id":{"$oid":"55210bd364929325582b87bb"},"id":"b496c576-dacc-4dd9-adba-c7d829d6a29b","nom":"Titus","bio":"Titus (39-81) Empereur romain de la dynastie Flaviens"}
-{"_id":{"$oid":"55210bd364929325582b87bd"},"id":"3a290b1f-21e1-4e08-8afd-06ebd8f6e36a","nom":"Cicéron","bio":"Cicéron (107 av. J.-C.-44 av. J.-C.) Homme d'État romain et un auteur latin"}
-{"_id":{"$oid":"55210bd364929325582b87be"},"id":"c28dc8e7-8223-4096-8980-de0113e68ed0","nom":"Saint Louis","bio":"Louis IX dit 'Saint Louis' (1226-1270) 44e roi de France"}
-{"_id":{"$oid":"55210bd364929325582b87c0"},"id":"34bcf694-bc7f-475e-9286-0f1770653d71","nom":"Charles VII","bio":"Charles VII (1403-1461) Cinquième roi de la branche dite de Valois de la dynastie capétienne."}
-{"_id":{"$oid":"55210bd364929325582b87bc"},"id":"fbcf1114-738a-4d6a-a30a-518c9a9cda33","nom":"Marc Aurèle","bio":"Marc Aurèle (121-180) Empereur romain & philosophe"}
-{"_id":{"$oid":"55210bd364929325582b87c3"},"id":"38e25532-aad3-4d52-88c4-1feb5fb2bf1e","nom":"Gengis Khan","bio":"Genghis Khan (1155-1227) Fondateur de l'Empire mongol"}
-{"_id":{"$oid":"55210bd364929325582b87c2"},"id":"3afbe4ac-f56a-4b6d-b47c-2d7fdef519d7","nom":"Marco Polo ","bio":"Marco Polo (1254-1324) Marchand vénitien et écrivain."}
-{"_id":{"$oid":"55210bd364929325582b87c4"},"id":"8b078d99-bc50-4678-b845-fe85a88762a3","nom":"Léonard de Vinci","bio":"Léonard de Vinci (1452-1519) Peintre florentin et un homme d'esprit universel, à la fois artiste, scientifique, ingénieur, inventeur..."}
-{"_id":{"$oid":"55210bd364929325582b87c1"},"id":"770242d5-edc7-49b7-8d19-6f49c2714012","nom":"Philippe Auguste","bio":"Philippe Auguste (1165-1223) Septième roi de la dynastie dite des Capétiens."}
-{"_id":{"$oid":"55210bd364929325582b87c6"},"id":"6230e8d3-e0e4-442f-b967-fff8bdc1d35e","nom":"Georges Clemenceau","bio":"Georges Clémenceau (1841-1929) Homme d'État français"}
-{"_id":{"$oid":"55210bd364929325582b87c5"},"id":"4c13d097-b276-4e0d-9922-ff66368fee3b","nom":"Lénine","bio":"Vladimir Ilitch Oulianov dit 'Lénine' (1870-1924) Révolutionnaire, théoricien politique et homme d'État russe."}
-{"_id":{"$oid":"55210bd364929325582b87c7"},"id":"e44040a2-7f5e-47ec-b116-73091b5cbfc1","nom":"Trotski","bio":"Léon Trotsky (1879-1940) Révolutionnaire et homme politique russo-soviétique"}
-{"_id":{"$oid":"55210bd364929325582b87c8"},"id":"2f30dcb6-22c3-47f7-a004-9381fe56f3a8","nom":"Mussolini","bio":"Benito Mussolini (1883-1945) Fondateur du fascisme, président de la République sociale italienne"}
-{"_id":{"$oid":"55210bd364929325582b87c9"},"id":"d07ce948-7dc6-4cd5-939b-19d10e6715ab","nom":"Woodrow Wilson","bio":"Woodrow Wilson (1856-1924) Vingt-huitième président des États-Unis"}
-{"_id":{"$oid":"55210bd364929325582b87ca"},"id":"66d8ba2a-f85b-4d67-95aa-26cc32032bd6","nom":"Winston Churchill","bio":"Winston Churchill (1874-1965) Premier ministre de 1940 à 1945 du Royaume-Uni"}
-{"_id":{"$oid":"55210bd364929325582b87cb"},"id":"d6b3ff32-c86c-4394-a0df-15ffa377301f","nom":"Général de Gaulle","bio":"Charles de Gaulle (1890-1970) Symbole de la résistance pendant la Seconde Guerre mondiale, un des créateur de la cinquième république"}
-{"_id":{"$oid":"55210bd364929325582b87cd"},"id":"7b97d95f-111a-46a2-873a-05a51380dd4f","nom":"Khroutchev","bio":"Nikita Khroutchev (1894-1971) Homme politique soviétique qui dirigea l'URSS durant une partie de la guerre froide."}
-{"_id":{"$oid":"55210bd364929325582b87cf"},"id":"f068213a-7c46-4811-822c-de7f09f70dd0","nom":"John F. Kennedy","bio":"John Fitzgerald Kennedy (1917-1963) 35e président des États-Unis."}
-{"_id":{"$oid":"55210bd364929325582b87d0"},"id":"dd8343f7-b144-4fad-873e-af7e44f2ccfc","nom":"Nelson Mandela","bio":"Nelson Mandela (1918-2013) Président de la République d'Afrique du Sud"}
-{"_id":{"$oid":"55210bd364929325582b87d2"},"id":"b2e0141c-8085-4aab-80c0-e0f48fe58182","nom":"Lech Wałęsa","bio":"Lech Wałęsa (1943-) 6e président de la République polonaise. Prix Nobel de la paix en 1983"}
-{"_id":{"$oid":"55210bd364929325582b87cc"},"id":"8dd35480-8620-4750-9826-cd733072d94a","nom":"Maréchal Pétain","bio":"Philippe Pétain (1856-1951) Chef millitaire, maréchal de France en 1918. Chef du régime de Vichy."}
-{"_id":{"$oid":"55210bd364929325582b87ce"},"id":"03e11258-7a82-435c-9ebe-7a8773aa145a","nom":"Gorbatchev","bio":"Mikhaïl Gorbatchev (1931-) Homme d'État soviétique, russe qui dirigea l'URSS"}
-{"_id":{"$oid":"55210bd364929325582b87d1"},"id":"67a5a4d8-e80f-4e89-9007-4e323e6b8c25","nom":"Indira Gandhi","bio":"Indira Gandhi (1869-1948) Dirigeant politique, important guide spirituel de l'Inde et du mouvement pour l'indépendance de ce pays"}
-{"_id":{"$oid":"55210bd364929325582b87d4"},"id":"317761da-c87f-43ef-b934-67b19c392080","nom":"Martin Luther King","bio":"Martin Luther King (1929-1968) Militant non-violent leader du mouvement des droits civiques aux États-Unis."}
-{"_id":{"$oid":"55210bd364929325582b87d5"},"id":"95fed78e-d023-4d6a-ac7f-afb834144afd","nom":"Fidel Castro","bio":"Fidel Castro (1926-) Dirigeant politique cubain, ancien chef de l'État et du gouvernement de Cuba."}
-{"_id":{"$oid":"55210bd364929325582b87d3"},"id":"e53bb54b-51fe-4291-9ca5-5467f247a2cc","nom":"Rosa Parks","bio":"Rosa Parks (1913-2005) Figure emblématique de la lutte contre la ségrégation raciale aux États-Unis."}
-{"_id":{"$oid":"55210bd364929325582b87d6"},"id":"97b52cc3-a3a2-4578-8a0b-8d3e33c1e196","nom":"Che Guevara","bio":"Enesto 'Che' Guevara (1928-1967) Révolutionnaire marxiste et internationaliste et un homme politique d'Amérique latine."}
-{"_id":{"$oid":"55210bd364929325582b87d7"},"id":"4974f394-ecae-4161-9948-77236e39f044","nom":"Richard Nixon","bio":"Richard Nixon (1913-1994) 37ᵉ président des États-Unis"}
-{"_id":{"$oid":"55210bd364929325582b87d8"},"id":"f7b2e9fb-03a4-4977-bb51-48ca5dc8473a","nom":"Bill Clinton","bio":"Bill Clinton (1946-) 42ᵉ président des États-Unis"}
-{"_id":{"$oid":"55210bd364929325582b87da"},"id":"3a4ebd56-4f38-4a9d-bc7c-b972fa6c8412","nom":"Michel de Montaigne","bio":"Michel de Montaigne (1533-1592) Philosophe et moraliste de la Renaissance."}
-{"_id":{"$oid":"55210bd364929325582b87d9"},"id":"98f47904-441f-4462-83b8-09e0edb51641","nom":"Mao Zedong","bio":"Mao Zedong (1893-1976) Fondateur et dirigeant de la République populaire de Chine."}
-{"_id":{"$oid":"55210bd364929325582b87dd"},"id":"d97d3621-37fb-410b-8c40-341f22c747b3","nom":"Voltaire","bio":"François-Marie Arouet, dit Voltaire (1694-1778) Écrivain et philosophe français"}
-{"_id":{"$oid":"55210bd364929325582b87dc"},"id":"d8c5f8b2-1474-4f55-801f-9eb8e0884c28","nom":"Érasme","bio":"Erasme (1466-1536) Philosophe, écrivain latin, humaniste et théologien des Pays-Bas bourguignons."}
-{"_id":{"$oid":"55210bd364929325582b87df"},"id":"42bf81d8-1d56-4028-a231-23887a8ed4b1","nom":"Jean-Jacques Rousseau","bio":"Jean-Jacques Rousseau (1712-1778) Écrivain, philosophe et musicien genevois francophone."}
-{"_id":{"$oid":"55210bd364929325582b87db"},"id":"cc74b7fb-59ed-41fb-98b3-2d29218b41de","nom":"Descartes","bio":"René Descartes (1596-1650) Mathématicien, physicien et philosophe français."}
-{"_id":{"$oid":"55210bd364929325582b87de"},"id":"5b7139e0-a7de-46ef-a58a-8b692c47b381","nom":"Montesquieu","bio":"Montesquieu (1689-1755) Penseur politique, franc-maçon, précurseur de la sociologie, philosophe et écrivain français des Lumières."}
-{"_id":{"$oid":"55210bd364929325582b87e1"},"id":"10690ce9-d011-42d5-ae6d-e2c89feefddb","nom":"Emmanuel Kant","bio":"Emmanuel Kant (1724-1804) Philosophe allemand, fondateur de l’« idéalisme transcendantal »."}
-{"_id":{"$oid":"55210bd364929325582b87e2"},"id":"fb285ac8-8e45-4d3f-b6a2-70d2d73193fa","nom":"Karl Marx","bio":"Karl Marx (1818-1883) Historien, philosophe, économiste, sociologue, essayiste, théoricien de la révolution, socialiste et communiste allemand."}
-{"_id":{"$oid":"55210bd364929325582b87e4"},"id":"93423442-6b4a-4b24-a523-df27c2bc84a5","nom":"Francisco Franco","bio":"Fransisco Franco (1892-1975) Militaire, chef d'État et chef de gouvernement espagnol."}
-{"_id":{"$oid":"55210bd364929325582b87e3"},"id":"9f344ec6-a34d-4615-8aa5-ee2f7fd50ed8","nom":"Nietzsche","bio":"Friedrich Nietzsche (1844-1900) Philologue, philosophe et poète allemand."}
-{"_id":{"$oid":"55210bd364929325582b87e0"},"id":"62f49baf-912c-4062-a059-527b44e77153","nom":"Denis Diderot","bio":"Denis Diderot (1713-1784) Écrivain, philosophe et encyclopédiste français des Lumière."}
-{"_id":{"$oid":"55210bd364929325582b87e6"},"id":"4bb64a60-2a35-4ffa-8e95-c6980a0d645d","nom":"George Washington","bio":"Georges Washington (1732-1799) Premier président des États-Unis."}
-{"_id":{"$oid":"55210bd364929325582b87e5"},"id":"c743e984-34cb-4750-b6da-fd0db7000135","nom":"William Wallace","bio":"William Wallace (1272-1305) Hevalier écossais, Il mena son peuple contre l'occupation des Anglais."}
-{"_id":{"$oid":"55210bd364929325582b87e7"},"id":"2f8dbe7a-d6e7-4614-84ea-1724ebf2383d","nom":"Jeanne d’Arc","bio":"Jeanne d'Arc (1412-1431) Guide des troupes françaises contre les armées anglaises"}
-{"_id":{"$oid":"55210bd364929325582b87e8"},"id":"ad568535-fd65-473b-aa55-a250423cf94b","nom":"Napoléon Bonaparte","bio":"Napoléon Bonaparte (1769-1821) Premier empereur des Français"}
+{"_id":"4b4cae3f-fef0-4881-9287-44ce457c0980","nom":"Jacques Chirac","bio":"Jacques Chirac (1932-) 22e président de la République française."}
+{"_id":"4678716e-f025-4a65-8813-35a63d6a58cc","nom":"Toutânkhamon","bio":"Toutânkhamon (1342 av. J.-C.-1327 av. J.-C.) Onzième pharaon de la XVIIIᵉ dynastie."}
+{"_id":"f0232a6c-3e4c-42b8-a801-085944d7468e","nom":"Akhénaton","bio":"Akhénaton (?-1338 av. J.-C.) Dixième pharaon de la XVIIIe dynastie."}
+{"_id":"1af69fd8-988c-4717-9d48-46c8bff9a0e0","nom":"Ramsès II","bio":"Ramsès II (1303 av. J.-C.-1213 av. J.-C.) Troisième pharaon de la XIXᵉ dynastie."}
+{"_id":"887041b0-e16d-44e4-b8e8-641fb44b9fe0","nom":"Vercingétorix","bio":"Vercingétorix (82 av. J.-C.-46 av. J.-C.) Chef de la révolte gauloise en 52 av. J.-C."}
+{"_id":"8bfa0ab0-9183-4683-b36f-123cbdeebf44","nom":"Alexandre le Grand","bio":"Alexandre le Grand (356 av. J.-C.-323 av. J.-C.) Roi de Macédoine."}
+{"_id":"a5100442-754c-4ce8-a1f5-86b9cfbb5972","nom":"Cléopâtre","bio":"Cléopâtre (70 av. J.-C.-30 av. J.-C.) Reine d'Égypte antique."}
+{"_id":"6d96f8e7-4725-4c83-85c6-972423d8e565","nom":"Aristote","bio":"Aristote (384 av. J.-C.-322 av. J.-C.) Philosophe grec de l'Antiquité. "}
+{"_id":"52425120-5f75-446a-ba1d-0bd95add0596","nom":"Périclès","bio":"Périclès (495 av. J.-C.-429 av. J.-C.) Homme de guerre de la Grèce antique."}
+{"_id":"a31aa501-11dc-4dd8-bfa1-839ebadd9a03","nom":"Archimède","bio":"Archimède (287 av. J.-C.-212 av. J.-C.) Grand scientifique grec de Sicile de l'Antiquité, physicien, mathématicien"}
+{"_id":"655182b6-78e3-45ea-a2ba-d5f10e707f12","nom":"Pythagore","bio":"Pythagore (~580 av. J.-C.-395 av. J.-C.) Philosophe grec de l'Antiquité"}
+{"_id":"94e38364-8eed-48b7-842b-25b1f1d6fba9","nom":"Diogène","bio":"Diogène (412 av. J.-C.-323 av. J.-C.) Philosophe grec de l'Antiquité"}
+{"_id":"83e05cc5-e387-46ad-a646-8559bde65fa1","nom":"Socrate","bio":"Socrate (469 av. J.-C.-399 av. J.-C.) Philosophe grec de l'Antiquité"}
+{"_id":"2d9ac08f-121a-40fa-9ae8-a4c5d3030a7a","nom":"Aristophane","bio":"Aristophane (445 av. J.-C.-385 av. J.-C.) Poète comique grec de l'Antiquité."}
+{"_id":"c610b52d-2f9a-4d08-8c23-c61bcb52c566","nom":"Euclide","bio":"Euclide (inconnu) Mathématicien de la Grèce antique"}
+{"_id":"57e53c6d-494b-4c67-9b6a-00c6a5c342c2","nom":"Platon","bio":"Platon (427 av. J.-C.-348 av. J.-C.) Philosophe de la Grèce antique"}
+{"_id":"880a168a-d653-453a-ab10-d6caae0f47af","nom":"Jules César","bio":"César (100 av. J.-C.-44 av. J.-C.) Général, homme politique et écrivain romain"}
+{"_id":"cd235003-695e-4d46-9289-409c0a1ee599","nom":"Auguste","bio":"Auguste (63 av. J.-C.-14) Premier empereur romain"}
+{"_id":"8077e5cb-71d4-4ca0-b6bd-34bba21d0cd2","nom":"Néron","bio":"Néron (37-68) Dernier empereur romain de la dynastie julio-claudienne"}
+{"_id":"e9d7f2b5-834b-471e-acfe-6af2ff2834e8","nom":"Pompée","bio":"Pompée (106 av. J.-C.-48 av. J.-C.) Général et homme d'État romain"}
+{"_id":"0ef20ae4-6c45-48e3-9781-b83c737c5a37","nom":"Hugues Capet","bio":"Hugues Capet (940-996) Premier souverain de la dynastie capétienne."}
+{"_id":"b496c576-dacc-4dd9-adba-c7d829d6a29b","nom":"Titus","bio":"Titus (39-81) Empereur romain de la dynastie Flaviens"}
+{"_id":"3a290b1f-21e1-4e08-8afd-06ebd8f6e36a","nom":"Cicéron","bio":"Cicéron (107 av. J.-C.-44 av. J.-C.) Homme d'État romain et un auteur latin"}
+{"_id":"c28dc8e7-8223-4096-8980-de0113e68ed0","nom":"Saint Louis","bio":"Louis IX dit 'Saint Louis' (1226-1270) 44e roi de France"}
+{"_id":"34bcf694-bc7f-475e-9286-0f1770653d71","nom":"Charles VII","bio":"Charles VII (1403-1461) Cinquième roi de la branche dite de Valois de la dynastie capétienne."}
+{"_id":"fbcf1114-738a-4d6a-a30a-518c9a9cda33","nom":"Marc Aurèle","bio":"Marc Aurèle (121-180) Empereur romain & philosophe"}
+{"_id":"38e25532-aad3-4d52-88c4-1feb5fb2bf1e","nom":"Gengis Khan","bio":"Genghis Khan (1155-1227) Fondateur de l'Empire mongol"}
+{"_id":"3afbe4ac-f56a-4b6d-b47c-2d7fdef519d7","nom":"Marco Polo ","bio":"Marco Polo (1254-1324) Marchand vénitien et écrivain."}
+{"_id":"8b078d99-bc50-4678-b845-fe85a88762a3","nom":"Léonard de Vinci","bio":"Léonard de Vinci (1452-1519) Peintre florentin et un homme d'esprit universel, à la fois artiste, scientifique, ingénieur, inventeur..."}
+{"_id":"770242d5-edc7-49b7-8d19-6f49c2714012","nom":"Philippe Auguste","bio":"Philippe Auguste (1165-1223) Septième roi de la dynastie dite des Capétiens."}
+{"_id":"6230e8d3-e0e4-442f-b967-fff8bdc1d35e","nom":"Georges Clemenceau","bio":"Georges Clémenceau (1841-1929) Homme d'État français"}
+{"_id":"4c13d097-b276-4e0d-9922-ff66368fee3b","nom":"Lénine","bio":"Vladimir Ilitch Oulianov dit 'Lénine' (1870-1924) Révolutionnaire, théoricien politique et homme d'État russe."}
+{"_id":"e44040a2-7f5e-47ec-b116-73091b5cbfc1","nom":"Trotski","bio":"Léon Trotsky (1879-1940) Révolutionnaire et homme politique russo-soviétique"}
+{"_id":"2f30dcb6-22c3-47f7-a004-9381fe56f3a8","nom":"Mussolini","bio":"Benito Mussolini (1883-1945) Fondateur du fascisme, président de la République sociale italienne"}
+{"_id":"d07ce948-7dc6-4cd5-939b-19d10e6715ab","nom":"Woodrow Wilson","bio":"Woodrow Wilson (1856-1924) Vingt-huitième président des États-Unis"}
+{"_id":"66d8ba2a-f85b-4d67-95aa-26cc32032bd6","nom":"Winston Churchill","bio":"Winston Churchill (1874-1965) Premier ministre de 1940 à 1945 du Royaume-Uni"}
+{"_id":"d6b3ff32-c86c-4394-a0df-15ffa377301f","nom":"Général de Gaulle","bio":"Charles de Gaulle (1890-1970) Symbole de la résistance pendant la Seconde Guerre mondiale, un des créateur de la cinquième république"}
+{"_id":"7b97d95f-111a-46a2-873a-05a51380dd4f","nom":"Khroutchev","bio":"Nikita Khroutchev (1894-1971) Homme politique soviétique qui dirigea l'URSS durant une partie de la guerre froide."}
+{"_id":"f068213a-7c46-4811-822c-de7f09f70dd0","nom":"John F. Kennedy","bio":"John Fitzgerald Kennedy (1917-1963) 35e président des États-Unis."}
+{"_id":"dd8343f7-b144-4fad-873e-af7e44f2ccfc","nom":"Nelson Mandela","bio":"Nelson Mandela (1918-2013) Président de la République d'Afrique du Sud"}
+{"_id":"b2e0141c-8085-4aab-80c0-e0f48fe58182","nom":"Lech Wałęsa","bio":"Lech Wałęsa (1943-) 6e président de la République polonaise. Prix Nobel de la paix en 1983"}
+{"_id":"8dd35480-8620-4750-9826-cd733072d94a","nom":"Maréchal Pétain","bio":"Philippe Pétain (1856-1951) Chef millitaire, maréchal de France en 1918. Chef du régime de Vichy."}
+{"_id":"03e11258-7a82-435c-9ebe-7a8773aa145a","nom":"Gorbatchev","bio":"Mikhaïl Gorbatchev (1931-) Homme d'État soviétique, russe qui dirigea l'URSS"}
+{"_id":"67a5a4d8-e80f-4e89-9007-4e323e6b8c25","nom":"Indira Gandhi","bio":"Indira Gandhi (1869-1948) Dirigeant politique, important guide spirituel de l'Inde et du mouvement pour l'indépendance de ce pays"}
+{"_id":"317761da-c87f-43ef-b934-67b19c392080","nom":"Martin Luther King","bio":"Martin Luther King (1929-1968) Militant non-violent leader du mouvement des droits civiques aux États-Unis."}
+{"_id":"95fed78e-d023-4d6a-ac7f-afb834144afd","nom":"Fidel Castro","bio":"Fidel Castro (1926-) Dirigeant politique cubain, ancien chef de l'État et du gouvernement de Cuba."}
+{"_id":"e53bb54b-51fe-4291-9ca5-5467f247a2cc","nom":"Rosa Parks","bio":"Rosa Parks (1913-2005) Figure emblématique de la lutte contre la ségrégation raciale aux États-Unis."}
+{"_id":"97b52cc3-a3a2-4578-8a0b-8d3e33c1e196","nom":"Che Guevara","bio":"Enesto 'Che' Guevara (1928-1967) Révolutionnaire marxiste et internationaliste et un homme politique d'Amérique latine."}
+{"_id":"4974f394-ecae-4161-9948-77236e39f044","nom":"Richard Nixon","bio":"Richard Nixon (1913-1994) 37ᵉ président des États-Unis"}
+{"_id":"f7b2e9fb-03a4-4977-bb51-48ca5dc8473a","nom":"Bill Clinton","bio":"Bill Clinton (1946-) 42ᵉ président des États-Unis"}
+{"_id":"3a4ebd56-4f38-4a9d-bc7c-b972fa6c8412","nom":"Michel de Montaigne","bio":"Michel de Montaigne (1533-1592) Philosophe et moraliste de la Renaissance."}
+{"_id":"98f47904-441f-4462-83b8-09e0edb51641","nom":"Mao Zedong","bio":"Mao Zedong (1893-1976) Fondateur et dirigeant de la République populaire de Chine."}
+{"_id":"d97d3621-37fb-410b-8c40-341f22c747b3","nom":"Voltaire","bio":"François-Marie Arouet, dit Voltaire (1694-1778) Écrivain et philosophe français"}
+{"_id":"d8c5f8b2-1474-4f55-801f-9eb8e0884c28","nom":"Érasme","bio":"Erasme (1466-1536) Philosophe, écrivain latin, humaniste et théologien des Pays-Bas bourguignons."}
+{"_id":"42bf81d8-1d56-4028-a231-23887a8ed4b1","nom":"Jean-Jacques Rousseau","bio":"Jean-Jacques Rousseau (1712-1778) Écrivain, philosophe et musicien genevois francophone."}
+{"_id":"cc74b7fb-59ed-41fb-98b3-2d29218b41de","nom":"Descartes","bio":"René Descartes (1596-1650) Mathématicien, physicien et philosophe français."}
+{"_id":"5b7139e0-a7de-46ef-a58a-8b692c47b381","nom":"Montesquieu","bio":"Montesquieu (1689-1755) Penseur politique, franc-maçon, précurseur de la sociologie, philosophe et écrivain français des Lumières."}
+{"_id":"10690ce9-d011-42d5-ae6d-e2c89feefddb","nom":"Emmanuel Kant","bio":"Emmanuel Kant (1724-1804) Philosophe allemand, fondateur de l’« idéalisme transcendantal »."}
+{"_id":"fb285ac8-8e45-4d3f-b6a2-70d2d73193fa","nom":"Karl Marx","bio":"Karl Marx (1818-1883) Historien, philosophe, économiste, sociologue, essayiste, théoricien de la révolution, socialiste et communiste allemand."}
+{"_id":"93423442-6b4a-4b24-a523-df27c2bc84a5","nom":"Francisco Franco","bio":"Fransisco Franco (1892-1975) Militaire, chef d'État et chef de gouvernement espagnol."}
+{"_id":"9f344ec6-a34d-4615-8aa5-ee2f7fd50ed8","nom":"Nietzsche","bio":"Friedrich Nietzsche (1844-1900) Philologue, philosophe et poète allemand."}
+{"_id":"62f49baf-912c-4062-a059-527b44e77153","nom":"Denis Diderot","bio":"Denis Diderot (1713-1784) Écrivain, philosophe et encyclopédiste français des Lumière."}
+{"_id":"4bb64a60-2a35-4ffa-8e95-c6980a0d645d","nom":"George Washington","bio":"Georges Washington (1732-1799) Premier président des États-Unis."}
+{"_id":"c743e984-34cb-4750-b6da-fd0db7000135","nom":"William Wallace","bio":"William Wallace (1272-1305) Hevalier écossais, Il mena son peuple contre l'occupation des Anglais."}
+{"_id":"2f8dbe7a-d6e7-4614-84ea-1724ebf2383d","nom":"Jeanne d’Arc","bio":"Jeanne d'Arc (1412-1431) Guide des troupes françaises contre les armées anglaises"}
+{"_id":"ad568535-fd65-473b-aa55-a250423cf94b","nom":"Napoléon Bonaparte","bio":"Napoléon Bonaparte (1769-1821) Premier empereur des Français"}
