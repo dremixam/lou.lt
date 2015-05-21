@@ -36,7 +36,7 @@
   loultApp.service('$socket', ['$rootScope',
     function ($rootScope) {
       d('connecting');
-      var socket = io.connect('', {
+      var socket = io.connect('http://localhost:8090/', {
         'force new connection': true,
         'reconnection limit': 10000,
         'max reconnection attempts': Infinity
@@ -310,6 +310,9 @@
   }]);
 
 
+  loultApp.controller('TitleCtrl', ['$scope', function ($scope) {
+    $scope.channel = location.pathname;
+  }]);
 
   loultApp.controller('TextBoxCtrl', ['$scope', '$socket',
     function ($scope, $socket) {

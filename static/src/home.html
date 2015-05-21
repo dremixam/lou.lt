@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en" class="no-js" ng-app="loultApp">
 
 <head>
-  <title translate>Lou.lt - expérimental</title>
+  <title ng-controller="TitleCtrl">{{channel}} - Lou.lt</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="Lou.lt anonymous chat with vocal synthesis">
@@ -23,7 +23,7 @@
   <script src="/js/main.min.js"></script>
 </head>
 
-<body ng-app="loultApp" layout="column" ng-controller="mainCtrl">
+<body layout="column" ng-controller="mainCtrl">
 
   <md-toolbar layout="row">
     <button ng-click="toggleSideNav('left')" class="menuBtn">
