@@ -267,7 +267,8 @@ loultApp.controller('TextBoxCtrl', ['$scope',
 
       if (!FloodDetector.evaluate(message)) {
         insereErreur('Ce message ressemble à du flood et n\'a pas été envoyé');
-        return;
+        $scope.textMessage = '';
+        return false;
       }
 
       if (first.charAt(0) === '/') {
