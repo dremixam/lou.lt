@@ -172,7 +172,7 @@ loultApp.controller('UserListCtrl', ['$scope',
       var result = $scope.userlist.filter(function (obj) {
         return obj.uuid === data.user.uuid;
       });
-      if (!result[0].muted) {
+      if (!result[0].muted && FloodDetector.evaluate(data.message)) {
         insereMessage(data.user.pseudo, data.message, data.color, $scope.language);
         document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
         document.getElementById('audio' + (audioPlayer % 10)).play();
@@ -186,11 +186,13 @@ loultApp.controller('UserListCtrl', ['$scope',
     });
 
     socket.on('ownmessage', function (data) {
-      document.getElementById('message').placeholder = 'Message...';
-      insereOwnMessage(data.user.pseudo, data.message, data.color, $scope.language);
-      document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
-      document.getElementById('audio' + (audioPlayer % 10)).play();
-      audioPlayer++;
+      if (FloodDetector.evaluate(data.message)) {
+        document.getElementById('message').placeholder = 'Message...';
+        insereOwnMessage(data.user.pseudo, data.message, data.color, $scope.language);
+        document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
+        document.getElementById('audio' + (audioPlayer % 10)).play();
+        audioPlayer++;
+      }
     });
     socket.on('debug', function (message) {
       insereDebug(message);
@@ -262,6 +264,12 @@ loultApp.controller('TextBoxCtrl', ['$scope',
       var message = $scope.textMessage;
       var first = message.split(' ')[0];
       var next = message.substr(message.indexOf(' ') + 1);
+
+      if (!FloodDetector.evaluate(message)) {
+        insereErreur('Ce message ressemble à du flood et n\'a pas été envoyé');
+        return;
+      }
+
       if (first.charAt(0) === '/') {
         socket.emit('command', {
           cmd: first.substring(1),
