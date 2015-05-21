@@ -283,6 +283,24 @@ loultApp.controller('TextBoxCtrl', ['$scope',
       return false; // Permet de bloquer l'envoi 'classique' du formulaire
     };
 
+    function insereErreur(message) {
+      insereLigne('[Erreur]', 'error', message, null);
+    }
+
+    function insereLigne(premier, classe, second, color) {
+      if (color === null) {
+        $('#zone_chat').append('<div class="ligne ' + classe + '"><div class="premier">' + premier + '</div><div class="second">' + second + '<div><div class="lineTimer">' + currentTime() + '</div></div>');
+      } else {
+        $('#zone_chat').append('<div class="ligne ' + classe + '"><div class="premier" style="color: ' + color + ';">' + premier + '</div><div class="second">' + second + '<div><div class="lineTimer">' + currentTime() + '</div></div>');
+      }
+
+      if ($('#zone_chat').scrollTop() + $('#zone_chat').height() > ($('#zone_chat')[0].scrollHeight - $('#zone_chat').height() / 2)) {
+        $('#zone_chat').stop().animate({
+          scrollTop: $('#zone_chat')[0].scrollHeight
+        }, 500);
+      }
+    }
+
 }]);
 
 
