@@ -35,16 +35,16 @@
 
   loultApp.service('$socket', ['$rootScope',
     function ($rootScope) {
-      d('connecting');
-      var socket = io.connect('http://localhost:8090/', {
+      d('connecting…');
+      var socket = io.connect('', {
         'force new connection': true,
         'reconnection limit': 10000,
         'max reconnection attempts': Infinity
       });
       this.on = function (eventName, callback) {
         socket.on(eventName, function () {
-          d('recv:' + eventName + ':' + JSON.stringify(arguments));
           var args = arguments;
+          d('recv:' + eventName + ':' + JSON.stringify(arguments));
           $rootScope.$apply(function () {
             if (callback) {
               callback.apply(socket, args);
@@ -66,6 +66,9 @@
       this.removeAllListeners = function () {
         socket.removeAllListeners();
       };
+
+
+
   }]);
 
   // Controller pour la gestion des menus sur les cotés.
@@ -82,9 +85,6 @@
       $scope.userlist = [];
 
       $scope.language = 'fr';
-      $socket.on('connect', function () {
-        $socket.emit('join', location.pathname);
-      });
 
       // ajouter a la liste les nouveaux clients (il faudra revoir ici pour éviter les fantomes)
       $socket.on('nouveau_client', function (data) {
@@ -264,6 +264,7 @@
       });
 
       $socket.on('connecting', function () {
+        $socket.emit('join', location.pathname);
         $scope.pushMessage({
           'premier': '[Info]',
           'paragraphes': [{
