@@ -103,13 +103,16 @@
           <span class="visuallyhidden">Userlist</span>
         </button>
       </md-toolbar>
-      <md-list>
-        <md-item ng-repeat="user in userlist track by $index | orderBy:pseudo">
-          <md-item-content>
-            <md-button ng-click="" ng-class="">
-              <span class="user-{{user.uuid}} avatar"></span> {{user.pseudo}}
-            </md-button>
-          </md-item-content>
+      <md-list ng-controller="UserListCtrl" id="sideUserList">
+        <md-item ng-repeat="user in userlist track by $index | orderBy:pseudo" class="animate-user-item">
+          <md-button ng-click="" ng-class="">
+            <md-item-content>
+              <div class="md-tile-left message-zone-avatar">
+                <img ng-src="/res/charapic/{{user.avatar}}" class="face" alt="{{user.pseudo}}" src="/res/charapic/{{user.avatar}}">
+              </div>
+              <div class="md-tile-content message-content">{{user.pseudo}}</div>
+            </md-item-content>
+          </md-button>
         </md-item>
       </md-list>
     </md-sidenav>

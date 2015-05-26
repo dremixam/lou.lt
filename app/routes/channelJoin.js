@@ -22,9 +22,11 @@ module.exports = function (socket, db) {
 
     clientList.add(socket, db, function (newUserData) {
       // On transmet au nouveau client la liste des personnes en ligne
+      log.debug('liste des clients');
       clientList.forEach(channel, function (entry) {
         socket.emit('nouveau_client', entry.public);
       });
+      log.debug('on envoie au channel ' + channel + ' le nouveau user ' + JSON.stringify(newUserData.public));
       socket.to(channel).emit('nouveau_client', newUserData.public);
       socket.emit('connected', newUserData.public);
       messagesModel.forEach(channel, function (message) {
@@ -34,12 +36,10 @@ module.exports = function (socket, db) {
     });
 
     socket.on('disconnect', function () {
-      //var publicData = socket.handshake.session.userData.public;
-      //var uuid = socket.handshake.session.userData.public.uuid;
-      //clientList.remove(channel, uuid);
-      //socket.to(channel).emit('disconnected', publicData);
+      var userData = socketModel.get(socket.id, 'userData');
+      clientList.remove(channel, userData.public.uuid);
+      socket.to(channel).emit('disconnected', userData.public);
       socketModel.remove(socket.id);
-      //clearInterval(intervalID);
     });
   });
 

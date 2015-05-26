@@ -71,6 +71,7 @@ module.exports.add = function (socket, db, fn) {
       socketModel.set(socket.id, 'userData', userData);
       socketModel.set(socket.id, 'last', Date.now());
 
+      log.debug('allClients : ' + JSON.stringify(allClients));
       fn(userData);
     });
 
@@ -93,7 +94,7 @@ module.exports.forEach = function (channel, fn) {
 };
 
 module.exports.remove = function (channel, uuid) {
-
+  log.debug('remove ' + uuid + ' from ' + channel);
   if (allClients[channel] === undefined) allClients[channel] = {};
   if (allSockets[channel] === undefined) allSockets[channel] = {};
   delete allClients[channel][uuid];

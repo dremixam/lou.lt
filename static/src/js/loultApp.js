@@ -2,6 +2,18 @@
   'use strict';
   var DEBUG = true;
 
+  var dateOptions = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+  };
+
+  var locale = window.navigator.userLanguage || window.navigator.language;
+
   function d(message) {
     if (DEBUG) {
       console.log('[DEBUG] ' + message);
@@ -66,9 +78,6 @@
       this.removeAllListeners = function () {
         socket.removeAllListeners();
       };
-
-
-
   }]);
 
   // Controller pour la gestion des menus sur les cotés.
@@ -84,10 +93,9 @@
     function ($scope, $socket) {
       $scope.userlist = [];
 
-      $scope.language = 'fr';
-
       // ajouter a la liste les nouveaux clients (il faudra revoir ici pour éviter les fantomes)
       $socket.on('nouveau_client', function (data) {
+        d('nouveau client');
         var result = $scope.userlist.filter(function (obj) {
           return obj.uuid === data.uuid;
         });
@@ -119,7 +127,6 @@
 
       // Supression de la liste des utilisateurs qui se déconnectent.
       $socket.on('disconnected', function (data) {
-
         var result = $scope.userlist.filter(function (obj) {
           return obj.uuid === data.uuid;
         });
@@ -130,7 +137,6 @@
             $scope.userlist.splice($scope.userlist.indexOf(result[0]), 1);
           }
         }
-
       });
 
       // On vient de se connecter, on initialise tout
@@ -155,8 +161,6 @@
   loultApp.controller('MessageListCtrl', ['$scope', '$socket', 'ngAudio',
     function ($scope, $socket, ngAudio) {
       $scope.messagelist = [];
-
-      $scope.glued = true;
 
       $socket.on('message', function (data) {
 
@@ -298,7 +302,7 @@
             lastMessage.paragraphes.push(messageObject.paragraphes[0]);
           }
           if (messageObject.time) {
-            lastMessage.date = new Date(Date.parse(messageObject.time));
+            lastMessage.date = new Date(Date.parse(messageObject.time)).toLocaleString(locale, dateOptions);
           }
         } else {
           $scope.messagelist.push(messageObject);
