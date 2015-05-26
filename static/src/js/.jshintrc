@@ -88,10 +88,7 @@
   "globals": {
     "angular": true,
     "io": true,
-    "$": true
+    "$": true,
+    "FloodDetector": true
   } // additional predefined global variables
 }
-
-
-
-

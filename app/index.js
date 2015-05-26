@@ -8,10 +8,9 @@ var log = require('./models/log.js')(config, path.relative('.', __filename));
 
 var messagesRoute = require('./routes/messages');
 var channelJoinRoute = require('./routes/channelJoin');
-var tldjs = require('tldjs');
 var socketModel = require('./models/socket');
 
-module.exports = function (io) {
+module.exports = function (io, db) {
 
   log.debug('on charge les routes');
   io.on('connection', function (socket) {
@@ -19,28 +18,9 @@ module.exports = function (io) {
     socketModel.push(socket.id);
     socket.emit('connecting');
 
-    channelJoinRoute(socket);
-    /*
-    //La gestion de la langue ne se fait plus par le sous domaine.
+    channelJoinRoute(socket, db);
 
-    var lng = tldjs.getSubdomain(socket.handshake.headers.host.split(':').shift());
-
-    if (['fr', 'en'].indexOf(lng) === -1) lng = 'en';
-
-    */
-
-    /*
-    var lng = 'fr';
-
-    socketModel.set(socket.id, 'lng', lng);
-
-    // On prévient l'utilisateur qu'il est bien en train de se connecter
-
-
-
-
-    messagesRoute(socket);
-*/
+    messagesRoute(socket, db);
   });
 
 };

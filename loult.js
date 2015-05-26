@@ -8,6 +8,8 @@ log4js.replaceConsole();
 var path = require('path');
 var log = require('./app/models/log.js')(config, path.relative('.', __filename));
 
+var MongoClient = require('mongodb');
+
 // Évidemment on a besoin de express et de socket.io
 var express = require('express'); // load express
 var favicon = require('serve-favicon');
@@ -41,9 +43,17 @@ app.get('*', function (req, res) {
   res.sendFile(__dirname + '/static/dist/home.html');
 });
 
-// routes ======================================================================
-require('./app/')(io);
 
-// listen (start app with node server.js) ======================================
-server.listen(config.port, config.ip);
-log.info('App listening on ' + config.ip + ':' + config.port);
+MongoClient.connect(config.dbURL, function (err, db) {
+  if (err) {
+    log.error(err);
+    return;
+  }
+
+  // routes ======================================================================
+  require('./app/')(io, db);
+
+  // listen (start app with node server.js) ======================================
+  server.listen(config.port, config.ip);
+  log.info('App listening on ' + config.ip + ':' + config.port);
+});

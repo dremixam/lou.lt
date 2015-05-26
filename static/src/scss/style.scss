@@ -44,13 +44,6 @@ md-list .md-button.selected {
   color: #03a9f4;
 }
 
-.avatar {
-  border: 1px solid #ddd;
-  display: inline-block;
-  margin: 0px;
-  vertical-align: middle;
-}
-
 /* Primary content area */
 
 #content {
@@ -122,4 +115,64 @@ https://github.com/google/material-design-icons
 
 .userlistBtn {
   background: url("../res/ic_group_24px.svg") no-repeat center center;
+}
+
+#content {
+  padding: 0 16px;
+  md-item:not(:last-child) {
+    .message-item-content {
+      border-bottom: 1px solid #ddd;
+    }
+  }
+  .message-item-content {
+    align-items: flex-start;
+    padding-bottom: 5px;
+    .message-content {
+      p {
+        font-size: 1em;
+        &.join {
+          color: darkgreen;
+          font-style: italic;
+        }
+        &.error {
+          color: firebrick;
+          font-style: italic;
+        }
+        &.old {
+          color: #aaa;
+        }
+        span.count {
+          font-size: .7em;
+          background-color: #b22222;
+          color: #fff;
+          font-weight: 700;
+          border-radius: 10px;
+          padding: 0 6px;
+          display: inline-block;
+          margin: 0;
+        }
+      }
+      footer {
+        font-size: 0.75em;
+        color: #aaa;
+      }
+    }
+    .message-zone-avatar {
+      border: 1px solid #ddd;
+      display: inline-block;
+      margin: 16px 0 0;
+      vertical-align: top;
+      height: 50px;
+      width: 50px;
+      border-radius: 24px;
+      min-width: 0;
+      img {
+        border-radius: 24px;
+        height: 48px;
+        width: 48px;
+        margin: 0;
+        box-sizing: content-box;
+      }
+    }
+  }
 }

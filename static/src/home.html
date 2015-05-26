@@ -7,19 +7,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="Lou.lt anonymous chat with vocal synthesis">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-
   <link rel="stylesheet" href="/lib/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="/styles/style.css">
-
   <script src="/socket.io/socket.io.js"></script>
-
   <script src="/lib/angular/angular.min.js"></script>
   <script src="/lib/angular-route/angular-route.min.js"></script>
   <script src="/lib/angular-aria/angular-aria.min.js"></script>
   <script src="/lib/angular-animate/angular-animate.min.js"></script>
   <script src="/lib/angular-messages/angular-messages.min.js"></script>
-  <script src="lib/angular-material/angular-material.min.js"></script>
+  <script src="/lib/angular-material/angular-material.min.js"></script>
   <script src="/lib/angular-audio/app/angular.audio.js"></script>
+  <script src="/lib/angular-scroll-glue/src/scrollglue.js"></script>
+  <script src="/lib/lz-string/libs/lz-string.min.js"></script>
+  <script src="/lib/flood-detector/flood-detector.js"></script>
   <script src="/js/main.min.js"></script>
 </head>
 
@@ -77,7 +77,7 @@
     </md-sidenav>
 
     <md-content layout="column" flex class="content-wrapper md-padding" id="content" ng-controller="MessageListCtrl">
-      <md-list layout-fill style="overflow-y: scroll;">
+      <md-list layout-fill style="overflow-y: scroll;" scroll-glue>
         <md-item ng-repeat="message in messagelist track by $index">
           <md-item-content class="message-item-content">
             <div class="md-tile-left message-zone-avatar">
@@ -92,7 +92,6 @@
 
             </div>
           </md-item-content>
-          <md-divider md-inset ng-if="!$last"></md-divider>
         </md-item>
       </md-list>
     </md-content>
@@ -114,17 +113,17 @@
         </md-item>
       </md-list>
     </md-sidenav>
-
   </div>
 
   <div>
     <md-content md-theme="docs-dark" class="md-whiteframe-z1" ng-controller="TextBoxCtrl">
-      <form name="messageForm">
+      <form name="messageForm" ng-submit="submit()">
         <md-input-container>
           <label>Message</label>
-          <input md-maxlength="300" name="message" id="fgfg" ng-model="messageForm.message">
+          <input md-maxlength="300" name="message" id="message" ng-model="textMessage" ng-change="check()" autofocus>
           <div ng-messages="messageForm.message.$error">
             <div ng-message="md-maxlength">Le message est trop long.</div>
+            <div ng-message="flood">Le message ressemble à du flood.</div>
           </div>
         </md-input-container>
       </form>

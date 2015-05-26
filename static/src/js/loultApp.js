@@ -14,9 +14,9 @@
     }
   }
 
-  var loultApp = angular.module('loultApp', ['ngMaterial', 'ngMessages', 'ngAudio']);
+  var loultApp = angular.module('loultApp', ['ngMaterial', 'ngMessages', 'ngAudio', 'luegg.directives']);
 
-  var audioPlayer = 0;
+  //var audioPlayer = 0;
   var connected = false;
   var me;
 
@@ -156,31 +156,26 @@
     function ($scope, $socket, ngAudio) {
       $scope.messagelist = [];
 
-
       $scope.glued = true;
 
       $socket.on('message', function (data) {
-        var result = $scope.userlist.filter(function (obj) {
-          return obj.uuid === data.user.uuid;
-        });
-        if (!result[0].muted) {
-          $scope.pushMessage({
-            'premier': data.user.pseudo,
-            'paragraphes': [{
-              text: data.message,
-              class: '',
-              count: 1
-            }],
-            'color': data.color,
-            'date': new Date(),
-            'uuid': data.user.uuid,
-            'avatar': '/res/charapic/' + data.user.avatar
-          });
 
-          document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
-          document.getElementById('audio' + (audioPlayer % 10)).play();
-          audioPlayer++;
-        }
+        $scope.pushMessage({
+          'premier': data.user.pseudo,
+          'paragraphes': [{
+            text: data.message,
+            class: '',
+            count: 1
+            }],
+          'color': data.color,
+          'date': new Date(),
+          'uuid': data.user.uuid,
+          'avatar': '/res/charapic/' + data.user.avatar
+        });
+
+        //document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
+        //document.getElementById('audio' + (audioPlayer % 10)).play();
+        //audioPlayer++;
       });
 
       $socket.on('lastmessage', function (data) {
@@ -199,10 +194,9 @@
       });
 
       $socket.on('ownmessage', function (data) {
-        //document.getElementById('message').placeholder = 'Message...';
-        document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
-        document.getElementById('audio' + (audioPlayer % 10)).play();
-        audioPlayer++;
+        //document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
+        //document.getElementById('audio' + (audioPlayer % 10)).play();
+        //audioPlayer++;
         $scope.pushMessage({
           'premier': data.user.pseudo,
           'paragraphes': [{
@@ -229,7 +223,7 @@
           'color': null,
           'date': new Date(),
           'uuid': 'error',
-          'avatar': '/lib/material-design-icons/action/svg/design/ic_info_24px.svg'
+          'avatar': '/lib/material-design-icons/alert/svg/design/ic_error_24px.svg'
         });
       });
 
@@ -303,7 +297,9 @@
           } else {
             lastMessage.paragraphes.push(messageObject.paragraphes[0]);
           }
-          lastMessage.date = new Date();
+          if (messageObject.time) {
+            lastMessage.date = new Date(Date.parse(messageObject.time));
+          }
         } else {
           $scope.messagelist.push(messageObject);
         }
@@ -317,17 +313,37 @@
 
   loultApp.controller('TextBoxCtrl', ['$scope', '$socket',
     function ($scope, $socket) {
+      $scope.check = function () {
+        if ($scope.textMessage && !FloodDetector.evaluate($scope.textMessage)) {
+          $scope.messageForm.message.$error.flood = true;
+        } else {
+          if ($scope.messageForm.message.$error.flood) {
+            delete($scope.messageForm.message.$error.flood);
+          }
+        }
+      };
       // Lorsqu'on envoie le formulaire, on transmet le message et on l'affiche sur la page
       $scope.submit = function () {
+        d('valudation du formulaire');
+        if (Object.keys($scope.messageForm.message.$error).length > 0) {
+          d('il y a une erreur on valide pas');
+          return;
+        }
         var message = $scope.textMessage;
+        if (!message || message.length < 1) {
+          $scope.textMessage = '';
+          return false;
+        }
         var first = message.split(' ')[0];
         var next = message.substr(message.indexOf(' ') + 1);
         if (first.charAt(0) === '/') {
+          d('commande ' + first.substring(1));
           $socket.emit('command', {
             cmd: first.substring(1),
             args: next
           });
         } else {
+          d('message ' + message);
           $socket.emit('message', message); // Transmet le message aux autres
         }
         $scope.textMessage = '';

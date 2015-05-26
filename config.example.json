@@ -10,9 +10,5 @@
   "secret": "secret",
   "host": "domain.tld",
   "sessIdName": "sessID",
-  "db": {
-    "host": "localhost",
-    "name": "lou_lt_experimental",
-    "sessionColl": "session"
-  }
+  "dbURL": 'mongodb://localhost:27017/lou_lt_experimental'
 }

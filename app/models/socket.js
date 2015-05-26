@@ -1,14 +1,22 @@
 'use strict';
+
+var config = require('../../config.json');
+var log4js = require('log4js');
+log4js.replaceConsole();
+var path = require('path');
+var log = require('../models/log.js')(config, path.relative('.', __filename));
+
 module.exports = {
   socket: {},
   push: function (newSocketID) {
     if (typeof this.socket[newSocketID] === 'undefined') {
       this.socket[newSocketID] = {};
     }
-    //console.log(this.socket);
+    log.debug('push de la nouvelle socket ' + newSocketID);
   },
   remove: function (socketID) {
     if (typeof this.socket[socketID] !== 'undefined') {
+      log.debug('remove de la socket ' + socketID);
       delete this.socket[socketID];
     }
   },
