@@ -10,5 +10,5 @@
   "secret": "secret",
   "host": "domain.tld",
   "sessIdName": "sessID",
-  "dbURL": 'mongodb://localhost:27017/lou_lt_experimental'
+  "dbURL": "mongodb://localhost:27017/lou_lt_experimental"
 }

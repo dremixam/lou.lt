@@ -71,37 +71,7 @@ module.exports = function (socket, db) {
       return;
     }
 
-    var messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€\-']/ig, ' ').substring(0, 300),
-
-      links = twitter.extractUrls(message);
-
-    message = twitter.autoLink(tools.replaceHtmlEntites(message), {
-      target: '_blank'
-    });
-
-    var messageHisto = message;
-    if (links.length > 0) {
-      var insert = '';
-      var insertHisto = '';
-
-      for (var index = 0; index < links.length && index < 3; ++index) {
-        if (links[index].indexOf('http') !== 0) {
-          links[index] = 'http://' + links[index];
-        }
-        var imgHash = crypto.createHash('sha1').update('URL' + links[index]).digest('hex');
-        var imgPath = './static/dist/res/img/thumbs/' + imgHash + '.png';
-        var parsedURL = url.parse(links[index]);
-        if (fs.existsSync(imgPath)) {
-          insert += '<span class="link-placeholder-' + imgHash + ' link-placeholder" style="background: url(/res/img/thumbs/' + imgHash + '.png);"><a target="_blank" href="' + links[index] + '"><span>' + parsedURL.host + '</span></a></span>';
-          delete links[index];
-        } else {
-          insert += '<span class="link-placeholder-' + imgHash + ' link-placeholder">Loading preview…</span>';
-        }
-        insertHisto += '<span class="link-placeholder-' + imgHash + ' link-placeholder" style="background: url(/res/img/thumbs/' + imgHash + '.png);"><a target="_blank" href="' + links[index] + '"><span>' + parsedURL.host + '</span></a></span>';
-      }
-      message += '<div style="display: table; border-spacing:4px;">' + insert + '</div>';
-      messageHisto += '<div style="display: table; border-spacing:4px;">' + insertHisto + '</div>';
-    }
+    var messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€\-']/ig, ' ').substring(0, 300);
 
     var audio = '/res/audio/' + messageId + '.wav';
 
@@ -141,65 +111,6 @@ module.exports = function (socket, db) {
         } catch (err) {
           console.log('send error: ' + err);
         }
-        //Création et envoi des miniatures
-        links.forEach(function (site) {
-          // Si l'URL ne commence pas par le protocole (https?), on ajoute http:// avant.
-          if (site.indexOf('http') !== 0) {
-            site = 'http://' + site;
-          }
-          // On crée le hash qui va servir de référence pour le lien
-          var fileHash = crypto.createHash('sha1').update('URL' + site).digest('hex');
-
-          // Vérification de la présence d'une vidéo embeddable
-          var embeded = embed(site);
-          if (typeof embeded !== 'undefined') {
-            // Si la vidéo est embeddable on envoie embed avec l'id du lien et le code embeddable via la socket
-            socket.to(channel).emit('embed', {
-              id: fileHash,
-              code: embeded
-            });
-            /*
-            socket.emit('embed', {
-              id: fileHash,
-              code: embeded
-            });*/
-          } else {
-
-            var filename = './static' + '/dist/res/img/thumbs/' + fileHash + '.png';
-            var filenameBig = './static' + '/dist/res/img/thumbs/' + fileHash + '_large.png';
-
-
-            var pageres = new Pageres({
-                delay: 2,
-                filename: fileHash + '_large'
-              })
-              .src(site, ['1280x960'], {
-                crop: true
-              })
-              .dest('./static/dist/res/img/thumbs/');
-            try {
-              pageres.run(function (err) {
-                if (err) {
-                  socket.to(channel).emit('thumberr', fileHash);
-                  return;
-                }
-                gm(filenameBig).resize(200).write(filename, function (err) {
-                  if (err) {
-                    socket.to(channel).emit('thumberr', fileHash);
-                  } else {
-                    socket.to(channel).emit('thumbok', {
-                      url: site,
-                      title: url.parse(site),
-                      hash: fileHash
-                    });
-                  }
-                });
-              });
-            } catch (err) {
-              socket.to(channel).emit('thumberr', fileHash);
-            }
-          }
-        });
       }
     });
   });

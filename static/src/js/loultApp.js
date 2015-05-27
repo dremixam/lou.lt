@@ -295,14 +295,22 @@
       $scope.pushMessage = function (messageObject) {
         var lastMessage = $scope.messagelist[$scope.messagelist.length - 1];
         if (typeof lastMessage !== 'undefined' && lastMessage.uuid === messageObject.uuid) {
+          // Si le nouveau message a le meme auteur que le précédent
+
+          //On récupère le dernier paragraphe du message
           var lastParagraphe = lastMessage.paragraphes[lastMessage.paragraphes.length - 1];
+
+
           if (lastParagraphe.text === messageObject.paragraphes[0].text) {
+            // Si le dernier paragraphe est identique au nouveau message, on incrémente juste son compteur
             lastParagraphe.count++;
           } else {
+            // Sinon on ajoute le message comme nouveau paragraphe au message précédent
             lastMessage.paragraphes.push(messageObject.paragraphes[0]);
           }
-          if (messageObject.time) {
-            lastMessage.date = new Date(Date.parse(messageObject.time)).toLocaleString(locale, dateOptions);
+          if (messageObject.date) {
+            //Si le message est reçu avec une heure, on met a jour en utilisant l'heure reçue
+            lastMessage.date = new Date(Date.parse(messageObject.date)).toLocaleString(locale, dateOptions);
           }
         } else {
           $scope.messagelist.push(messageObject);
