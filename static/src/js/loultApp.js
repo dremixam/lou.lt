@@ -313,6 +313,7 @@
             lastMessage.date = new Date(Date.parse(messageObject.date)).toLocaleString(locale, dateOptions);
           }
         } else {
+          messageObject.date = new Date(Date.parse(messageObject.date)).toLocaleString(locale, dateOptions)
           $scope.messagelist.push(messageObject);
         }
       };
