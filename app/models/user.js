@@ -55,7 +55,7 @@ module.exports.add = function (socket, db, fn) {
         voice: {
           fr: 'fr' + voice
         },
-        gender: ((voice === 2 || voice === 4) ? 4 : 2),
+        gender: ((voice === 2 || voice === 4) ? 4 : 1),
         params: ' -p ' + tools.randomIntRange(0, 99) + ' -s ' + tools.randomIntRange(100, 175),
         last: Date.now(),
         ip: socket.handshake.headers['x-real-ip'] || socket.handshake.address.address || socket.handshake.address,
