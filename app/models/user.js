@@ -48,13 +48,15 @@ module.exports.add = function (socket, db, fn) {
 
       var uuid = tools.randomUUID();
 
+      var voice = tools.randomIntRange(1, 7)
+
       // On sauvegarde toutes les données de l'utilisateur
       userData = {
         voice: {
-          fr: 'fr' + tools.randomIntRange(1, 6),
-          en: 'us' + tools.randomIntRange(1, 3)
+          fr: 'fr' + voice
         },
-        params: ' -p ' + tools.randomIntRange(1, 99) + ' -s ' + tools.randomIntRange(100, 175),
+        gender: ((voice === 2 || voice === 4) ? 4 : 2),
+        params: ' -p ' + tools.randomIntRange(0, 99) + ' -s ' + tools.randomIntRange(100, 175),
         last: Date.now(),
         ip: socket.handshake.headers['x-real-ip'] || socket.handshake.address.address || socket.handshake.address,
         public: {

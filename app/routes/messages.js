@@ -92,7 +92,7 @@ module.exports = function (socket, db) {
 
     // Configuration du synthétiseur vocal.
     var params = [];
-    params = [userData.params, 'fr', messageAEnregistrer, userData.voice.fr, './static/dist' + audio];
+    params = [userData.params, 'fr', messageAEnregistrer, userData.voice.fr, './static/dist' + audio, userData.gender];
 
 
     //Lancement du synthétiseur vocal
