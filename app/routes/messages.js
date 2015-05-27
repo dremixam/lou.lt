@@ -22,6 +22,21 @@ var url = require('url');
 var Pageres = require('pageres');
 var tools = require('../models/tools.js');
 
+//=============================================================================
+var dirPath = './static/dist/res/audio/records/';
+try {
+  var files = fs.readdirSync(dirPath);
+  if (files.length > 0) {
+    for (var i = 0; i < files.length; i++) {
+      var filePath = dirPath + '/' + files[i];
+      fs.unlinkSync(filePath);
+    }
+  }
+} catch (e) {
+  log.error(e);
+}
+//=============================================================================
+
 module.exports = function (socket, db) {
   socket.on('message', function (message) {
     log.debug('message reçu de ' + socket.id + ' : ' + message);
@@ -73,7 +88,7 @@ module.exports = function (socket, db) {
 
     var messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€\-']/ig, ' ').substring(0, 300);
 
-    var audio = '/res/audio/' + messageId + '.wav';
+    var audio = '/res/audio/records/' + messageId + '.wav';
 
     // Configuration du synthétiseur vocal.
     var params = [];
@@ -85,7 +100,7 @@ module.exports = function (socket, db) {
 
     synth.on('exit', function (exitCode) {
       if (exitCode !== 0 && config.devel === false) {
-        console.log('Une erreur est survenue lors de la génération du son');
+        log.error('Une erreur est survenue lors de la génération du son');
       } else {
         try {
           socket.broadcast.to(channel).emit('message', {
@@ -103,13 +118,22 @@ module.exports = function (socket, db) {
           messagesModel.push(channel, {
             user: userData.public,
             ip: userIp,
-            message: messageHisto,
+            message: message,
             audiofile: audio,
             color: userData.public.color,
             time: new Date().toUTCString()
           });
+          setTimeout(function () {
+            log.debug('suppression du fichier audio ' + audio);
+            try {
+              fs.unlinkSync('./static/dist' + audio);
+            } catch (err) {
+              log.error('could not delete audio file' + audio);
+            }
+
+          }, 60000)
         } catch (err) {
-          console.log('send error: ' + err);
+          log.error('send error: ' + err);
         }
       }
     });
