@@ -24,16 +24,9 @@ var io = require('socket.io').listen(server, {
   }
 });
 
-if (config.devel) {
-  app.use(log4js.connectLogger(log, {
-    level: 'auto'
-  }));
-} else {
-  app.use(log4js.connectLogger(log, {
-    level: log4js.levels.ERROR
-  }));
-}
-
+app.use(log4js.connectLogger(log, {
+  level: 'auto'
+}));
 app.use(favicon(__dirname + '/static/dist/favicon.png'));
 app.use(express.static(__dirname + '/static/dist'));
 
