@@ -164,22 +164,20 @@
 
       $socket.on('message', function (data) {
 
-        $scope.pushMessage({
-          'premier': data.user.pseudo,
-          'paragraphes': [{
-            text: data.message,
-            class: '',
-            count: 1
+        if ($scope.pushMessage({
+            'premier': data.user.pseudo,
+            'paragraphes': [{
+              text: data.message,
+              class: '',
+              count: 1
             }],
-          'color': data.color,
-          'date': new Date(),
-          'uuid': data.user.uuid,
-          'avatar': '/res/charapic/' + data.user.avatar
-        });
-
-        //document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
-        //document.getElementById('audio' + (audioPlayer % 10)).play();
-        //audioPlayer++;
+            'color': data.color,
+            'date': new Date(),
+            'uuid': data.user.uuid,
+            'avatar': '/res/charapic/' + data.user.avatar
+          })) {
+          ngAudio.play(data.audiofile);
+        }
       });
 
       $socket.on('lastmessage', function (data) {
@@ -201,18 +199,20 @@
         //document.getElementById('audio' + (audioPlayer % 10)).src = data.audiofile;
         //document.getElementById('audio' + (audioPlayer % 10)).play();
         //audioPlayer++;
-        $scope.pushMessage({
-          'premier': data.user.pseudo,
-          'paragraphes': [{
-            text: data.message,
-            class: 'own',
-            count: 1
+        if ($scope.pushMessage({
+            'premier': data.user.pseudo,
+            'paragraphes': [{
+              text: data.message,
+              class: 'own',
+              count: 1
             }],
-          'color': data.color,
-          'date': new Date(),
-          'uuid': data.user.uuid,
-          'avatar': '/res/charapic/' + data.user.avatar
-        });
+            'color': data.color,
+            'date': new Date(),
+            'uuid': data.user.uuid,
+            'avatar': '/res/charapic/' + data.user.avatar
+          })) {
+          ngAudio.play(data.audiofile);
+        }
       });
 
       $socket.on('errormsg', function (data) {
@@ -293,6 +293,7 @@
       });
 
       $scope.pushMessage = function (messageObject) {
+        var _return = true;
         var lastMessage = $scope.messagelist[$scope.messagelist.length - 1];
         if (typeof lastMessage !== 'undefined' && lastMessage.uuid === messageObject.uuid) {
           // Si le nouveau message a le meme auteur que le précédent
@@ -304,6 +305,7 @@
           if (lastParagraphe.text === messageObject.paragraphes[0].text) {
             // Si le dernier paragraphe est identique au nouveau message, on incrémente juste son compteur
             lastParagraphe.count++;
+            _return = false;
           } else {
             // Sinon on ajoute le message comme nouveau paragraphe au message précédent
             lastMessage.paragraphes.push(messageObject.paragraphes[0]);
@@ -316,6 +318,7 @@
           messageObject.date = new Date(Date.parse(messageObject.date)).toLocaleString(locale, dateOptions)
           $scope.messagelist.push(messageObject);
         }
+        return _return;
       };
   }]);
 
