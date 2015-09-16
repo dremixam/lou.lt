@@ -9,11 +9,23 @@ var log = require('../models/log.js')(config, path.relative('.', __filename));
 var messagesModel = require('../models/messages');
 var clientList = require('../models/user');
 var socketModel = require('../models/socket');
+var torchecker = require('torchecker');
 
+torchecker.start(config.ip);
 
 module.exports = function (socket, db) {
   var userIp = socket.handshake.headers['x-real-ip'] || socket.handshake.address || socket.handshake.address.address;
   log.debug('user from ' + userIp + ' is waiting to join a channel');
+
+  if (torchecker.check(userIp)) {
+    log.debug(userIp + ' répertoriée comme ip TOR. On refuse l\'utilisateur.');
+    socket.emit('error', 'tor');
+    socket.close();
+    return;
+  } else {
+    log.debug(userIp + ' ok');
+  }
+
   socket.on('join', function (channel) {
     log.debug('user from ' + userIp + ' joins ' + channel);
     socketModel.set(socket.id, 'channel', channel);

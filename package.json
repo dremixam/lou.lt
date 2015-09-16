@@ -5,6 +5,7 @@
   "main": "loult.js",
   "author": "Dr Emixam",
   "dependencies": {
+    "chance": "^0.7.5",
     "connect": "^3.3.5",
     "connect-mongo": "^0.8.1",
     "cookie": "^0.1.3",
@@ -18,6 +19,7 @@
     "gulp-concat": "^2.4.2",
     "gulp-imagemin": "^2.0.0",
     "gulp-install": "^0.2.0",
+    "gulp-jshint": "^1.11.0",
     "gulp-minify-css": "^0.3.11",
     "gulp-minify-html": "^0.1.8",
     "gulp-rename": "^1.2.0",
@@ -31,9 +33,8 @@
     "serve-favicon": "^2.2.1",
     "socket.io": "^1.3.5",
     "tldjs": "~1.3.1",
-    "twitter-text": "~1.9.0",
-    "chance": "^0.7.5",
-    "gulp-jshint": "^1.11.0"
+    "torchecker": "^0.1.6",
+    "twitter-text": "~1.9.0"
   },
   "scripts": {
     "start": "node loult.js"
