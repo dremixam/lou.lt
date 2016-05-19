@@ -74,37 +74,11 @@ module.exports = function (socket) {
         // Si le message est vide on jette
         if (message.length < 1) { return; }
 
-        var messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€\-']/ig, ' ').substring(0, 300),
+        var messageAEnregistrer = message.replace(/(https?:\/\/[^\s]+)/g, ' ').replace(/(\#)/g, ' hashtag ').replace(/[^a-zA-Z0-9 ,\.\?\!éùàçèÉÀÇÈÙ%êÊâÂûÛïÏîÎöÖüÜëËäÄôÔñÑœŒ\@\#\€\-']/ig, ' ').substring(0, 300);
 
-          links = twitter.extractUrls(message);
-
-        message = twitter.autoLink(replaceHtmlEntites(message), {
-          target: '_blank'
-        });
+	message = replaceHtmlEntites(message);
 
         var messageHisto = message;
-        if (links.length > 0) {
-          var insert = '';
-          var insertHisto = '';
-
-          for (var index = 0; index < links.length && index < 3; ++index) {
-            if (links[index].indexOf('http') !== 0) {
-              links[index] = 'http://' + links[index];
-            }
-            var imgHash = crypto.createHash('sha1').update('URL' + links[index]).digest('hex');
-            var imgPath = './static/dist/res/img/thumbs/' + imgHash + '.png';
-            var parsedURL = url.parse(links[index]);
-            if (fs.existsSync(imgPath)) {
-              insert += '<span class="link-placeholder-' + imgHash + ' link-placeholder" style="background: url(/res/img/thumbs/' + imgHash + '.png);"><a target="_blank" href="' + links[index] + '"><span>' + parsedURL.host + '</span></a></span>';
-              delete links[index];
-            } else {
-              insert += '<span class="link-placeholder-' + imgHash + ' link-placeholder">Loading preview…</span>';
-            }
-            insertHisto += '<span class="link-placeholder-' + imgHash + ' link-placeholder" style="background: url(/res/img/thumbs/' + imgHash + '.png);"><a target="_blank" href="' + links[index] + '"><span>' + parsedURL.host + '</span></a></span>';
-          }
-          message += '<div style="display: table; border-spacing:4px;">' + insert + '</div>';
-          messageHisto += '<div style="display: table; border-spacing:4px;">' + insertHisto + '</div>';
-        }
 
         var audio = '/res/audio/' + messageId + '.wav';
 
@@ -151,78 +125,6 @@ module.exports = function (socket) {
               console.log('send error: ' + err);
             }
             //Création et envoi des miniatures
-            links.forEach(function (site) {
-              if (site.indexOf('http') !== 0) {
-                site = 'http://' + site;
-              }
-              var embeded = embed(site);
-              if (typeof embeded !== 'undefined') {
-                socket.broadcast.to(channel).emit('embed', {
-                  id: crypto.createHash('sha1').update('URL' + site).digest('hex'),
-                  code: embeded
-                });
-                socket.emit('embed', {
-                  id: crypto.createHash('sha1').update('URL' + site).digest('hex'),
-                  code: embeded
-                });
-              } else {
-
-                var filename = './static' + '/dist/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '.png';
-                var filenameBig = './static' + '/dist/res/img/thumbs/' + crypto.createHash('sha1').update('URL' + site).digest('hex') + '_large.png';
-
-
-                var pageres = new Pageres({
-                    delay: 2,
-                    filename: crypto.createHash('sha1').update('URL' + site).digest('hex') + '_large'
-                  })
-                  .src(site, ['1280x960'], {
-                    crop: true
-                  })
-                  .dest('./static/dist/res/img/thumbs/');
-                try {
-                  pageres.run(function (err) {
-                    if (err) {
-                      socket.broadcast.to(channel).emit('thumberr',
-                        crypto.createHash('sha1').update('URL' + site).digest('hex')
-                      );
-                      socket.emit('thumberr',
-                        crypto.createHash('sha1').update('URL' + site).digest('hex'),
-                        crypto.createHash('sha1').update('URL' + site).digest('hex')
-                      );
-                      return;
-                    }
-                    gm(filenameBig).resize(200).write(filename, function (err) {
-                      if (err) {
-                        socket.broadcast.to(channel).emit('thumberr',
-                          crypto.createHash('sha1').update('URL' + site).digest('hex')
-                        );
-                        socket.emit('thumberr',
-                          crypto.createHash('sha1').update('URL' + site).digest('hex')
-                        );
-                      } else {
-                        socket.broadcast.to(channel).emit('thumbok', {
-                          url: site,
-                          title: url.parse(site),
-                          hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
-                        });
-                        socket.emit('thumbok', {
-                          url: site,
-                          title: url.parse(site),
-                          hash: crypto.createHash('sha1').update('URL' + site).digest('hex')
-                        });
-                      }
-                    });
-                  });
-                } catch (err) {
-                  socket.broadcast.to(channel).emit('thumberr',
-                    crypto.createHash('sha1').update('URL' + site).digest('hex')
-                  );
-                  socket.emit('thumberr',
-                    crypto.createHash('sha1').update('URL' + site).digest('hex')
-                  );
-                }
-              }
-            });
           }
         });
       }
