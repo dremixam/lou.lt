@@ -7,8 +7,9 @@ var log4js = require('log4js');
 log4js.replaceConsole();
 var path = require('path');
 var log = require('./app/models/log.js')(config, path.relative('.', __filename));
-
-var MongoClient = require('mongodb');
+var MongoClient = require('mongodb'),
+  Server = MongoClient.Server,
+  Db = MongoClient.Db;
 
 // Évidemment on a besoin de express et de socket.io
 var express = require('express'); // load express
@@ -36,17 +37,40 @@ app.get('*', function (req, res) {
   res.sendFile(__dirname + '/static/dist/home.html');
 });
 
+log.info('host : '+config.db.host);
+log.info('port : '+config.db.port);
+log.info('db : '+config.db.name);
+log.info('user : '+config.db.username);
+log.info('pwd : '+config.db.pwd);
 
-MongoClient.connect(config.dbURL, function (err, db) {
+
+
+var mongoserver = new Server(config.db.host, config.db.port, {
+  auto_reconnect: true,
+  logger: log4js.connectLogger(log, {
+    level: 'auto'
+  })
+});
+var db = new Db(config.db.name, mongoserver);
+
+db.open(function (err, db) {
   if (err) {
     log.error(err);
     return;
   }
+  db.authenticate(config.db.username, config.db.pwd, function(err,res) {
+    if(err) {
+      log.error(err);
+      return;
+    }
 
-  // routes ======================================================================
-  require('./app/')(io, db);
+    console.log('connecté a la bdd ' + db);
 
-  // listen (start app with node server.js) ======================================
-  server.listen(config.port, config.ip);
-  log.info('App listening on ' + config.ip + ':' + config.port);
+    // routes ======================================================================
+    require('./app/')(io, db);
+
+    // listen (start app with node server.js) ======================================
+    server.listen(config.port, config.ip);
+    log.info('App listening on ' + config.ip + ':' + config.port);
+  });
 });

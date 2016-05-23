@@ -49,6 +49,7 @@ module.exports = function (socket, db) {
 
     socket.on('disconnect', function () {
       var userData = socketModel.get(socket.id, 'userData');
+      if ( typeof userData === 'undefined') return;
       clientList.remove(channel, userData.public.uuid);
       socket.to(channel).emit('disconnected', userData.public);
       socketModel.remove(socket.id);

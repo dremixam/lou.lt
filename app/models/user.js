@@ -35,6 +35,10 @@ module.exports.add = function (socket, db, fn) {
   var characters = db.collection('characters');
 
   characters.count(function (err, n) {
+    if (err) {
+      log.error(err);
+      return;
+    }
     log.debug(n + ' personnages dans la base');
     var r = Math.floor(Math.random() * n);
     log.debug('on prend le numéro ' + r);
