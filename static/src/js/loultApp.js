@@ -315,7 +315,8 @@
             lastMessage.date = new Date(Date.parse(messageObject.date)).toLocaleString(locale, dateOptions);
           }
         } else {
-          messageObject.date = new Date(Date.parse(messageObject.date)).toLocaleString(locale, dateOptions)
+          messageObject.date = new Date(Date.parse(messageObject.date)).toLocaleString(locale, dateOptions);
+          if ( $scope.messagelist.length > 100) $scope.messagelist.shift();
           $scope.messagelist.push(messageObject);
         }
         return _return;
